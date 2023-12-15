@@ -4,6 +4,7 @@
 # 2023/10/30 - TiiZss corrección de errores
 # 2023/11/01 - TiiZss - JavaVulnerableLab no funciona. No hay conectividad con mysql desde WSL
 # 2023/11/09 - TiiZss - w4p no funciona no arranca mysql. web4pentester funciona.
+# 2023/12/15 - TiiZss - Audi 1 SQLi Labs
 
 ETC_HOSTS=/etc/hosts
 
@@ -44,8 +45,9 @@ display_help() {
     echo "  altoro          - Altoro Mutual Custom made from github.com/hclproducts/altoroj"
     echo "  graphql         - Vulnerable GraphQL API Carve Systems LLC (carvesystems/vulnerable-graphql-api)"
     #echo "  jvl             - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab)"
-    #echo "  w4p             - Web for Pentester (tiizss/webforpentester1)"
+    echo "  w4p             - Web for Pentester (tiizss/webforpentester1)"
 	echo "  web4pentester   - Web for Pentester I (tiizss/webforpentester)"
+	echo "  sqlilabs   		- SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)"
 
     exit 1
 }
@@ -100,7 +102,8 @@ list() {
     #echo "  jvl				- CSPF Java Vulnerable Lab Web Application"
     echo "  w4p   	        - PentesterLab Web For Pentester I "
     echo "  web4pentestar   - PentesterLab Web For Pentester I "
-    echo
+    echo "  sqlilabs   		- Audi - 1 SQLI labs"
+	echo
     exit 1
 }
 
@@ -151,6 +154,9 @@ info () {
     w4p)
       project_info_web4pentester
     ;;
+	sqlilabs)
+		  project_info_sqlilabs
+	;;
     *) 
       echo "Unknown project name"
       list
@@ -347,6 +353,15 @@ project_startinfo_web4pentester ()
 	echo "----------------------------------------------"
 }
 
+project_info_sqlilabs ()
+{
+	echo "https://github-com.translate.goog/Audi-1/sqli-labs"
+}
+
+project_startinfo_sqlilabs ()
+{
+	echo "SQLI-LABS is a platform to learn SQLI Following labs are covered for GET and POST scenarios"
+}
 
 #########################
 # Common start          #
@@ -478,6 +493,7 @@ project_status()
   #project_running "Java Vulnerable Lab          " "jvl" "http://jvl"
   #project_running "Web For Pentester I          " "w4p" "http://w4p"
   project_running "Web For Pentester I          " "web4pentester" "http://w4p http://127.18.0.1"
+  project_running "Audi 1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
 }
 
 
@@ -549,6 +565,10 @@ project_start_dispatch()
       # In this particular case in the dockername is attached the command we need to launch on the container
       project_start "Web for Pentester I" "w4p" "tiizss/webforpentester1:1.0" "127.18.0.1" "80"
 	  ;;
+	sqlilabs)
+		project_startinfo_sqlilabs
+		project_start "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "127.19.0.1" "80"
+		;;
     *)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
     ;;
@@ -624,6 +644,11 @@ project_startpublic_dispatch()
       project_startpublic "Web For Pentester" "web4pentester" "tiizss/webforpentester bash" "80" $publicip $port
       project_startinfo_web4pentester $publicip
     ;;
+	sqlilabs)
+      project_startpublic "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "80" $publicip $port
+      project_startinfo_sqlilabs $publicip
+    ;;
+    
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
     ;;
@@ -679,6 +704,9 @@ project_stop_dispatch()
     w4p)
       project_stop "Web For Pentester" "w4p"
     ;;
+	sqlilabs)
+		project_stop "Audi-1 SQLi Labs" "sqlilabs"
+	;;
     *)
     echo "ERROR: Project stop dispatch doesn't recognize the project name $1" 
     ;;
