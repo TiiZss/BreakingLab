@@ -18,6 +18,7 @@ Working and tested on Ubuntu 23.04 and WSL.
 * Vulnerable GraphQL API
 * Java Vulnerable Lab (New 20230916) --> Not working :-(
 * Web for Pentester I (New 20230918)
+* Audi - 1 SQLI labs (New 20231215)
 
 ### Get started 
 
