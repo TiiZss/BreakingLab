@@ -1,7 +1,7 @@
 # BreakingLab
 Bash script to manage web apps using docker and hosts aliases.  
 Idea taken from: https://github.com/eystsen/pentestlab.  
-Working and tested on Ubuntu 23.04 and WSL.
+Working and tested on Ubuntu 23.04, Kali and WSL.
 
 ### Current available webapps
 
@@ -19,6 +19,7 @@ Working and tested on Ubuntu 23.04 and WSL.
 * Java Vulnerable Lab (New 20230916) --> Not working :-(
 * Web for Pentester I (New 20230918)
 * Audi - 1 SQLI labs (New 20231215)
+* OxNinja SQLi-Lab (New 20231217)
 
 ### Get started 
 
@@ -128,6 +129,8 @@ Ex.
  * Vulnerable GraphQL API - Carve Systems LLC (carvesystems/vulnerable-graphql-api)  
  * Java Vulnerable Lab    - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab) --> :-( Not working
  * Web For Pentester I    - PentesterLab Web For Pentester I (tiizss/webforpentester)
+ * Audi 1 SQLi Lab    		  - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
+ * OxNinja SQLi-Lab		     - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
 
 github references means the docker is custom created and hosted in dockerhub.
 
