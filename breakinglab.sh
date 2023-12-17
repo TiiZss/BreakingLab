@@ -5,6 +5,7 @@
 # 2023/11/01 - TiiZss - JavaVulnerableLab no funciona. No hay conectividad con mysql desde WSL
 # 2023/11/09 - TiiZss - w4p no funciona no arranca mysql. web4pentester funciona.
 # 2023/12/15 - TiiZss - Audi 1 SQLi Labs
+# 2023/12/17 - TiiZss - OxNinja SQLi Lab
 
 ETC_HOSTS=/etc/hosts
 
@@ -48,6 +49,7 @@ display_help() {
     echo "  w4p             - Web for Pentester (tiizss/webforpentester1)"
 	echo "  web4pentester   - Web for Pentester I (tiizss/webforpentester)"
 	echo "  sqlilabs   		- SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)"
+	echo "  oxninjasqli		- OxNinja SQLI labs (tiizss/oxninja-sqlilab)"
 
     exit 1
 }
@@ -102,7 +104,8 @@ list() {
     #echo "  jvl				- CSPF Java Vulnerable Lab Web Application"
     echo "  w4p   	        - PentesterLab Web For Pentester I "
     echo "  web4pentestar   - PentesterLab Web For Pentester I "
-    echo "  sqlilabs   		- Audi - 1 SQLI labs"
+    echo "  sqlilabs   		- Audi - 1 SQLi labs"
+	echo "  oxninja   		- OxNinja SQLi lab"
 	echo
     exit 1
 }
@@ -156,6 +159,9 @@ info () {
     ;;
 	sqlilabs)
 		  project_info_sqlilabs
+	;;
+    oxninja)
+		  project_info_oxninja
 	;;
     *) 
       echo "Unknown project name"
@@ -363,6 +369,22 @@ project_startinfo_sqlilabs ()
 	echo "SQLI-LABS is a platform to learn SQLI Following labs are covered for GET and POST scenarios"
 }
 
+project_info_oxninja ()
+{
+	echo "https://github.com/OxNinja/SQLi-lab"
+	echo "https://0xninja.fr/posts/sqli-lab/"
+	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo " No automated tools (like SQLmap, dirb...)"
+	echo " Only hand-crafted payloads or home-made scripts"
+	echo " It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo "----------------------------------------------"
+}
+
+project_startinfo_oxninja ()
+{
+	echo "An SQL injection playground, from basic to advanced"
+}
+
 #########################
 # Common start          #
 #########################
@@ -494,6 +516,7 @@ project_status()
   #project_running "Web For Pentester I          " "w4p" "http://w4p"
   project_running "Web For Pentester I          " "web4pentester" "http://w4p http://127.18.0.1"
   project_running "Audi 1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
+  project_running "OxNinja SQLi-Lab             " "oxninja" "http://oxninja http://127.20.0.1"
 }
 
 
@@ -568,6 +591,10 @@ project_start_dispatch()
 	sqlilabs)
 		project_startinfo_sqlilabs
 		project_start "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "127.19.0.1" "80"
+		;;
+    oxninja)
+		project_startinfo_oxninja
+		project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "127.20.0.1" "80"
 		;;
     *)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
@@ -648,7 +675,10 @@ project_startpublic_dispatch()
       project_startpublic "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "80" $publicip $port
       project_startinfo_sqlilabs $publicip
     ;;
-    
+    oxninja)
+      project_startpublic "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "80" $publicip $port
+      project_startinfo_oxninja $publicip
+    ;;
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
     ;;
@@ -707,6 +737,9 @@ project_stop_dispatch()
 	sqlilabs)
 		project_stop "Audi-1 SQLi Labs" "sqlilabs"
 	;;
+    oxninja)
+		project_stop "OxNinja SQLi-Lab" "oxninja"
+	;;
     *)
     echo "ERROR: Project stop dispatch doesn't recognize the project name $1" 
     ;;
@@ -764,7 +797,7 @@ project_stop_dispatch()
           esac
         done
       fi
-
+	
       listen="$publicip:$port"
       if [ "$(netstat -ln4 | grep -w $listen )" ]
       then
