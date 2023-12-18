@@ -10,15 +10,59 @@
 ETC_HOSTS=/etc/hosts
 
 #########################
+# Text Style            #
+#########################
+TDefault="\e[0m"
+TBold="\e[1m"
+TUnderline="\e[2m"
+
+#########################
+# Text Colors           #
+#########################
+TDefault="\e[0;0m"
+TBlack="\e[0;30m"
+TRed="\e[0;31m"
+TGreen="\e[0;32m"
+TYellow="\e[0;33m"
+TBlue="\e[0;34m"
+TCian="\e[0;35m"
+TMagenta="\e[0;36m"
+TWhite="\e[0;37m"
+
+#########################
+# Background Colors     #
+#########################
+#BGDefault="\e[4m"
+BGBlack="\e[40m"
+BGRed="\e[41m"
+BGGreen="\e[42m"
+BGYellow="\e[43m"
+BGBlue="\e[44m"
+BGCian="\e[45m"
+BGMagenta="\e[46m"
+BGWhite="\e[47m"
+
+display_logo() {                                                                             
+	echo -e "-----------------------------------------------------------------------------------------"
+	echo -e "$BGGreen               35$BGWhite$TGreen                                               $TWhite$BGGreen               57$BGWhite$TGreen         $TWhite"
+	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen ███████  █████  ██   ██ ██ ███    ██  ██████  $TWhite$BGGreen ██       █████  $BGWhite$TGreen ██████  $TWhite"
+	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ████   ██ ██       $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
+	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen █████   ███████ █████   ██ ██ ██  ██ ██   ███ $TWhite$BGGreen ██      ███████ $BGWhite$TGreen ██████  $TWhite"
+	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ██  ██ ██ ██    ██ $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
+	echo -e "$BGGreen ██████  ██   ██ $BGWhite$TGreen ███████ ██   ██ ██   ██ ██ ██   ████  ██████  $TWhite$BGGreen ███████ ██   ██ $BGWhite$TGreen ██████  $TWhite"
+	echo -e "$BGGreen                 $BGWhite$TGreen 2023 TiiZss                                   $TWhite$BGGreen                 $BGWhite$TGreen         $TWhite"
+	echo -e "$TDefault-----------------------------------------------------------------------------------------"
+}
+
+#########################
 # The command line help #
 #########################
 display_help() {
-    echo "BreakingLab Scrtip a Local Pentest Lab Management Script (Docker based)"
-	echo " Modified by TiiZss. Version: 20231109"
-    echo "Usage: $0 {list|status|info|start|startpublic|stop} [projectname]" >&2
-    echo
+    echo "BreakingLab Script a Local Pentest Lab Management Script (Docker based)"
+	echo " Modified by TiiZss. Version: 20231217"
     echo " This scripts uses docker and hosts alias to make web apps available on localhost"
     echo 
+	echo "Usage: $0 {list|status|info|start|startpublic|stop} [projectname]" >&2
     echo " Ex."
     echo " $0 list"
     echo " 	List all available projects"
@@ -30,26 +74,26 @@ display_help() {
     echo " 	Start project and make it publicly available (to anyone with network connectivity to the machine)" 
     echo " $0 info w4p"
     echo " 	Show information about w4p project"
-    echo " $0 stop w40"
+    echo " $0 stop w4p"
     echo " 	Stop w4p project "
     echo
     echo " Dockerfiles from:"
-    echo "  dvwa            - DVWA Ryan Dewhurst (vulnerables/web-dvwa)"
-    echo "  multillidae     - Mutillidae II OWASP Project (citizenstig/nowasp)"
-    echo "  bwapp           - bWapp Rory McCune (raesene/bwapp)"
-    echo "  webgoat7        - Webgoat 7 OWASP Project"
-    echo "  webgoat8        - Webgoat 8 OWASP Project"
-    echo "  webgoat81       - Webgoat 8.1 OWASP Project"
-    echo "  juiceshop       - Juice Shop OWASP Project (bkimminich/juice-shop)"
-    echo "  vulnerablewp    - Vulnerable Wordpress Custom made from github.com/wpscanteam/VulnerableWordpress"
-    echo "  securityninjas  - Security Ninjas OpenDNS Security Ninjas AppSec Training"
-    echo "  altoro          - Altoro Mutual Custom made from github.com/hclproducts/altoroj"
-    echo "  graphql         - Vulnerable GraphQL API Carve Systems LLC (carvesystems/vulnerable-graphql-api)"
+    echo "  dvwa              - DVWA Ryan Dewhurst (vulnerables/web-dvwa)"
+    echo "  multillidae       - Mutillidae II OWASP Project (citizenstig/nowasp)"
+    echo "  bwapp             - bWapp Rory McCune (raesene/bwapp)"
+    echo "  webgoat7          - Webgoat 7 OWASP Project"
+    echo "  webgoat8          - Webgoat 8 OWASP Project"
+    echo "  webgoat81         - Webgoat 8.1 OWASP Project"
+    echo "  juiceshop         - Juice Shop OWASP Project (bkimminich/juice-shop)"
+    echo "  vulnerablewp      - Vulnerable Wordpress Custom made from github.com/wpscanteam/VulnerableWordpress"
+    echo "  securityninjas    - Security Ninjas OpenDNS Security Ninjas AppSec Training"
+    echo "  altoro            - Altoro Mutual Custom made from github.com/hclproducts/altoroj"
+    echo "  graphql           - Vulnerable GraphQL API Carve Systems LLC (carvesystems/vulnerable-graphql-api)"
     #echo "  jvl             - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab)"
-    echo "  w4p             - Web for Pentester (tiizss/webforpentester1)"
-	echo "  web4pentester   - Web for Pentester I (tiizss/webforpentester)"
-	echo "  sqlilabs   		- SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)"
-	echo "  oxninjasqli		- OxNinja SQLI labs (tiizss/oxninja-sqlilab)"
+    echo "  w4p               - Web for Pentester (tiizss/webforpentester1)"
+	echo "  web4pentester     - Web for Pentester I (tiizss/webforpentester)"
+	echo "  sqlilabs   	    - Audi-1 SQLi labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)"
+	echo "  oxninjas	    - OxNinja SQLi-lab"
 
     exit 1
 }
@@ -58,55 +102,124 @@ display_help() {
 ############################################
 # Check if docker is installed and running #
 ############################################
-if ! [ -x "$(command -v docker)" ]; then
-  echo 
-  echo "Docker was not found. Please install docker before running this script."
-  echo "For kali linux you can install docker with the following commands:"
-  echo " sudo apt update "
-  echo " sudo apt install -y docker.io"
-  echo " sudo systemctl enable docker --now"
-  echo " sudo usermod -aG docker $USER"
-  echo " docker"
-  echo "For other Linux Distros please visit: https://docs.docker.com/desktop/install/linux-install/"
-  echo "Thank You!"
-  exit
-fi
+#if ! [ -x "$(command -v docker)" ]; then
+#  echo 
+#  echo "Docker was not found. Please install docker before running this script."
+#  echo "For kali linux you can install docker with the following commands:"
+#  echo " sudo apt update "
+#  echo " sudo apt install -y docker.io"
+#  echo " sudo systemctl enable docker --now"
+#  echo " sudo usermod -aG docker $USER"
+#  echo " docker"
+#  echo "For other Linux Distros please visit: https://docs.docker.com/desktop/install/linux-install/"
+#  echo "Thank You!"
+#  exit
+#fi
+#
+#if sudo service docker status | grep inactive > /dev/null
+#then 
+#	echo "Docker is not running."
+#	echo -n "Do you want to start docker now (y/n)?"
+#	read answer
+#	if echo "$answer" | grep -iq "^y"; then
+#		sudo service docker start
+#	else
+#		echo "Not starting. Script will not be able to run applications."
+#	fi
+#fi
 
-if sudo service docker status | grep inactive > /dev/null
-then 
-	echo "Docker is not running."
-	echo -n "Do you want to start docker now (y/n)?"
-	read answer
-	if echo "$answer" | grep -iq "^y"; then
-		sudo service docker start
+function docker_is_installed() {
+  # Verifica si el comando docker está disponible
+  if command -v docker >/dev/null; then
+    # Verifica si el demonio de Docker está en ejecución
+    if docker info >/dev/null; then
+      # Docker está instalado y funcionando
+      echo "Docker está instalado y funcionando"
+      return 0
+    else
+      # Docker está instalado pero no está funcionando
+      echo "Docker está instalado pero no está funcionando"
+      return 1
+    fi
+  else
+    # Docker no está instalado
+    echo "Docker no está instalado"
+    return 1
+  fi
+}
+
+function docker_is_running() {
+  # Verifica si el proceso de Docker Desktop está en ejecución
+  ps -ef | grep -q "dockerd"
+  if [ $? -eq 0 ]; then
+    # Docker Desktop está en funcionamiento
+    echo "Docker Desktop está en funcionamiento"
+    return 0
+  else
+    # Docker Desktop no está en funcionamiento
+    echo "Docker Desktop no está en funcionamiento"
+    return 1
+  fi
+}
+
+function is_wsl() {
+  # Verifica si la variable de entorno WSL_DISTRO está definida
+  #if [[ -n "$WSL_DISTRO" ]]; then
+  if [[ $(uname -a) =~ "WSL" ]]; then
+  # El bash es de un WSL
+    #echo "WSL"
+    return 0
+  else
+    # El bash no es de un WSL
+    #echo "Ubuntu"
+    return 1
+  fi
+}
+
+function check_docker() {
+	if is_wsl; then
+		echo "WSL"
+		docker_is_running
 	else
-		echo "Not starting. Script will not be able to run applications."
+		docker_is_installed
 	fi
-fi
+}
 
+#########################################
+# Open URL with the default web browser #
+#########################################
+function openUrl() {
+	local URL="$1";
+	if [[ $(uname -r) =~ WSL ]]; then
+		explorer.exe $URL
+	else
+		xdg-open $URL || sensible-browser $URL || x-www-browser $URL || gnome-open $URL
+	fi
+}
 
 #########################
 # List all pentest apps #
 #########################
 list() {
     echo "Available pentest applications" >&2
-    echo "  bwapp 			- bWAPP PHP/MySQL based from itsecgames.com"
-    echo "  webgoat7		- OWASP WebGoat 7.1"
-    echo "  webgoat8		- OWASP WebGoat 8.0"
-    echo "  webgoat81		- OWASP WebGoat 8.1"
-    echo "  dvwa     		- Damn Vulnerable Web Application"
-    echo "  mutillidae		- OWASP Mutillidae II"
-    echo "  juiceshop		- OWASP Juice Shop"
-    echo "  vulnerablewp	- WPScan Vulnerable Wordpress"
-    echo "  securityninjas	- OpenDNS Security Ninjas"
-    echo "  altoro			- Altoro Mutual Vulnerable Bank"
-    echo "  graphql			- Vulnerable GraphQL API"
+    echo "-----------------------------------------------------------------------------------------"
+	echo "  bwapp            - bWAPP PHP/MySQL based from itsecgames.com"
+    echo "  webgoat7         - OWASP WebGoat 7.1"
+    echo "  webgoat8         - OWASP WebGoat 8.0"
+    echo "  webgoat81        - OWASP WebGoat 8.1"
+    echo "  dvwa             - Damn Vulnerable Web Application"
+    echo "  mutillidae       - OWASP Mutillidae II"
+    echo "  juiceshop        - OWASP Juice Shop"
+    echo "  vulnerablewp     - WPScan Vulnerable Wordpress"
+    echo "  securityninjas   - OpenDNS Security Ninjas"
+    echo "  altoro           - Altoro Mutual Vulnerable Bank"
+    echo "  graphql          - Vulnerable GraphQL API"
     #echo "  jvl				- CSPF Java Vulnerable Lab Web Application"
-    echo "  w4p   	        - PentesterLab Web For Pentester I "
-    echo "  web4pentestar   - PentesterLab Web For Pentester I "
-    echo "  sqlilabs   		- Audi - 1 SQLi labs"
-	echo "  oxninja   		- OxNinja SQLi lab"
-	echo
+    echo "  w4p              - PentesterLab Web For Pentester I "
+    echo "  web4pentester    - PentesterLab Web For Pentester I "
+    echo "  sqlilabs         - Audi-1 SQLi labs"
+	echo "  oxninja          - OxNinja SQLi-lab"
+	echo "-----------------------------------------------------------------------------------------"
     exit 1
 }
 
@@ -485,16 +598,16 @@ project_running()
   running=0
 
   if [ "$(sudo docker ps -q -f name=^/${shortname}$)" ]; then
-    echo "$projectname:$shortname	running at $url (localhost)"
+    echo -e "$projectname:$shortname	$TGreen	running at $url (localhost) $TDefault"
     running=1
   fi
   if [ "$(sudo docker ps -q -f name=^/${shortname}public$)" ]; then
-    echo "$projectname:$shortname	running (public)"
+    echo -e "$projectname:$shortname	$TGreen	running (public) $TDefault"
     running=1
   fi  
   if [ $running -eq 0 ];
   then
-    echo "$projectname:$shortname	not running"
+    echo -e "$projectname:$shortname		$TRed not running $TDefault"
   fi 
 }
 
@@ -515,7 +628,7 @@ project_status()
   #project_running "Java Vulnerable Lab          " "jvl" "http://jvl"
   #project_running "Web For Pentester I          " "w4p" "http://w4p"
   project_running "Web For Pentester I          " "web4pentester" "http://w4p http://127.18.0.1"
-  project_running "Audi 1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
+  project_running "Audi-1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
   project_running "OxNinja SQLi-Lab             " "oxninja" "http://oxninja http://127.20.0.1"
 }
 
@@ -591,10 +704,18 @@ project_start_dispatch()
 	sqlilabs)
 		project_startinfo_sqlilabs
 		project_start "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "127.19.0.1" "80"
+		openUrl "http://127.19.0.1"
 		;;
     oxninja)
 		project_startinfo_oxninja
-		project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "127.20.0.1" "80"
+		if [[ ! -d "oxninja-sqlilab" ]]; then
+			git clone https://github.com/OxNinja/SQLi-lab oxninja-sqlilab
+		fi
+		cd oxninja-sqlilab
+		sed -i "s|-\s*80\:\s*80|-\s*127.20.0.1\:\s*80\:\s*80|g" docker-compose.yml
+		openUrl "http://127.20.0.1" 
+		./build.sh	
+	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
 		;;
     *)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
@@ -676,8 +797,8 @@ project_startpublic_dispatch()
       project_startinfo_sqlilabs $publicip
     ;;
     oxninja)
-      project_startpublic "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "80" $publicip $port
-      project_startinfo_oxninja $publicip
+      #project_startpublic "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "80" $publicip $port
+      #project_startinfo_oxninja $publicip
     ;;
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
@@ -750,93 +871,106 @@ project_stop_dispatch()
 #########################
 # Main switch case      #
 #########################
+	display_logo
+	case "$1" in
+		start)
+			check_docker
+			if [ -z "$2" ]
+			then
+				echo "ERROR: Option start needs project name in lowercase"
+				echo 
+					list # call list ()
+				break
+			fi
+			project_start_dispatch $2
+			;;
+			
+		startpublic)
+			check_docker
+			if [ -z "$2" ]
+			then
+				echo "ERROR: Option start needs project name in lowercase"
+				echo 
+				list # call list ()
+				break
+			fi
 
-  case "$1" in
-    start)
-      if [ -z "$2" ]
-      then
-    	echo "ERROR: Option start needs project name in lowercase"
-        echo 
-        list # call list ()
-        break
-      fi
-      project_start_dispatch $2
-      ;;
-    startpublic)
-      if [ -z "$2" ]
-      then
-    	echo "ERROR: Option start needs project name in lowercase"
-        echo 
-        list # call list ()
-        break
-      fi
+			if [ -z "$4" ]
+			then
+				port=80
+			else
+				port=$4
+			fi
 
-      if [ -z "$4" ]
-      then
-        port=80
-      else
-        port=$4
-      fi
+			if [ "$3" ]
+			then
+				publicip=$3
+			else
+				publicip=`hostname -I | cut -d" " -f1`
+		
+				echo "Continue using local IP address $publicip?"
+				
+				select yn in "Yes" "No"; do
+					case $yn in
+						Yes)  
+							break;;
+						No) 
+							echo "Specify the correct IP address.";  
+							echo " ex."; 
+							echo "   $0 startpublic w4p 192.168.0.105"; 
+							exit;;
+					esac
+				done
+			fi
+		
+			listen="$publicip:$port"
+			if [ "$(netstat -ln4 | grep -w $listen )" ]
+			then
+				echo "$publicip already listening on port $port"
+				echo "Free up the port or select a different port to bind $2"
+				exit
+			fi
 
-      if [ "$3" ]
-      then
-        publicip=$3
-      else
-      	publicip=`hostname -I | cut -d" " -f1`
-    
-	echo "Continue using local IP address $publicip?"
-        select yn in "Yes" "No"; do
-          case $yn in
-            Yes )  
-              break;;
-            No ) 
-              echo "Specify the correct IP address.";  
-              echo " ex."; 
-              echo "   $0 startpublic bwapp 192.168.0.105"; 
-              exit;;
-          esac
-        done
-      fi
+			project_startpublic_dispatch $2 $publicip $port
+				echo "WARNING! Only do this in trusted lab environment. WARNING!"
+				echo "WARNING! Anyone with nettwork access can now pwn this machine! WARNING!" 
+			;;
+			
+		stop)
+			if [ -z "$2" ]
+			then
+				echo "ERROR: Option start needs project name in lowercase"
+				echo 
+				list # call list ()
+				break
+			fi
+			project_stop_dispatch $2
+			;;
+			
+		list)
+			list # call list ()
+			;;
+			
+		status)
+			echo " Showing STATUS of the Docker containers"
+			echo "-----------------------------------------------------------------------------------------"
+			project_status # call project_status ()
+			echo "-----------------------------------------------------------------------------------------"
+			;;
+			
+		info)
+			if [ -z "$2" ]
+			then
+				echo "ERROR: Option start needs project name in lowercase"
+				echo 
+				list # call list ()
+			break
+			fi
+			info $2
+			;;
+			
+		*)
+			display_help
+			;;
+	esac   
 	
-      listen="$publicip:$port"
-      if [ "$(netstat -ln4 | grep -w $listen )" ]
-      then
-        echo "$publicip already listening on port $port"
-        echo "Free up the port or select a different port to bind $2"
-        exit
-      fi
-
-      project_startpublic_dispatch $2 $publicip $port
-      echo "WARNING! Only do this in trusted lab environment. WARNING!"
-      echo "WARNING! Anyone with nettwork access can now pwn this machine! WARNING!" 
-      ;;
-    stop)
-      if [ -z "$2" ]
-      then
-    	echo "ERROR: Option start needs project name in lowercase"
-        echo 
-        list # call list ()
-        break
-      fi
-      project_stop_dispatch $2
-      ;;
-    list)
-      list # call list ()
-      ;;
-    status)
-      project_status # call project_status ()
-      ;;
-    info)
-      if [ -z "$2" ]
-      then
-    	echo "ERROR: Option start needs project name in lowercase"
-        echo 
-        list # call list ()
-        break
-      fi
-      info $2
-      ;;
-    *)
-      display_help
-      ;;
-  esac   
