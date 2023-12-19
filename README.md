@@ -30,7 +30,8 @@ Using any of these apps can be done in 3 quick and simple steps.
 Clone this repo, or download it any way you prefer
 ```
 git clone https://github.com/TiiZss/BreakingLab.git
-cd breakinglab
+cd BreakingLab
+chmod +x breakinglab.sh
 ```
 
 #### 2) Installing and enabling docker for your user
