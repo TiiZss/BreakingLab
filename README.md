@@ -1,8 +1,8 @@
 # BreakingLab
 <image src="/BrakingLab.png" alt="BreakinLab">
-Bash script to manage web apps using docker and hosts aliases.  
-Idea taken from: https://github.com/eystsen/pentestlab.  
-Working and tested on Ubuntu 23.04, Kali and WSL.
+Bash script to manage web apps using docker and hosts aliases.<br />
+Idea taken from: https://github.com/eystsen/pentestlab.<br />
+Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 
 ### Current available webapps
 
