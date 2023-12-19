@@ -1,4 +1,5 @@
 # BreakingLab
+<image src="/BrakingLab.png" alt="BreakinLab">
 Bash script to manage web apps using docker and hosts aliases.  
 Idea taken from: https://github.com/eystsen/pentestlab.  
 Working and tested on Ubuntu 23.04, Kali and WSL.
@@ -111,7 +112,7 @@ Ex.
    Start docker container with w4p and make it available on machine IP 
 
 ./breakinglab.sh stop w4p
-   Stop docker container
+   Stop docker w4p container
 
 ./breakinglab.sh info w4p
    Show information about w4p project
