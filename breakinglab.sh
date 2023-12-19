@@ -9,6 +9,11 @@
 
 ETC_HOSTS=/etc/hosts
 
+#Tmux vars
+session_name="breakinglab"
+tmux_main_window="breakinglab-Main"
+no_hardcore_exit=0
+
 #########################
 # Text Style            #
 #########################
@@ -25,8 +30,8 @@ TRed="\e[0;31m"
 TGreen="\e[0;32m"
 TYellow="\e[0;33m"
 TBlue="\e[0;34m"
-TCian="\e[0;35m"
-TMagenta="\e[0;36m"
+TMagenta="\e[0;35m"
+TCian="\e[0;36m"
 TWhite="\e[0;37m"
 
 #########################
@@ -42,92 +47,64 @@ BGCian="\e[45m"
 BGMagenta="\e[46m"
 BGWhite="\e[47m"
 
+#########################
+# Script Date Creation  #
+#########################
+function print_date () {
+	# Obtener la fecha de creación del script
+	fecha_creacion=$(stat -c %y "$0")
+
+	# Imprimir la fecha de creación
+	echo "$fecha_creacion"
+}
+
+#########################
+# Display Logo and Info #
+#########################
+
 display_logo() {                                                                             
 	echo -e "-----------------------------------------------------------------------------------------"
-	echo -e "$BGGreen               35$BGWhite$TGreen                                               $TWhite$BGGreen               57$BGWhite$TGreen         $TWhite"
+	echo -e "$BGGreen               35$BGWhite$TGreen                                       TiiZss  $TWhite$BGGreen               57$BGWhite$TGreen         $TWhite"
 	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen ███████  █████  ██   ██ ██ ███    ██  ██████  $TWhite$BGGreen ██       █████  $BGWhite$TGreen ██████  $TWhite"
 	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ████   ██ ██       $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
 	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen █████   ███████ █████   ██ ██ ██  ██ ██   ███ $TWhite$BGGreen ██      ███████ $BGWhite$TGreen ██████  $TWhite"
 	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ██  ██ ██ ██    ██ $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
 	echo -e "$BGGreen ██████  ██   ██ $BGWhite$TGreen ███████ ██   ██ ██   ██ ██ ██   ████  ██████  $TWhite$BGGreen ███████ ██   ██ $BGWhite$TGreen ██████  $TWhite"
-	echo -e "$BGGreen                 $BGWhite$TGreen 2023 TiiZss                                   $TWhite$BGGreen                 $BGWhite$TGreen         $TWhite"
+	echo -e "$BGGreen                 $BGWhite$TGreen v.$(print_date)         $TWhite$BGGreen                 $BGWhite$TGreen    BETA $TWhite"
 	echo -e "$TDefault-----------------------------------------------------------------------------------------"
+}
+
+function display_info {
+	echo -e "  BreakingLab Script a Local Pentest Lab Management Script (Docker based)"
+	echo -e "  Modified by TiiZss. Version: $(print_date)"
+    echo -e "  This scripts uses docker and hosts alias to make web apps available on localhost"
+    echo -e "-----------------------------------------------------------------------------------------"
 }
 
 #########################
 # The command line help #
 #########################
 display_help() {
-    echo "BreakingLab Script a Local Pentest Lab Management Script (Docker based)"
-	echo " Modified by TiiZss. Version: 20231217"
-    echo " This scripts uses docker and hosts alias to make web apps available on localhost"
-    echo 
-	echo "Usage: $0 {list|status|info|start|startpublic|stop} [projectname]" >&2
+    echo "Usage: $0 {list|status|info|start|startpublic|stop} [projectname]" >&2
     echo " Ex."
     echo " $0 list"
     echo " 	List all available projects"
     echo " $0 status"
     echo "	Show status for all projects"
     echo " $0 start w4p"
-    echo " 	Start project and make it available on localhost" 
+    echo " 	Start w4p project and make it available on localhost" 
     echo " $0 startpublic w4p"
-    echo " 	Start project and make it publicly available (to anyone with network connectivity to the machine)" 
+    echo " 	Start w4p project and make it publicly available (to anyone with network connectivity to the machine)" 
     echo " $0 info w4p"
     echo " 	Show information about w4p project"
     echo " $0 stop w4p"
     echo " 	Stop w4p project "
-    echo
-    echo " Dockerfiles from:"
-    echo "  dvwa              - DVWA Ryan Dewhurst (vulnerables/web-dvwa)"
-    echo "  multillidae       - Mutillidae II OWASP Project (citizenstig/nowasp)"
-    echo "  bwapp             - bWapp Rory McCune (raesene/bwapp)"
-    echo "  webgoat7          - Webgoat 7 OWASP Project"
-    echo "  webgoat8          - Webgoat 8 OWASP Project"
-    echo "  webgoat81         - Webgoat 8.1 OWASP Project"
-    echo "  juiceshop         - Juice Shop OWASP Project (bkimminich/juice-shop)"
-    echo "  vulnerablewp      - Vulnerable Wordpress Custom made from github.com/wpscanteam/VulnerableWordpress"
-    echo "  securityninjas    - Security Ninjas OpenDNS Security Ninjas AppSec Training"
-    echo "  altoro            - Altoro Mutual Custom made from github.com/hclproducts/altoroj"
-    echo "  graphql           - Vulnerable GraphQL API Carve Systems LLC (carvesystems/vulnerable-graphql-api)"
-    #echo "  jvl             - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab)"
-    echo "  w4p               - Web for Pentester (tiizss/webforpentester1)"
-	echo "  web4pentester     - Web for Pentester I (tiizss/webforpentester)"
-	echo "  sqlilabs   	    - Audi-1 SQLi labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)"
-	echo "  oxninjas	    - OxNinja SQLi-lab"
-
     exit 1
 }
-
 
 ############################################
 # Check if docker is installed and running #
 ############################################
-#if ! [ -x "$(command -v docker)" ]; then
-#  echo 
-#  echo "Docker was not found. Please install docker before running this script."
-#  echo "For kali linux you can install docker with the following commands:"
-#  echo " sudo apt update "
-#  echo " sudo apt install -y docker.io"
-#  echo " sudo systemctl enable docker --now"
-#  echo " sudo usermod -aG docker $USER"
-#  echo " docker"
-#  echo "For other Linux Distros please visit: https://docs.docker.com/desktop/install/linux-install/"
-#  echo "Thank You!"
-#  exit
-#fi
-#
-#if sudo service docker status | grep inactive > /dev/null
-#then 
-#	echo "Docker is not running."
-#	echo -n "Do you want to start docker now (y/n)?"
-#	read answer
-#	if echo "$answer" | grep -iq "^y"; then
-#		sudo service docker start
-#	else
-#		echo "Not starting. Script will not be able to run applications."
-#	fi
-#fi
-
 function docker_is_installed() {
   # Verifica si el comando docker está disponible
   if command -v docker >/dev/null; then
@@ -176,12 +153,61 @@ function is_wsl() {
   fi
 }
 
-function check_docker() {
+function check_docker2() {
 	if is_wsl; then
 		echo "WSL"
 		docker_is_running
 	else
 		docker_is_installed
+	fi
+}
+
+function check_docker() {
+	echo -ne "Checking if Docker is running:"
+	if [[ $(uname -r) =~ WSL ]]; then
+		#if ! command -v docker &> /dev/null; then
+		if ! docker &> /dev/null; then
+			echo -e "$TRed Docker Desktop isn't running. $TDefault"
+			start_docker
+		else
+			echo -e "$TGreen Docker is running. $TDefault "
+		fi
+	else
+		if ! [ -x "$(command -v docker)" ]; then
+			echo 
+			echo "Docker was not found. Please install docker before running this script."
+			echo "For kali linux you can install docker with the following commands:"
+			echo " sudo apt update "
+			echo " sudo apt install -y docker.io"
+			echo " sudo systemctl enable docker --now"
+			echo " sudo usermod -aG docker $USER"
+			echo " docker"
+			echo "For other Linux Distros please visit: https://docs.docker.com/desktop/install/linux-install/"
+			echo "Thank You!"
+			exit
+		fi		
+		if sudo service docker status | grep inactive > /dev/null
+			echo -e "$TGreen Docker is running. $TDefault "
+		then 
+			echo -e "$TRed Docker isn't running. $TDefault"
+			start_docker
+		fi
+	fi
+}
+
+function start_docker () {
+	echo -n "Do you want to start docker now (y/n)?"
+	read answer
+	if echo "$answer" | grep -iq "^y"; then
+		if is_wsl; then
+			cmd.exe /c "C:\Program Files\Docker\Docker\docker desktop.exe"
+		else
+			sudo service docker start
+		fi
+		echo -e "Starting Docker."
+	else	
+		echo -e "Not starting. Script will not be able to run applications."
+		exit
 	fi
 }
 
@@ -232,13 +258,13 @@ info () {
       project_info_bwapp
       ;;
     webgoat7)
-      project_info_webgoat7
+      project_info_webgoat
       ;;
     webgoat8)
-      project_info_webgoat8      
+      project_info_webgoat      
       ;;
     webgoat81)
-      project_info_webgoat8  
+      project_info_webgoat  
       ;;
     dvwa)
       project_info_dvwa 
@@ -323,7 +349,15 @@ function addhost() { # ex.   127.5.0.1	bwapp
 #########################
 project_info_bwapp () 
 {
-echo "http://www.itsecgames.com"
+	echo -e "$TCian Information about bWAPP an extremely buggy web app! - bwapp $TDefault"
+	echo -e " Description: bWAPP, or a buggy web application, is a free and open source deliberately insecure web application."
+	echo -e "              It helps security enthusiasts, developers and students to discover and to prevent web vulnerabilities."
+	echo -e "              bWAPP prepares one to conduct successful penetration testing and ethical hacking projects."
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Tutorial: https://www.youtube.com/playlist?list=PLSbrmTUy4daOsm6ky-M5QmUnV31BkZ_6X"
+	echo -e " Solutions: https://wooly6bear.files.wordpress.com/2016/01/bwapp-tutorial.pdf"
+	echo -e " Source: http://www.itsecgames.com"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_bwapp () 
@@ -338,19 +372,20 @@ project_startinfo_bwapp ()
   fi
 }
 
-project_info_webgoat7 () 
+project_info_webgoat () 
 {
-echo "https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
+	echo -e "$TCian Information about OWASP WebGoat 7,8,8.1 $TDefault"
+	echo -e " Description: WebGoat is a deliberately insecure application that allows interested developers just like you to test"
+	echo -e "              vulnerabilities commonly found in Java-based applications that use common and popular open source components."
+	echo -e " Source: https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
+	echo -e "         https://github.com/WebGoat/WebGoat"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_webgoat7 () 
 {
   echo "WebGoat 7.0 now runnung at http://webgoat7/WebGoat or http://127.6.0.1/WebGoat"
-}
-
-project_info_webgoat8 () 
-{
-echo "  https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
 }
 
 project_startinfo_webgoat8 () 
@@ -366,7 +401,16 @@ project_startinfo_webgoat81 ()
 
 project_info_dvwa () 
 {
-echo "http://www.itsecgames.com"
+	echo -e "$TCian Information about Damn Vulnerable Web Application - dvwa $TDefault"
+	echo -e " Description: DVWA is a PHP/MySQL web application that is damn vulnerable."
+	echo -e "	           Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, "
+	echo -e "              help web developers better understand the processes of securing web applications and to aid both students"
+	echo -e "	           & teachers to learn about web application security in a controlled class room environment"
+	echo -e " Source: https://github.com/digininja/DVWA"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Solutions: http://www.adminso.es/recursos/Proyectos/PFM/2011_12/PFM_DVWA.pdf"
+	echo -e "            https://bughacking.com/dvwa-ultimate-guide-first-steps-and-walkthrough/"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_dvwa () 
@@ -377,7 +421,15 @@ project_startinfo_dvwa ()
 
 project_info_mutillidae () 
 {
-echo "https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
+	echo -e "$TCian Information about OWASP Mutillidae 2 Project - mutillidae $TDefault"
+	echo -e " Description: OWASP Mutillidae II is a free, open-source, deliberately vulnerable web application providing a target for web-security training."
+	echo -e "	           This is an easy-to-use web hacking environment designed for labs, security enthusiasts, classrooms, CTF, and vulnerability assessment tool targets."
+	echo -e " Source: https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
+	echo -e "         https://github.com/webpwnized/mutillidae"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Tutorial: https://www.youtube.com/user/webpwnized"
+	echo -e " Solutions: https://matrixlabsblog.wordpress.com/2019/04/14/owasp-mutillidae-walkthrough/"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_mutillidae () 
@@ -387,7 +439,15 @@ project_startinfo_mutillidae ()
 
 project_info_juiceshop () 
 {
-echo "https://owasp-juice.shop"
+	echo -e "$TCian Information about OWASP Juice Shop - juiceshop $TDefault"
+	echo -e " Description: OWASP Juice Shop is probably the most modern and sophisticated insecure web application!"
+	echo -e " Source: https://owasp-juice.shop"
+	echo -e "         https://github.com/juice-shop/juice-shop"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Solutions: https://systemweakness.com/owasp-juice-shop-tryhackme-walkthrough-2023-detailed-bea74989325b"
+	echo -e "            https://medium.com/@corybantic/tryhackme-owasp-juice-shop-walkthrough-ab07d12dbdc"
+	echo -e "            https://tomsitcafe.com/2023/01/16/tryhackme-owasp-juice-shop-write-up/"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_juiceshop () 
@@ -397,17 +457,27 @@ project_startinfo_juiceshop ()
 
 project_info_securitysheperd () 
 {
-echo "https://www.owasp.org/index.php/OWASP_Security_Shepherd"
+	echo -e "$TCian Information about OWASP Security Shepherd - securitysheperd $TDefault"
+	echo -e " Description: OWASP Security Shepherd is a web and mobile application security training platform. "
+	echo -e "              Security Shepherd has been designed to foster and improve security awareness among a varied skill-set demographic. "
+	echo -e "              The aim of this project is to take AppSec novices or experienced engineers and sharpen their penetration testing skillset to security expert status"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Source: https://www.owasp.org/index.php/OWASP_Security_Shepherd"
+	echo -e "         https://github.com/OWASP/SecurityShepherd"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_securitysheperd () 
 {
   echo "OWASP Security Sheperd running"
+  echo " admin / password"
 }
 
 project_info_vulnerablewp () 
 {
-echo "https://github.com/wpscanteam/VulnerableWordpress"
+	echo -e "$TCian Information about Vulnerable WordPRess - vulnerablewp $TDefault"
+	echo -e " Source: https://github.com/wpscanteam/VulnerableWordpress"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_vulnerablewp () 
@@ -417,16 +487,28 @@ project_startinfo_vulnerablewp ()
 
 project_info_securityninjas () 
 {
-echo "https://github.com/opendns/Security_Ninjas_AppSec_Training"
+	echo -e "$TCian Information about OpenDNS Security Ninjas - securityninjas $TDefault"
+	echo -e " Description: OpenDNS Security Ninjas AppSec Training. "
+	echo -e "              This hands-on training lab consists of 10 fun real world like hacking exercises, corresponding to each of the 2013 OWASP Top 10 vulnerabilities."
+	echo -e " Source: https://github.com/opendns/Security_Ninjas_AppSec_Training"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e " Course: https://es.slideshare.net/OpenDNS/security-ninjas-opensource"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_securityninjas ()
 {
   echo "Open DNS Security Ninjas site now running"
 }
+
 project_info_altoro () 
 {
-echo "https://github.com/opendns/Security_Ninjas_AppSec_Training"
+	echo -e "$TCian Information about Altoro Mutual Vulnerable Bank - altoro $TDefault"
+	echo -e " Description: AltoroJ is a sample banking J2EE web application."
+	echo -e "              It shows what happens when web applications are written with consideration of app functionality but not app security"
+	echo -e " Source: https://github.com/HCL-TECH-SOFTWARE/AltoroJ"
+	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo -e "----------------------------------------------"
 }
 
 project_startinfo_altoro ()
@@ -448,7 +530,16 @@ project_startinfo_graphql ()
 
 project_info_jvl () 
 {
-  echo "https://github.com/CSPF-Founder/JavaVulnerableLab"
+	echo -e "$TCian Information about Java Vulnerable Lab - jvl $TDefault"
+	echo " Description: This is a Vulnerable Web Application developed by Cyber Security and Privacy Foundation(www.cysecurity.org). This app is intended for the Java Programmers and other people who wish to learn about Web application vulnerabilities and write secure code"
+	echo " Source: https://github.com/CSPF-Founder/JavaVulnerableLab"
+	echo " Install: Go to install.jsp anc click on the button"
+	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo "        No automated tools (like SQLmap, dirb...)"
+	echo "        Only hand-crafted payloads or home-made scripts"
+	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo " Solutions: https://github.com/CSPF-Founder/JavaSecurityCourse"
+	echo "----------------------------------------------"
 }
 
 project_startinfo_jvl ()
@@ -460,7 +551,14 @@ project_startinfo_jvl ()
 
 project_info_web4pentester ()
 {
-	echo "https://pentesterlab.com/exercises/web_for_pentester/course"
+	echo -e "$TCian Information about Web for Pentester - web4pentester $TDefault"
+	echo " Source: https://pentesterlab.com/exercises/web_for_pentester/course"
+	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo "        No automated tools (like SQLmap, dirb...)"
+	echo "        Only hand-crafted payloads or home-made scripts"
+	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo "----------------------------------------------"
+	
 }
 
 project_startinfo_web4pentester ()
@@ -474,7 +572,17 @@ project_startinfo_web4pentester ()
 
 project_info_sqlilabs ()
 {
-	echo "https://github-com.translate.goog/Audi-1/sqli-labs"
+	echo -e "$TCian Information about Audi-1 SQLi labs - sqlilabs $TDefault"
+	echo " Source: https://github-com.translate.goog/Audi-1/sqli-labs"
+	echo " Install: Click on the link setup/resetDB to create database, create tables and populate Data"
+	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
+	echo "        No automated tools (like SQLmap, dirb...)"
+	echo "        Only hand-crafted payloads or home-made scripts"
+	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo " Solutions: http://dummy2dummies.blogspot.com"
+	echo "            http://www.securitytube.net/user/Audi"
+	echo "            https://www.facebook.com/sqlilabs"
+	echo "----------------------------------------------"
 }
 
 project_startinfo_sqlilabs ()
@@ -484,12 +592,13 @@ project_startinfo_sqlilabs ()
 
 project_info_oxninja ()
 {
-	echo "https://github.com/OxNinja/SQLi-lab"
-	echo "https://0xninja.fr/posts/sqli-lab/"
+	echo -e "$TCian Information about OxNinja SQLi-Lab machine - oxninja $TDefault"
+	echo " Source:    https://github.com/OxNinja/SQLi-lab"
 	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo " No automated tools (like SQLmap, dirb...)"
-	echo " Only hand-crafted payloads or home-made scripts"
-	echo " It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo "        No automated tools (like SQLmap, dirb...)"
+	echo "        Only hand-crafted payloads or home-made scripts"
+	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+	echo " Solutions: https://0xninja.fr/posts/sqli-lab/"
 	echo "----------------------------------------------"
 }
 
@@ -637,62 +746,76 @@ project_start_dispatch()
 {
   case "$1" in
     bwapp)
-      project_start "bWAPP" "bwapp" "raesene/bwapp" "127.5.0.1" "80"
-      project_startinfo_bwapp
+		openUrl "http://127.5.0.1/install.php"
+		project_start "bWAPP" "bwapp" "raesene/bwapp" "127.5.0.1" "80"
+		project_startinfo_bwapp
     ;;
     webgoat7)
-      project_start "WebGoat 7.1" "webgoat7" "webgoat/webgoat-7.1" "127.6.0.1" "8080"
-      project_startinfo_webgoat7
+		openUrl "http://127.6.0.1/WebGoat"
+		project_start "WebGoat 7.1" "webgoat7" "webgoat/webgoat-7.1" "127.6.0.1" "8080"
+		project_startinfo_webgoat7
     ;;
     webgoat8)
-      project_start "WebGoat 8.0" "webgoat8" "webgoat/webgoat-8.0" "127.7.0.1" "8080"
-      project_startinfo_webgoat8
+		openUrl "http://127.7.0.1/WebGoat"
+		project_start "WebGoat 8.0" "webgoat8" "webgoat/webgoat-8.0" "127.7.0.1" "8080"
+		project_startinfo_webgoat8
     ;;    
     webgoat81)
-      project_start "WebGoat 8.1" "webgoat81" "webgoat/goatandwolf" "127.17.0.1" "8080"
-      project_startinfo_webgoat81
+		openUrl "http://127.17.0.1/WebGoat"
+		project_start "WebGoat 8.1" "webgoat81" "webgoat/goatandwolf" "127.17.0.1" "8080"
+		project_startinfo_webgoat81
     ;;    
     dvwa)
-      project_start "Damn Vulnerable Web Appliaction" "dvwa" "vulnerables/web-dvwa" "127.8.0.1" "80"
-      project_startinfo_dvwa
+		openUrl "http://127.8.0.1"		
+		project_start "Damn Vulnerable Web Appliaction" "dvwa" "vulnerables/web-dvwa" "127.8.0.1" "80"
+		project_startinfo_dvwa
     ;;    
     mutillidae)
-      project_start "Mutillidae II" "mutillidae" "citizenstig/nowasp" "127.9.0.1" "80"
-      project_startinfo_mutillidae
+		openUrl "http://127.9.0.1"
+		project_start "Mutillidae II" "mutillidae" "citizenstig/nowasp" "127.9.0.1" "80"
+		project_startinfo_mutillidae
     ;;
     juiceshop)
-      project_start "OWASP Juice Shop" "juiceshop" "bkimminich/juice-shop" "127.10.0.1" "3000"
-      project_startinfo_juiceshop
+		openUrl "http://127.10.0.1:3000"
+		project_start "OWASP Juice Shop" "juiceshop" "bkimminich/juice-shop" "127.10.0.1" "3000"
+		project_startinfo_juiceshop
     ;;
     securitysheperd)
-      project_start "OWASP Security Shepard" "securitysheperd" "ismisepaul/securityshepherd" "127.11.0.1" "80"
-      project_startinfo_securitysheperd
+		openUrl "http://127.11.0.1"
+		project_start "OWASP Security Shepard" "securitysheperd" "ismisepaul/securityshepherd" "127.11.0.1" "80"
+		project_startinfo_securitysheperd
     ;;
     vulnerablewp)
-      project_start "WPScan Vulnerable Wordpress" "vulnerablewp" "eystsen/vulnerablewordpress" "127.12.0.1" "80" "3306"
-      project_startinfo_vulnerablewp
+		openUrl "http://127.12.0.1"
+		project_start "WPScan Vulnerable Wordpress" "vulnerablewp" "eystsen/vulnerablewordpress" "127.12.0.1" "80" "3306"
+		project_startinfo_vulnerablewp
     ;;
     securityninjas)    
-      project_start "Open DNS Security Ninjas" "securityninjas" "opendns/security-ninjas" "127.13.0.1" "80"
-      project_startinfo_securityninjas
+		openUrl "http://127.13.0.1"
+		project_start "Open DNS Security Ninjas" "securityninjas" "opendns/security-ninjas" "127.13.0.1" "80"
+		project_startinfo_securityninjas
     ;;
     altoro)    
-      project_start "Altoro Mutual" "altoro" "eystsen/altoro" "127.14.0.1" "8080"
-      project_startinfo_altoro
+		openUrl "http://127.14.0.1:8080"
+		project_start "Altoro Mutual" "altoro" "eystsen/altoro" "127.14.0.1" "8080"
+		project_startinfo_altoro
     ;;
-    graphql)    
-      project_start "Vulnerable GraphQL API" "graphql" "carvesystems/vulnerable-graphql-api" "127.15.0.1" "3000"
-      project_startinfo_graphql
+    graphql)
+		openUrl "http://127.15.0.1:3000"    
+		project_start "Vulnerable GraphQL API" "graphql" "carvesystems/vulnerable-graphql-api" "127.15.0.1" "3000"
+		project_startinfo_graphql
     ;;
     jvl)    
-      project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
-	  sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
-      project_startinfo_jvl
+		project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
+		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
+		sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
+		project_startinfo_jvl
     ;;
     web4pentester)
       project_startinfo_web4pentester
       #In this particular case in the dockername is attached the command we need to launch on the container
       #sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester bash
+	  openUrl "http://127.18.0.1"
 	  sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester:1.0 bash -c "service apache2 start && service mysql start && bash"
 	  #project_start "Web for Pentester I" "w4p" "tiizss/webforpentester:1.0 bash -c 'service apache2 start && service mysql start && bash'" "127.18.0.1" "80"
     ;;
@@ -711,10 +834,13 @@ project_start_dispatch()
 		if [[ ! -d "oxninja-sqlilab" ]]; then
 			git clone https://github.com/OxNinja/SQLi-lab oxninja-sqlilab
 		fi
-		cd oxninja-sqlilab
+		cd oxninja-sqlilab	
+		if ! grep -q "container_name: oxninja" docker-compose.yml; then
+			sed -i "/web:/a 		container_name: oxninja" docker-compose.yml
+		fi
 		sed -i "s|-\s*80\:\s*80|-\s*127.20.0.1\:\s*80\:\s*80|g" docker-compose.yml
 		openUrl "http://127.20.0.1" 
-		./build.sh	
+		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
 		;;
     *)
@@ -798,7 +924,7 @@ project_startpublic_dispatch()
     ;;
     oxninja)
       #project_startpublic "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "80" $publicip $port
-      #project_startinfo_oxninja $publicip
+      #	project_startinfo_oxninja $publicip
     ;;
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
@@ -867,14 +993,39 @@ project_stop_dispatch()
   esac  
 }
 
+#########################
+# Checking Privileges   #
+#########################
+function check_runpriv (){
+	echo -e "Checking user privileges"
+	echo -en "Running docker without sudo:  "
+	if groups | grep -q docker; then
+		echo -e "$TGreen YES $TDefault"
+	else
+		echo -e "$TYellow NEED SUDO $TDefault"
+	fi
+	echo -en "User has sudo privileges:     "
+	if groups | grep -q sudo; then
+		echo -e "$TGreen YES - Elevating privileges $TDefault"
+		sudo docker &> /dev/null
+	else
+		echo -e "$TRed NO $TDefault - To run the script you have to use a user that can run docker."
+		exit
+	fi
+}
+
 
 #########################
 # Main switch case      #
 #########################
 	display_logo
+	display_info
+	check_runpriv
+	check_docker
+	echo -e "$TDefault-----------------------------------------------------------------------------------------"
+	
 	case "$1" in
 		start)
-			check_docker
 			if [ -z "$2" ]
 			then
 				echo "ERROR: Option start needs project name in lowercase"
@@ -886,7 +1037,6 @@ project_stop_dispatch()
 			;;
 			
 		startpublic)
-			check_docker
 			if [ -z "$2" ]
 			then
 				echo "ERROR: Option start needs project name in lowercase"
@@ -961,8 +1111,7 @@ project_stop_dispatch()
 		info)
 			if [ -z "$2" ]
 			then
-				echo "ERROR: Option start needs project name in lowercase"
-				echo 
+				echo -en "Please choose one 4 detailed information: "
 				list # call list ()
 			break
 			fi
@@ -972,5 +1121,6 @@ project_stop_dispatch()
 		*)
 			display_help
 			;;
-	esac   
+	esac
+
 	
