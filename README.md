@@ -158,3 +158,15 @@ Do these steps and record ouput (image, copy paste from screen, whatever works f
 sudo docker ps
 ```
 - Try to access the application using the IP address
+
+## Next machines / steps
+* Try to fix JVL
+* Include [SSRF-LAB](https://github.com/basubanakar/SSRF-LAB)
+* Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
+* Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
+* Include [exploit.co.il Vulnerable Web App](https://sourceforge.net/projects/exploitcoilvuln/files/)
+* Include [GameOver](https://sourceforge.net/projects/null-gameover/)
+* Include [Web for Pentester II](https://www.pentesterlab.com/exercises/web_for_pentester_II/attachments)
+* Include [OWASP Bricks](https://sourceforge.net/projects/owaspbricks/)
+* Include [Vulnado](https://github.com/ScaleSec/vulnado)
+* Include [BTS PenTesting Lab](https://github.com/CSPF-Founder/btslab)
