@@ -2,10 +2,11 @@
 # 2023/09/16 - TiiZss añade JavaVulnerableLab
 # 2023/09/18 - TiiZss modifica parámetros. Se incluye Web For Pentester
 # 2023/10/30 - TiiZss corrección de errores
-# 2023/11/01 - TiiZss - JavaVulnerableLab no funciona. No hay conectividad con mysql desde WSL
+# 2023/11/01 - TiiZss - JavaVulnerableLab no funciona. No hay conectividad con mysql desde WSL.
 # 2023/11/09 - TiiZss - w4p no funciona no arranca mysql. web4pentester funciona.
 # 2023/12/15 - TiiZss - Audi 1 SQLi Labs
 # 2023/12/17 - TiiZss - OxNinja SQLi Lab
+# 2023/12/24 - TiiZss - corrección de errores y optimización
 
 ETC_HOSTS=/etc/hosts
 
@@ -28,7 +29,7 @@ TDefault="\e[0;0m"
 TBlack="\e[0;30m"
 TRed="\e[0;31m"
 TGreen="\e[0;32m"
-TYellow="\e[0;33m"
+TYellow="\e[1;33m"
 TBlue="\e[0;34m"
 TMagenta="\e[0;35m"
 TCian="\e[0;36m"
@@ -61,7 +62,6 @@ function print_date () {
 #########################
 # Display Logo and Info #
 #########################
-
 display_logo() {                                                                             
 	echo -e "-----------------------------------------------------------------------------------------"
 	echo -e "$BGGreen               35$BGWhite$TGreen                                       TiiZss  $TWhite$BGGreen               57$BGWhite$TGreen         $TWhite"
@@ -163,7 +163,7 @@ function check_docker2() {
 }
 
 function check_docker() {
-	echo -ne "Checking if Docker is running:"
+	echo -ne " Checking if Docker is running:"
 	if [[ $(uname -r) =~ WSL ]]; then
 		#if ! command -v docker &> /dev/null; then
 		if ! docker &> /dev/null; then
@@ -204,9 +204,9 @@ function start_docker () {
 		else
 			sudo service docker start
 		fi
-		echo -e "Starting Docker."
+		echo -e " Starting Docker."
 	else	
-		echo -e "Not starting. Script will not be able to run applications."
+		echo -e "$TRed Not starting. Script will not be able to run applications. $TDefault"
 		exit
 	fi
 }
@@ -236,11 +236,12 @@ list() {
     echo "  dvwa             - Damn Vulnerable Web Application"
     echo "  mutillidae       - OWASP Mutillidae II"
     echo "  juiceshop        - OWASP Juice Shop"
-    echo "  vulnerablewp     - WPScan Vulnerable Wordpress"
+    echo "  securitysheperd  - OWASP Security Shepherd"
+	echo "  vulnerablewp     - WPScan Vulnerable Wordpress"
     echo "  securityninjas   - OpenDNS Security Ninjas"
     echo "  altoro           - Altoro Mutual Vulnerable Bank"
     echo "  graphql          - Vulnerable GraphQL API"
-    #echo "  jvl				- CSPF Java Vulnerable Lab Web Application"
+    echo "  jvl				 - CSPF Java Vulnerable Lab Web Application"
     echo "  w4p              - PentesterLab Web For Pentester I "
     echo "  web4pentester    - PentesterLab Web For Pentester I "
     echo "  sqlilabs         - Audi-1 SQLi labs"
@@ -248,67 +249,6 @@ list() {
 	echo "-----------------------------------------------------------------------------------------"
     exit 1
 }
-
-#########################
-# Info dispatch         #
-#########################
-info () {
-  case "$1" in 
-    bwapp)
-      project_info_bwapp
-      ;;
-    webgoat7)
-      project_info_webgoat
-      ;;
-    webgoat8)
-      project_info_webgoat      
-      ;;
-    webgoat81)
-      project_info_webgoat  
-      ;;
-    dvwa)
-      project_info_dvwa 
-      ;;
-    mutillidae)
-      project_info_mutillidae
-    ;;
-    juiceshop)
-      project_info_juiceshop
-    ;;
-    vulnerablewp)
-      project_info_vulnerablewp
-    ;;
-    securityninjas)
-      project_info_securityninjas
-    ;;
-    altoro)
-      project_info_altoro
-    ;;
-    graphql)
-      project_info_graphql
-    ;;
-    jvl)
-      project_info_jvl
-    ;;
-    web4pentester)
-      project_info_web4pentester
-    ;;
-    w4p)
-      project_info_web4pentester
-    ;;
-	sqlilabs)
-		  project_info_sqlilabs
-	;;
-    oxninja)
-		  project_info_oxninja
-	;;
-    *) 
-      echo "Unknown project name"
-      list
-      ;;
-  esac  
-}
-
 
 #########################
 # hosts file util       #
@@ -347,16 +287,135 @@ function addhost() { # ex.   127.5.0.1	bwapp
 #########################
 # PROJECT INFO & STARTUP#
 #########################
-project_info_bwapp () 
-{
-	echo -e "$TCian Information about bWAPP an extremely buggy web app! - bwapp $TDefault"
-	echo -e " Description: bWAPP, or a buggy web application, is a free and open source deliberately insecure web application."
-	echo -e "              It helps security enthusiasts, developers and students to discover and to prevent web vulnerabilities."
-	echo -e "              bWAPP prepares one to conduct successful penetration testing and ethical hacking projects."
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Tutorial: https://www.youtube.com/playlist?list=PLSbrmTUy4daOsm6ky-M5QmUnV31BkZ_6X"
-	echo -e " Solutions: https://wooly6bear.files.wordpress.com/2016/01/bwapp-tutorial.pdf"
-	echo -e " Source: http://www.itsecgames.com"
+function project_info () {
+	case "$1" in
+		bwapp)
+			echo -e "$TCian Information about bWAPP an extremely buggy web app! - bwapp $TDefault"
+			echo -e "$TYellow Description: $TDefault bWAPP, or a buggy web application, is a free and open source deliberately insecure web application."
+			echo -e "              It helps security enthusiasts, developers and students to discover and to prevent web vulnerabilities."
+			echo -e "              bWAPP prepares one to conduct successful penetration testing and ethical hacking projects."
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Tutorial: $TDefault https://www.youtube.com/playlist?list=PLSbrmTUy4daOsm6ky-M5QmUnV31BkZ_6X"
+			echo -e "$TYellow Solutions: $TDefault https://wooly6bear.files.wordpress.com/2016/01/bwapp-tutorial.pdf"
+			echo -e "$TYellow Source: $TDefault http://www.itsecgames.com"
+		;;
+		webgoat*)
+			echo -e "$TCian Information about OWASP WebGoat 7,8,8.1 $TDefault"
+			echo -e "$TYellow Description: $TDefault WebGoat is a deliberately insecure application that allows interested developers just like you to test"
+			echo -e "              vulnerabilities commonly found in Java-based applications that use common and popular open source components."
+			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
+			echo -e "         https://github.com/WebGoat/WebGoat"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+		;;
+		dvwa)
+			echo -e "$TCian Information about Damn Vulnerable Web Application - dvwa $TDefault"
+			echo -e "$TYellow Description: $TDefault DVWA is a PHP/MySQL web application that is damn vulnerable."
+			echo -e "	           Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, "
+			echo -e "              help web developers better understand the processes of securing web applications and to aid both students"
+			echo -e "	           & teachers to learn about web application security in a controlled class room environment"
+			echo -e "$TYellow Source: $TDefault https://github.com/digininja/DVWA"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Solutions: $TDefault http://www.adminso.es/recursos/Proyectos/PFM/2011_12/PFM_DVWA.pdf"
+			echo -e "            https://bughacking.com/dvwa-ultimate-guide-first-steps-and-walkthrough/"
+		;;    
+		mutillidae)
+			echo -e "$TCian Information about OWASP Mutillidae 2 Project - mutillidae $TDefault"
+			echo -e "$TYellow Description: $TDefault OWASP Mutillidae II is a free, open-source, deliberately vulnerable web application providing a target for web-security training."
+			echo -e "	           This is an easy-to-use web hacking environment designed for labs, security enthusiasts, classrooms, CTF, and vulnerability assessment tool targets."
+			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
+			echo -e "         https://github.com/webpwnized/mutillidae"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Tutorial: $TDefault https://www.youtube.com/user/webpwnized"
+			echo -e "$TYellow Solutions: $TDefault https://matrixlabsblog.wordpress.com/2019/04/14/owasp-mutillidae-walkthrough/"
+		;;
+		juiceshop)
+			echo -e "$TCian Information about OWASP Juice Shop - juiceshop $TDefault"
+			echo -e "$TYellow Description: $TDefault OWASP Juice Shop is probably the most modern and sophisticated insecure web application!"
+			echo -e "$TYellow Source: $TDefault https://owasp-juice.shop"
+			echo -e "         https://github.com/juice-shop/juice-shop"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Solutions: $TDefault https://systemweakness.com/owasp-juice-shop-tryhackme-walkthrough-2023-detailed-bea74989325b"
+			echo -e "            https://medium.com/@corybantic/tryhackme-owasp-juice-shop-walkthrough-ab07d12dbdc"
+			echo -e "            https://tomsitcafe.com/2023/01/16/tryhackme-owasp-juice-shop-write-up/"
+		;;
+		securitysheperd)
+			echo -e "$TCian Information about OWASP Security Shepherd - securitysheperd $TDefault"
+			echo -e "$TYellow Description: $TDefault OWASP Security Shepherd is a web and mobile application security training platform. "
+			echo -e "              Security Shepherd has been designed to foster and improve security awareness among a varied skill-set demographic. "
+			echo -e "              The aim of this project is to take AppSec novices or experienced engineers and sharpen their penetration testing skillset to security expert status"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/OWASP_Security_Shepherd"
+			echo -e "         https://github.com/OWASP/SecurityShepherd"
+		;;
+		vulnerablewp)
+			echo -e "$TCian Information about Vulnerable WordPRess - vulnerablewp $TDefault"
+			echo -e "$TYellow Source: $TDefault https://github.com/wpscanteam/VulnerableWordpress"
+		;;
+		securityninjas)    
+			echo -e "$TCian Information about OpenDNS Security Ninjas - securityninjas $TDefault"
+			echo -e "$TYellow Description: $TDefault OpenDNS Security Ninjas AppSec Training. "
+			echo -e "              This hands-on training lab consists of 10 fun real world like hacking exercises, corresponding to each of the 2013 OWASP Top 10 vulnerabilities."
+			echo -e "$TYellow Source: $TDefault https://github.com/opendns/Security_Ninjas_AppSec_Training"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Course: $TDefault https://es.slideshare.net/OpenDNS/security-ninjas-opensource"
+		;;
+		altoro)    
+			echo -e "$TCian Information about Altoro Mutual Vulnerable Bank - altoro $TDefault"
+			echo -e "$TYellow Description: $TDefault AltoroJ is a sample banking J2EE web application."
+			echo -e "              It shows what happens when web applications are written with consideration of app functionality but not app security"
+			echo -e "$TYellow Source: $TDefault https://github.com/HCL-TECH-SOFTWARE/AltoroJ"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+		;;
+		graphql)
+			echo -e "$TCian Information about Grap QL - graphql $TDefault"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TYellow Source: $TDefault https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/"
+		;;
+		jvl)    
+			echo -e "$TCian Information about Java Vulnerable Lab - jvl $TDefault"
+			echo -e "$TYellow Description: $TDefault This is a Vulnerable Web Application developed by Cyber Security and Privacy Foundation(www.cysecurity.org). This app is intended for the Java Programmers and other people who wish to learn about Web application vulnerabilities and write secure code"
+			echo -e "$TYellow Source: $TDefault https://github.com/CSPF-Founder/JavaVulnerableLab"
+			echo -e "$TYellow Install: $TDefault Go to install.jsp anc click on the button"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+			echo -e "$TYellow Solutions: $TDefault https://github.com/CSPF-Founder/JavaSecurityCourse"
+		;;
+		w4p | web4pentester)
+			echo -e "$TCian Information about Web for Pentester I - web4pentester/w4p $TDefault"
+			echo -e "$TYellow Source: $TDefault https://pentesterlab.com/exercises/web_for_pentester/course"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+		;;
+		sqlilabs)
+			echo -e "$TCian Information about Audi-1 SQLi labs - sqlilabs $TDefault"
+			echo -e "$TYellow Source: $TDefault https://github-com.translate.goog/Audi-1/sqli-labs"
+			echo -e "$TYellow Install: $TDefault Click on the link setup/resetDB to create database, create tables and populate Data"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+			echo -e "$TYellow Solutions: $TDefault http://dummy2dummies.blogspot.com"
+			echo -e "            http://www.securitytube.net/user/Audi"
+			echo -e "            https://www.facebook.com/sqlilabs"
+			;;
+		oxninja)
+			echo -e "$TCian Information about OxNinja SQLi-Lab machine - oxninja $TDefault"
+			echo -e "$TYellow Source: $TDefault https://github.com/OxNinja/SQLi-lab"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
+			echo -e "$TYellow Solutions: $TDefault https://0xninja.fr/posts/sqli-lab/"
+			;;
+		*)
+		  echo "ERROR: WTH! I don't recognize the project name $1" 
+		  list
+		;;
+	esac  
 	echo -e "----------------------------------------------"
 }
 
@@ -370,17 +429,6 @@ project_startinfo_bwapp ()
   else
     echo "Run install first to use bWapp at http://$1/install.php"
   fi
-}
-
-project_info_webgoat () 
-{
-	echo -e "$TCian Information about OWASP WebGoat 7,8,8.1 $TDefault"
-	echo -e " Description: WebGoat is a deliberately insecure application that allows interested developers just like you to test"
-	echo -e "              vulnerabilities commonly found in Java-based applications that use common and popular open source components."
-	echo -e " Source: https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
-	echo -e "         https://github.com/WebGoat/WebGoat"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e "----------------------------------------------"
 }
 
 project_startinfo_webgoat7 () 
@@ -399,37 +447,10 @@ project_startinfo_webgoat81 ()
   echo "WebWolf is not mapped yet, so only challenges not using WebWolf can be completed"
 }
 
-project_info_dvwa () 
-{
-	echo -e "$TCian Information about Damn Vulnerable Web Application - dvwa $TDefault"
-	echo -e " Description: DVWA is a PHP/MySQL web application that is damn vulnerable."
-	echo -e "	           Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, "
-	echo -e "              help web developers better understand the processes of securing web applications and to aid both students"
-	echo -e "	           & teachers to learn about web application security in a controlled class room environment"
-	echo -e " Source: https://github.com/digininja/DVWA"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Solutions: http://www.adminso.es/recursos/Proyectos/PFM/2011_12/PFM_DVWA.pdf"
-	echo -e "            https://bughacking.com/dvwa-ultimate-guide-first-steps-and-walkthrough/"
-	echo -e "----------------------------------------------"
-}
-
 project_startinfo_dvwa () 
 {
   echo "Default username/password:   admin/password"
   echo "Remember to click on the CREATE DATABASE Button before you start"
-}
-
-project_info_mutillidae () 
-{
-	echo -e "$TCian Information about OWASP Mutillidae 2 Project - mutillidae $TDefault"
-	echo -e " Description: OWASP Mutillidae II is a free, open-source, deliberately vulnerable web application providing a target for web-security training."
-	echo -e "	           This is an easy-to-use web hacking environment designed for labs, security enthusiasts, classrooms, CTF, and vulnerability assessment tool targets."
-	echo -e " Source: https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
-	echo -e "         https://github.com/webpwnized/mutillidae"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Tutorial: https://www.youtube.com/user/webpwnized"
-	echo -e " Solutions: https://matrixlabsblog.wordpress.com/2019/04/14/owasp-mutillidae-walkthrough/"
-	echo -e "----------------------------------------------"
 }
 
 project_startinfo_mutillidae () 
@@ -437,34 +458,9 @@ project_startinfo_mutillidae ()
   echo "Remember to click on the create database link before you start"
 }
 
-project_info_juiceshop () 
-{
-	echo -e "$TCian Information about OWASP Juice Shop - juiceshop $TDefault"
-	echo -e " Description: OWASP Juice Shop is probably the most modern and sophisticated insecure web application!"
-	echo -e " Source: https://owasp-juice.shop"
-	echo -e "         https://github.com/juice-shop/juice-shop"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Solutions: https://systemweakness.com/owasp-juice-shop-tryhackme-walkthrough-2023-detailed-bea74989325b"
-	echo -e "            https://medium.com/@corybantic/tryhackme-owasp-juice-shop-walkthrough-ab07d12dbdc"
-	echo -e "            https://tomsitcafe.com/2023/01/16/tryhackme-owasp-juice-shop-write-up/"
-	echo -e "----------------------------------------------"
-}
-
 project_startinfo_juiceshop () 
 {
   echo "OWASP Juice Shop now running"
-}
-
-project_info_securitysheperd () 
-{
-	echo -e "$TCian Information about OWASP Security Shepherd - securitysheperd $TDefault"
-	echo -e " Description: OWASP Security Shepherd is a web and mobile application security training platform. "
-	echo -e "              Security Shepherd has been designed to foster and improve security awareness among a varied skill-set demographic. "
-	echo -e "              The aim of this project is to take AppSec novices or experienced engineers and sharpen their penetration testing skillset to security expert status"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Source: https://www.owasp.org/index.php/OWASP_Security_Shepherd"
-	echo -e "         https://github.com/OWASP/SecurityShepherd"
-	echo -e "----------------------------------------------"
 }
 
 project_startinfo_securitysheperd () 
@@ -473,42 +469,14 @@ project_startinfo_securitysheperd ()
   echo " admin / password"
 }
 
-project_info_vulnerablewp () 
-{
-	echo -e "$TCian Information about Vulnerable WordPRess - vulnerablewp $TDefault"
-	echo -e " Source: https://github.com/wpscanteam/VulnerableWordpress"
-	echo -e "----------------------------------------------"
-}
-
 project_startinfo_vulnerablewp () 
 {
   echo "WPScan Vulnerable Wordpress site now running"
 }
 
-project_info_securityninjas () 
-{
-	echo -e "$TCian Information about OpenDNS Security Ninjas - securityninjas $TDefault"
-	echo -e " Description: OpenDNS Security Ninjas AppSec Training. "
-	echo -e "              This hands-on training lab consists of 10 fun real world like hacking exercises, corresponding to each of the 2013 OWASP Top 10 vulnerabilities."
-	echo -e " Source: https://github.com/opendns/Security_Ninjas_AppSec_Training"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e " Course: https://es.slideshare.net/OpenDNS/security-ninjas-opensource"
-	echo -e "----------------------------------------------"
-}
-
 project_startinfo_securityninjas ()
 {
   echo "Open DNS Security Ninjas site now running"
-}
-
-project_info_altoro () 
-{
-	echo -e "$TCian Information about Altoro Mutual Vulnerable Bank - altoro $TDefault"
-	echo -e " Description: AltoroJ is a sample banking J2EE web application."
-	echo -e "              It shows what happens when web applications are written with consideration of app functionality but not app security"
-	echo -e " Source: https://github.com/HCL-TECH-SOFTWARE/AltoroJ"
-	echo -e " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo -e "----------------------------------------------"
 }
 
 project_startinfo_altoro ()
@@ -517,29 +485,10 @@ project_startinfo_altoro ()
   echo "Second known credential is admin/admin"
 }
 
-project_info_graphql () 
-{
-echo "https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/"
-}
-
 project_startinfo_graphql ()
 {
   echo "Vulnerable GraphQL now mapped to port 80 (not 3000 as documentation states)." 
   echo "Have a look at this post for more information on this API: https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/"
-}
-
-project_info_jvl () 
-{
-	echo -e "$TCian Information about Java Vulnerable Lab - jvl $TDefault"
-	echo " Description: This is a Vulnerable Web Application developed by Cyber Security and Privacy Foundation(www.cysecurity.org). This app is intended for the Java Programmers and other people who wish to learn about Web application vulnerabilities and write secure code"
-	echo " Source: https://github.com/CSPF-Founder/JavaVulnerableLab"
-	echo " Install: Go to install.jsp anc click on the button"
-	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo "        No automated tools (like SQLmap, dirb...)"
-	echo "        Only hand-crafted payloads or home-made scripts"
-	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-	echo " Solutions: https://github.com/CSPF-Founder/JavaSecurityCourse"
-	echo "----------------------------------------------"
 }
 
 project_startinfo_jvl ()
@@ -547,18 +496,6 @@ project_startinfo_jvl ()
   echo "Java Vulnerable Lab now mapped to port 80."
   echo "First Install: http://127.16.0.1/JavaVulnerableLab/instal.jsp"
   echo "Access: http://127.16.0.1/JavaVulnerableLab"  
-}
-
-project_info_web4pentester ()
-{
-	echo -e "$TCian Information about Web for Pentester - web4pentester $TDefault"
-	echo " Source: https://pentesterlab.com/exercises/web_for_pentester/course"
-	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo "        No automated tools (like SQLmap, dirb...)"
-	echo "        Only hand-crafted payloads or home-made scripts"
-	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-	echo "----------------------------------------------"
-	
 }
 
 project_startinfo_web4pentester ()
@@ -570,36 +507,9 @@ project_startinfo_web4pentester ()
 	echo "----------------------------------------------"
 }
 
-project_info_sqlilabs ()
-{
-	echo -e "$TCian Information about Audi-1 SQLi labs - sqlilabs $TDefault"
-	echo " Source: https://github-com.translate.goog/Audi-1/sqli-labs"
-	echo " Install: Click on the link setup/resetDB to create database, create tables and populate Data"
-	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo "        No automated tools (like SQLmap, dirb...)"
-	echo "        Only hand-crafted payloads or home-made scripts"
-	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-	echo " Solutions: http://dummy2dummies.blogspot.com"
-	echo "            http://www.securitytube.net/user/Audi"
-	echo "            https://www.facebook.com/sqlilabs"
-	echo "----------------------------------------------"
-}
-
 project_startinfo_sqlilabs ()
 {
 	echo "SQLI-LABS is a platform to learn SQLI Following labs are covered for GET and POST scenarios"
-}
-
-project_info_oxninja ()
-{
-	echo -e "$TCian Information about OxNinja SQLi-Lab machine - oxninja $TDefault"
-	echo " Source:    https://github.com/OxNinja/SQLi-lab"
-	echo " Rules: The goal of this lab is to train like a hacker not a script kiddie"
-	echo "        No automated tools (like SQLmap, dirb...)"
-	echo "        Only hand-crafted payloads or home-made scripts"
-	echo "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-	echo " Solutions: https://0xninja.fr/posts/sqli-lab/"
-	echo "----------------------------------------------"
 }
 
 project_startinfo_oxninja ()
@@ -836,9 +746,11 @@ project_start_dispatch()
 		fi
 		cd oxninja-sqlilab	
 		if ! grep -q "container_name: oxninja" docker-compose.yml; then
-			sed -i "/web:/a 		container_name: oxninja" docker-compose.yml
+			sed -i "/web:/at        container_name: oxninja" docker-compose.yml
+			sed -i "s/^t//" docker-compose.yml
 		fi
 		sed -i "s|-\s*80\:\s*80|-\s*127.20.0.1\:\s*80\:\s*80|g" docker-compose.yml
+		sed -i "s/172.16.0/172.16.1/g" docker-compose.yml
 		openUrl "http://127.20.0.1" 
 		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
@@ -997,14 +909,14 @@ project_stop_dispatch()
 # Checking Privileges   #
 #########################
 function check_runpriv (){
-	echo -e "Checking user privileges"
-	echo -en "Running docker without sudo:  "
+	echo -e "$TCian Checking user privileges $TDefault"
+	echo -en " Running docker without sudo:  "
 	if groups | grep -q docker; then
 		echo -e "$TGreen YES $TDefault"
 	else
 		echo -e "$TYellow NEED SUDO $TDefault"
 	fi
-	echo -en "User has sudo privileges:     "
+	echo -en " User has sudo privileges:     "
 	if groups | grep -q sudo; then
 		echo -e "$TGreen YES - Elevating privileges $TDefault"
 		sudo docker &> /dev/null
@@ -1115,7 +1027,8 @@ function check_runpriv (){
 				list # call list ()
 			break
 			fi
-			info $2
+			project_info $2
+			#info $2
 			;;
 			
 		*)
