@@ -23,7 +23,7 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * OpenDNS Security Ninjas
 * Altoro Mutual
 * Vulnerable GraphQL API
-* Java Vulnerable Lab (New 20230916) --> Not working :-(
+* Java Vulnerable Lab (New 20230916) --> Offical Docker Not working :-(
 * Web for Pentester I (New 20230918)
 * Audi - 1 SQLI labs (New 20231215)
 * OxNinja SQLi-Lab (New 20231217)
