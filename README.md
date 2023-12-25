@@ -161,6 +161,7 @@ sudo docker ps
 
 ## Next machines / steps
 * Try to fix JVL
+* Include [NoSQLi Lab](https://github.com/digininja/nosqlilab)
 * Include [SSRF-LAB](https://github.com/basubanakar/SSRF-LAB)
 * Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 * Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
