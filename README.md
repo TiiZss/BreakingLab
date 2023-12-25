@@ -7,10 +7,10 @@
 
 <image src="/BrakingLab.png" alt="BreakinLab">
 Bash script to manage web apps using docker and hosts aliases.<br />
-Idea taken from: https://github.com/eystsen/pentestlab.<br />
+Inspiration comes from: https://github.com/eystsen/pentestlab.<br />
 Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 
-### Current available webapps
+### Current available DOCKER webapps
 
 * bWAPP
 * WebGoat 7.1
@@ -28,9 +28,14 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * Audi - 1 SQLI labs (New 20231215)
 * OxNinja SQLi-Lab (New 20231217)
 
-### Get started 
+### Current available ONLINE webapps
 
-Using any of these apps can be done in 3 quick and simple steps.
+* RedTiger's Hackit (New 20231224)
+* PortSwigger SQLi Labs (New 20231224)
+* Hacksplanning SQLi Lab (New 20231224)
+* Synk Learn (New 20231224)
+* Try Hack Me SQLi Lab (New 20231225)
+* Kontra SQLi Lab (New 20231225)
 
 #### 1) Clone the repo
 Clone this repo, or download it any way you prefer
@@ -74,7 +79,7 @@ Use the startpublic command to bind the app to your IP
 ```
 If you have multiple interfaces and/or IPs, **or** you need to expose the app on a different port specify it like this
 ```
-./breakinglab.sh startpublic w4p 192.168.1.118 8080
+./breakinglab.sh startpublic w4p 192.168.1.218 8080
 ```
 IP needs to be an IP on the machine and port in this example is 8080
 
@@ -84,9 +89,8 @@ You can only have one app exposed on any given port. If you need to expose more 
 #### 5) Stopp any app
 To stop any app use the stop command
 ```
-./breakinglab.sh stop bwapp
+./breakinglab.sh stop w4p
 ```
-
 
 #### Print a complete list of available projects use the list command
 ```
@@ -101,7 +105,7 @@ To stop any app use the stop command
 
 ### Usage
 ```
-Usage: ./breakinglab.sh {list|status|info|start|startpublic|stop} [projectname]
+Usage: ./breakinglab.sh {list|status|info|start|startpublic|stop|online} [projectname]
 
  This scripts uses docker and hosts alias to make web apps available on localhost"
 
@@ -110,7 +114,7 @@ Ex.
    List all available projects  
 
 ./breakinglab.sh status
-   Show status for all projects  
+   Show status for all docker projects  
 
 ./breakinglab.sh start w4p
    Start docker container with w4p and make it available on localhost  
@@ -123,6 +127,10 @@ Ex.
 
 ./breakinglab.sh info w4p
    Show information about w4p project
+
+./breakinglab.sh online w4p
+   Start w4p online webapp
+
 ```
 
  ### Dockerfiles from
@@ -137,8 +145,8 @@ Ex.
  * Vulnerable GraphQL API - Carve Systems LLC (carvesystems/vulnerable-graphql-api)  
  * Java Vulnerable Lab    - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab) --> :-( Not working
  * Web For Pentester I    - PentesterLab Web For Pentester I (tiizss/webforpentester)
- * Audi 1 SQLi Lab    		  - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
- * OxNinja SQLi-Lab		     - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
+ * Audi 1 SQLi Lab        - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
+ * OxNinja SQLi-Lab       - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
 
 github references means the docker is custom created and hosted in dockerhub.
 
