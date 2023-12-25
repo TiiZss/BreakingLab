@@ -6,7 +6,7 @@
 # 2023/11/09 - TiiZss - w4p no funciona no arranca mysql. web4pentester funciona.
 # 2023/12/15 - TiiZss - Audi 1 SQLi Labs
 # 2023/12/17 - TiiZss - OxNinja SQLi Lab
-# 2023/12/24 - TiiZss - corrección de errores y optimización
+# 2023/12/24 - TiiZss - corrección de errores y optimización. Se añade RedTiger's Hackit Online
 
 ETC_HOSTS=/etc/hosts
 
@@ -85,20 +85,22 @@ function display_info {
 # The command line help #
 #########################
 display_help() {
-    echo "Usage: $0 {list|status|info|start|startpublic|stop} [projectname]" >&2
-    echo " Ex."
-    echo " $0 list"
-    echo " 	List all available projects"
-    echo " $0 status"
-    echo "	Show status for all projects"
-    echo " $0 start w4p"
-    echo " 	Start w4p project and make it available on localhost" 
-    echo " $0 startpublic w4p"
-    echo " 	Start w4p project and make it publicly available (to anyone with network connectivity to the machine)" 
-    echo " $0 info w4p"
-    echo " 	Show information about w4p project"
-    echo " $0 stop w4p"
-    echo " 	Stop w4p project "
+    echo -e "  Usage: $0 {list|status|info|start|startpublic|stop|online} [projectname]" >&2
+    echo -e "   Ex."
+    echo -e "   $0 list"
+    echo -e "   	List all available projects"
+    echo -e "   $0 status"
+    echo -e "  	Show status for all docker projects"
+    echo -e "   $0 start w4p"
+    echo -e "   	Start w4p docker project and make it available on localhost" 
+    echo -e "   $0 startpublic w4p"
+    echo -e "   	Start w4p docker project and make it publicly available (to anyone with network connectivity to the machine)" 
+    echo -e "   $0 info w4p"
+    echo -e "   	Show information about w4p project"
+    echo -e "   $0 stop w4p"
+    echo -e "   	Stop w4p docker project "
+    echo -e "   $0 online w4p"
+    echo -e "   	Start Online w4p project "
     exit 1
 }
 
@@ -227,7 +229,7 @@ function openUrl() {
 # List all pentest apps #
 #########################
 list() {
-    echo "Available pentest applications" >&2
+    echo " Available Docker Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
 	echo "  bwapp            - bWAPP PHP/MySQL based from itsecgames.com"
     echo "  webgoat7         - OWASP WebGoat 7.1"
@@ -241,11 +243,20 @@ list() {
     echo "  securityninjas   - OpenDNS Security Ninjas"
     echo "  altoro           - Altoro Mutual Vulnerable Bank"
     echo "  graphql          - Vulnerable GraphQL API"
-    echo "  jvl				 - CSPF Java Vulnerable Lab Web Application"
+    echo "  jvl              - CSPF Java Vulnerable Lab Web Application"
     echo "  w4p              - PentesterLab Web For Pentester I "
     echo "  web4pentester    - PentesterLab Web For Pentester I "
     echo "  sqlilabs         - Audi-1 SQLi labs"
 	echo "  oxninja          - OxNinja SQLi-lab"
+	echo "-----------------------------------------------------------------------------------------"
+    echo " Available Online Pentest Applications " >&2
+    echo "-----------------------------------------------------------------------------------------"
+    echo "  redtiger         - RedTiger's Hackit      (online)"
+	echo "  portswigger      - PortSwigger SQLi Labs  (online)"
+	echo "  hacksplaining    - Hacksplanning SQLi Lab (online)"
+	echo "  synk             - Synk Learn             (online)"
+	echo "  thmsqli          - Try Hack Me SQLi Lab   (online)"
+	echo "  kontra           - Kontra SQLi Lab        (online)"
 	echo "-----------------------------------------------------------------------------------------"
     exit 1
 }
@@ -411,6 +422,56 @@ function project_info () {
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
 			echo -e "$TYellow Solutions: $TDefault https://0xninja.fr/posts/sqli-lab/"
 			;;
+		redtiger)
+			echo -e "$TCian Information about RedTigers HackIit - redtiger (ONLINE) $TDefault"
+			echo -e "$TYellow Source: $TDefault http://redtiger.labs.overthewire.org/"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
+		
+		portswigger)
+			echo -e "$TCian Information about PortSwigger SQLi Lab - portswigger (ONLINE) $TDefault"
+			echo -e "$TYellow Source: https://portswigger.net/web-security/sql-injection $TDefault "
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
+			
+		hacksplaining)
+			echo -e "$TCian Information about Hacksplanning SQLi Lab - hacksplaining (ONLINE) $TDefault"
+			echo -e "$TYellow Source: $TDefault https://www.hacksplaining.com/exercises/sql-injection"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
+		
+		synk)
+			echo -e "$TCian Information about Synk Learn Labs - synk (ONLINE) $TDefault"
+			echo -e "$TYellow Source: $TDefault https://learn.snyk.io/catalog/"
+			;;	
+		
+		thmsqli)
+			echo -e "$TCian Information about Try Hack Me SQLi Lab - thmsqli (ONLINE) $TDefault"
+			echo -e "$TYellow Source: $TDefault https://tryhackme.com/room/sqlilab"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords."
+			;;
+		
+		kontra)
+			echo -e "$TCian Information about Kontra SQLi Lab - kontra (ONLINE) $TDefault"
+			echo -e "$TYellow Source: $TDefault https://application.security/free-application-security-training/owasp-top-10-sql-injection"
+			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords."
+			;;
+			
 		*)
 		  echo "ERROR: WTH! I don't recognize the project name $1" 
 		  list
@@ -755,12 +816,54 @@ project_start_dispatch()
 		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
 		;;
-    *)
+	*)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
     ;;
   esac  
 }
 
+function start_online () {
+	case "$1" in
+		redtiger)
+			echo -e "  RedTiger's Hackit SQLi Lab is an Online machine. So only web browser is needed."
+			sleep 2
+			openUrl "http://redtiger.labs.overthewire.org/"
+			;;
+		portswigger)
+			echo -e "  PortSwigger SQL injection Labs. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://portswigger.net/web-security/sql-injection"
+			;;
+		hacksplaining)
+			echo -e " Hacksplanning SQL Injection Lab. This are all online. So only web browser is needed. "
+			sleep 2
+			openUrl "https://www.hacksplaining.com/exercises/sql-injection"
+			;;
+		synk)
+			echo -e "  Synk Learn teaches developers how to stay secure with interactive lessons exploring "
+			echo -e "  vulnerabilities across a variety of languages and ecosystems. "
+			echo -e "  This are all online. So only web browser is needed. "
+			sleep 2
+			openUrl "https://learn.snyk.io/catalog/"
+			;;
+		thmsqli)
+			echo -e "  Try Hack Me SQLi Lab. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://tryhackme.com/room/sqlilab"
+			;;
+		kontra)
+			echo -e "  Kontra Aplication Security SQLi Lab is an online Lab, so only web browser is needed."
+			sleep -2
+			openUrl "https://application.security/free-application-security-training/owasp-top-10-sql-injection"
+			;;
+		*)
+			echo -e "$TRed ERROR: Project start online doesn't recognize the online project name $TDefault $1 "
+			echo -e " Trying Docker Project if exists it will be launched. "
+			sleep 2
+			project_start_dispatch $1
+		;;
+	esac		
+}
 
 project_startpublic_dispatch()
 {
@@ -932,8 +1035,38 @@ function check_runpriv (){
 #########################
 	display_logo
 	display_info
-	check_runpriv
-	check_docker
+	
+	case "$1" in
+		online)
+			if [ -z "$2" ]
+			then
+				echo -e "$TRed ERROR: Option online needs project name in lowercase $TDefault"
+				list # call list ()
+				break
+			fi
+			start_online $2
+			;;
+		
+		info)
+			if [ -z "$2" ]
+			then
+				echo -en " Please choose one 4 detailed information: "
+				list # call list ()
+			break
+			fi
+			project_info $2
+		;;
+		
+		list)
+			list # call list ()
+			;;
+		
+		*)
+			check_runpriv
+			check_docker
+		;;
+	esac
+
 	echo -e "$TDefault-----------------------------------------------------------------------------------------"
 	
 	case "$1" in
@@ -1009,10 +1142,6 @@ function check_runpriv (){
 			project_stop_dispatch $2
 			;;
 			
-		list)
-			list # call list ()
-			;;
-			
 		status)
 			echo " Showing STATUS of the Docker containers"
 			echo "-----------------------------------------------------------------------------------------"
@@ -1020,17 +1149,9 @@ function check_runpriv (){
 			echo "-----------------------------------------------------------------------------------------"
 			;;
 			
-		info)
-			if [ -z "$2" ]
-			then
-				echo -en "Please choose one 4 detailed information: "
-				list # call list ()
-			break
-			fi
-			project_info $2
-			#info $2
+		list | info | online)
 			;;
-			
+
 		*)
 			display_help
 			;;
