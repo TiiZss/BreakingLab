@@ -37,6 +37,14 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * Try Hack Me SQLi Lab (New 20231225)
 * Kontra SQLi Lab (New 20231225)
 
+### Current available ONLINE Hacking Training Webs
+* [TryHackMe](https://tryhackme.com) (New 20240315)
+* [HackTheBox](https://www.hackthebox.com) (New 20240315)
+* [VulnHub](https://www.vulnhub.com) (New 20240316)
+* [Burp Web Security Academy](https://portswigger.net/web-security) (New 20240316)
+* [CTFTime](https://ctftime.org) (New 20240316)
+
+## How To
 #### 1) Clone the repo
 Clone this repo, or download it any way you prefer
 ```
@@ -92,18 +100,14 @@ To stop any app use the stop command
 ./breakinglab.sh stop w4p
 ```
 
-#### Print a complete list of available projects use the list command
-```
-./breakinglab.sh list 
-```
+## Usage
+### With menu
 
-#### Running just the script will print help info
 ```
 ./breakinglab.sh 
 ```
 
-
-### Usage
+### With patrameters
 ```
 Usage: ./breakinglab.sh {list|status|info|start|startpublic|stop|online} [projectname]
 
@@ -179,11 +183,6 @@ sudo docker ps
 * Include [OWASP Bricks](https://sourceforge.net/projects/owaspbricks/)
 * Include [Vulnado](https://github.com/ScaleSec/vulnado)
 * Include [BTS PenTesting Lab](https://github.com/CSPF-Founder/btslab)
-* Include [TryHackMe](https://tryhackme.com)
-* Include [HackTheBox](https://www.hackthebox.com)
-* Include [VulnHub](https://www.vulnhub.com)
-* Include [Burp Web Security Academy](https://portswigger.net/web-security)
-* Include [CTFTime](https://ctftime.org)
 * Include [HackMyVM](https://hackmyvm.eu)
 * Include [VulnMachines](https://www.vulnmachines.com/)
-* Include [BlueTeamLasb](https://blueteamlabs.online/)
+* Include [BlueTeamLabs](https://blueteamlabs.online/)
