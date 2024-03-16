@@ -7,6 +7,9 @@
 # 2023/12/15 - TiiZss - Audi 1 SQLi Labs
 # 2023/12/17 - TiiZss - OxNinja SQLi Lab
 # 2023/12/24 - TiiZss - corrección de errores y optimización. Se añade RedTiger's Hackit Online
+# 2024/01/26 - TiiZss - se modifica el sistema de menus
+# 2024/03/15 - TiiZss - Se añaden HackTheBox/TryHackMe Online
+# 2024/03/16 - TiiZss - Se añaden PortSwigger / VulnHub / CTFTime Online
 
 ETC_HOSTS=/etc/hosts
 
@@ -18,22 +21,22 @@ no_hardcore_exit=0
 #########################
 # Text Style            #
 #########################
-TDefault="\e[0m"
-TBold="\e[1m"
-TUnderline="\e[2m"
+TxDefault="\e[0m"
+TxBold="\e[1m"
+TxUnderline="\e[2m"
 
 #########################
 # Text Colors           #
 #########################
-TDefault="\e[0;0m"
-TBlack="\e[0;30m"
-TRed="\e[0;31m"
-TGreen="\e[0;32m"
-TYellow="\e[1;33m"
-TBlue="\e[0;34m"
-TMagenta="\e[0;35m"
-TCian="\e[0;36m"
-TWhite="\e[0;37m"
+TCD="\e[0;0m"
+TCBlack="\e[0;30m"
+TCR="\e[0;31m"
+TCG="\e[0;32m"
+TCY="\e[1;33m"
+TCB="\e[0;34m"
+TCM="\e[0;35m"
+TCC="\e[0;36m"
+TCW="\e[0;37m"
 
 #########################
 # Background Colors     #
@@ -64,21 +67,21 @@ function print_date () {
 #########################
 display_logo() {                                                                             
 	echo -e "-----------------------------------------------------------------------------------------"
-	echo -e "$BGGreen               35$BGWhite$TGreen                                       TiiZss  $TWhite$BGGreen               57$BGWhite$TGreen         $TWhite"
-	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen ███████  █████  ██   ██ ██ ███    ██  ██████  $TWhite$BGGreen ██       █████  $BGWhite$TGreen ██████  $TWhite"
-	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ████   ██ ██       $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
-	echo -e "$BGGreen ██████  ██████  $BGWhite$TGreen █████   ███████ █████   ██ ██ ██  ██ ██   ███ $TWhite$BGGreen ██      ███████ $BGWhite$TGreen ██████  $TWhite"
-	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TGreen ██      ██   ██ ██  ██  ██ ██  ██ ██ ██    ██ $TWhite$BGGreen ██      ██   ██ $BGWhite$TGreen ██   ██ $TWhite"
-	echo -e "$BGGreen ██████  ██   ██ $BGWhite$TGreen ███████ ██   ██ ██   ██ ██ ██   ████  ██████  $TWhite$BGGreen ███████ ██   ██ $BGWhite$TGreen ██████  $TWhite"
-	echo -e "$BGGreen                 $BGWhite$TGreen v.$(print_date)         $TWhite$BGGreen                 $BGWhite$TGreen    BETA $TWhite"
-	echo -e "$TDefault-----------------------------------------------------------------------------------------"
+	echo -e "$BGGreen               35$BGWhite$TCG                                       TiiZss  $TCW$BGGreen               57$BGWhite$TCG         $TCW"
+	echo -e "$BGGreen ██████  ██████  $BGWhite$TCG ███████  █████  ██   ██ ██ ███    ██  ██████  $TCW$BGGreen ██       █████  $BGWhite$TCG ██████  $TCW"
+	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TCG ██      ██   ██ ██  ██  ██ ████   ██ ██       $TCW$BGGreen ██      ██   ██ $BGWhite$TCG ██   ██ $TCW"
+	echo -e "$BGGreen ██████  ██████  $BGWhite$TCG █████   ███████ █████   ██ ██ ██  ██ ██   ███ $TCW$BGGreen ██      ███████ $BGWhite$TCG ██████  $TCW"
+	echo -e "$BGGreen ██   ██ ██   ██ $BGWhite$TCG ██      ██   ██ ██  ██  ██ ██  ██ ██ ██    ██ $TCW$BGGreen ██      ██   ██ $BGWhite$TCG ██   ██ $TCW"
+	echo -e "$BGGreen ██████  ██   ██ $BGWhite$TCG ███████ ██   ██ ██   ██ ██ ██   ████  ██████  $TCW$BGGreen ███████ ██   ██ $BGWhite$TCG ██████  $TCW"
+	echo -e "$BGGreen                 $BGWhite$TCG v.$(print_date)         $TCW$BGGreen                 $BGWhite$TCG    BETA $TCW"
+	echo -e "$TCD-----------------------------------------------------------------------------------------"
 }
 
 function display_info {
 	echo -e "  BreakingLab Script a Local Pentest Lab Management Script (Docker based)"
 	echo -e "  Modified by TiiZss. Version: $(print_date)"
     echo -e "  This scripts uses docker and hosts alias to make web apps available on localhost"
-    echo -e "-----------------------------------------------------------------------------------------"
+    #echo -e "-----------------------------------------------------------------------------------------"
 }
 
 #########################
@@ -101,7 +104,7 @@ display_help() {
     echo -e "   	Stop w4p docker project "
     echo -e "   $0 online w4p"
     echo -e "   	Start Online w4p project "
-    exit 1
+    #exit 1
 }
 
 ############################################
@@ -113,16 +116,16 @@ function docker_is_installed() {
     # Verifica si el demonio de Docker está en ejecución
     if docker info >/dev/null; then
       # Docker está instalado y funcionando
-      echo "Docker está instalado y funcionando"
+      echo "  Docker está instalado y funcionando"
       return 0
     else
       # Docker está instalado pero no está funcionando
-      echo "Docker está instalado pero no está funcionando"
+      echo "  Docker está instalado pero no está funcionando"
       return 1
     fi
   else
     # Docker no está instalado
-    echo "Docker no está instalado"
+    echo "  Docker no está instalado"
     return 1
   fi
 }
@@ -132,11 +135,11 @@ function docker_is_running() {
   ps -ef | grep -q "dockerd"
   if [ $? -eq 0 ]; then
     # Docker Desktop está en funcionamiento
-    echo "Docker Desktop está en funcionamiento"
+    echo "  Docker Desktop está en funcionamiento"
     return 0
   else
     # Docker Desktop no está en funcionamiento
-    echo "Docker Desktop no está en funcionamiento"
+    echo "  Docker Desktop no está en funcionamiento"
     return 1
   fi
 }
@@ -169,10 +172,10 @@ function check_docker() {
 	if [[ $(uname -r) =~ WSL ]]; then
 		#if ! command -v docker &> /dev/null; then
 		if ! docker &> /dev/null; then
-			echo -e "$TRed Docker Desktop isn't running. $TDefault"
+			echo -e "$TCR Docker Desktop isn't running. $TCD"
 			start_docker
 		else
-			echo -e "$TGreen Docker is running. $TDefault "
+			echo -e "$TCG Docker is running. $TCD "
 		fi
 	else
 		if ! [ -x "$(command -v docker)" ]; then
@@ -189,16 +192,16 @@ function check_docker() {
 			exit
 		fi		
 		if sudo service docker status | grep inactive > /dev/null
-			echo -e "$TGreen Docker is running. $TDefault "
+			echo -e "$TCG Docker is running. $TCD "
 		then 
-			echo -e "$TRed Docker isn't running. $TDefault"
+			echo -e "$TCR Docker isn't running. $TCD"
 			start_docker
 		fi
 	fi
 }
 
 function start_docker () {
-	echo -n "Do you want to start docker now (y/n)?"
+	echo -n " Do you want to start docker now (y/n)?"
 	read answer
 	if echo "$answer" | grep -iq "^y"; then
 		if is_wsl; then
@@ -206,10 +209,11 @@ function start_docker () {
 		else
 			sudo service docker start
 		fi
-		echo -e " Starting Docker."
+		echo -e "$TCG Starting Docker. $TCD"
+		return 1
 	else	
-		echo -e "$TRed Not starting. Script will not be able to run applications. $TDefault"
-		exit
+		echo -e "$TCR If you don't start docker script will not be able to run docker applications. Quitting. $TCD"
+		return 0 # exit
 	fi
 }
 
@@ -231,34 +235,94 @@ function openUrl() {
 list() {
     echo " Available Docker Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
-	echo "  bwapp            - bWAPP PHP/MySQL based from itsecgames.com"
-    echo "  webgoat7         - OWASP WebGoat 7.1"
-    echo "  webgoat8         - OWASP WebGoat 8.0"
-    echo "  webgoat81        - OWASP WebGoat 8.1"
-    echo "  dvwa             - Damn Vulnerable Web Application"
-    echo "  mutillidae       - OWASP Mutillidae II"
-    echo "  juiceshop        - OWASP Juice Shop"
-    echo "  securitysheperd  - OWASP Security Shepherd"
-	echo "  vulnerablewp     - WPScan Vulnerable Wordpress"
-    echo "  securityninjas   - OpenDNS Security Ninjas"
-    echo "  altoro           - Altoro Mutual Vulnerable Bank"
-    echo "  graphql          - Vulnerable GraphQL API"
-    echo "  jvl              - CSPF Java Vulnerable Lab Web Application"
-    echo "  w4p              - PentesterLab Web For Pentester I "
-    echo "  web4pentester    - PentesterLab Web For Pentester I "
-    echo "  sqlilabs         - Audi-1 SQLi labs"
-	echo "  oxninja          - OxNinja SQLi-lab"
+	echo "  bwapp           - bWAPP PHP/MySQL based from itsecgames.com"
+    echo "  webgoat7        - OWASP WebGoat 7.1"
+    echo "  webgoat8        - OWASP WebGoat 8.0"
+    echo "  webgoat81       - OWASP WebGoat 8.1"
+    echo "  dvwa            - Damn Vulnerable Web Application"
+    echo "  mutillidae      - OWASP Mutillidae II"
+    echo "  juiceshop       - OWASP Juice Shop"
+    echo "  securitysheperd - OWASP Security Shepherd"
+	echo "  vulnerablewp    - WPScan Vulnerable Wordpress"
+    echo "  securityninjas  - OpenDNS Security Ninjas"
+    echo "  altoro          - Altoro Mutual Vulnerable Bank"
+    echo "  graphql         - Vulnerable GraphQL API"
+    echo "  jvl             - CSPF Java Vulnerable Lab Web Application"
+    echo "  w4p             - PentesterLab Web For Pentester I "
+    echo "  web4pentester   - PentesterLab Web For Pentester I "
+    echo "  sqlilabs        - Audi-1 SQLi labs"
+	echo "  oxninja         - OxNinja SQLi-lab"
 	echo "-----------------------------------------------------------------------------------------"
     echo " Available Online Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
-    echo "  redtiger         - RedTiger's Hackit      (online)"
-	echo "  portswigger      - PortSwigger SQLi Labs  (online)"
-	echo "  hacksplaining    - Hacksplanning SQLi Lab (online)"
-	echo "  synk             - Synk Learn             (online)"
-	echo "  thmsqli          - Try Hack Me SQLi Lab   (online)"
-	echo "  kontra           - Kontra SQLi Lab        (online)"
+    echo "  redtiger        - RedTiger's Hackit               (online)"
+	echo "  portswigger     - PortSwigger SQLi Labs           (online)"
+	echo "  hacksplaining   - Hacksplanning SQLi Lab          (online)"
+	echo "  synk            - Synk Learn                      (online)"
+	echo "  thmsqli         - Try Hack Me SQLi Lab            (online)"
 	echo "-----------------------------------------------------------------------------------------"
-    exit 1
+	echo " Available Online Hacking Training Webs - User registration needed" >&2
+    echo "-----------------------------------------------------------------------------------------"
+	echo "  kontra          - Kontra SQLi Lab                 (online)"
+	echo "  thm             - Try Hack Me                     (online)"
+	echo "  hdb             - Hack The Box                    (online)"
+	echo "  vulnhub         - VulnHub                         (online)"
+	echo "  ps              - PortSwigger WebSecurity Academy (online)"
+	echo "  ctftime         - CTFTime                         (online)"
+	echo "-----------------------------------------------------------------------------------------"
+    #exit 1
+}
+
+function list_dockerapps() {
+    echo -en "$TCC"
+	echo -e " Available Docker Pentest Applications " >&2
+    echo -e "-----------------------------------------------------------------------------------------"
+	echo -en "$TCD"
+	echo -e "$TCG bwapp           $TCD- bWAPP PHP/MySQL based from itsecgames.com"
+    echo -e "$TCG webgoat7        $TCD- OWASP WebGoat 7.1"
+    echo -e "$TCG webgoat8        $TCD- OWASP WebGoat 8.0"
+    echo -e "$TCG webgoat81       $TCD- OWASP WebGoat 8.1"
+    echo -e "$TCG dvwa            $TCD- Damn Vulnerable Web Application"
+    echo -e "$TCG mutillidae      $TCD- OWASP Mutillidae II"
+    echo -e "$TCG juiceshop       $TCD- OWASP Juice Shop"
+    echo -e "$TCG securitysheperd $TCD- OWASP Security Shepherd"
+	echo -e "$TCG vulnerablewp    $TCD- WPScan Vulnerable Wordpress"
+    echo -e "$TCG securityninjas  $TCD- OpenDNS Security Ninjas"
+    echo -e "$TCG altoro          $TCD- Altoro Mutual Vulnerable Bank"
+    echo -e "$TCG graphql         $TCD- Vulnerable GraphQL API"
+    echo -e "$TCG jvl             $TCD- CSPF Java Vulnerable Lab Web Application"
+    echo -e "$TCG w4p             $TCD- PentesterLab Web For Pentester I "
+    echo -e "$TCG web4pentester   $TCD- PentesterLab Web For Pentester I "
+    echo -e "$TCG sqlilabs        $TCD- Audi-1 SQLi labs"
+	echo -e "$TCG oxninja         $TCD- OxNinja SQLi-lab"
+	echo -e "-----------------------------------------------------------------------------------------"
+}
+
+function list_onlineapps () {
+	clear
+	display_logo
+	echo -en "$TCC"
+    echo -e " Available Online Pentest Applications " >&2
+    echo -e "-----------------------------------------------------------------------------------------"
+	echo -en "$TCD"
+    echo -e " $TCG redtiger      $TCD- RedTiger's Hackit      (online)"
+	echo -e " $TCG portswigger   $TCD- PortSwigger SQLi Labs  (online)"
+	echo -e " $TCG hacksplaining $TCD- Hacksplanning SQLi Lab (online)"
+	echo -e " $TCG synk          $TCD- Synk Learn             (online)"
+	echo -e " $TCG thmsqli       $TCD- Try Hack Me SQLi Lab   (online)"
+	echo -e " $TCG kontra        $TCD- Kontra SQLi Lab        (online)"
+	echo -e "-----------------------------------------------------------------------------------------"
+	echo -en "$TCB"
+    echo -e " Available Online Hacking Training Webs. User registration needed" >&2
+    echo -e "-----------------------------------------------------------------------------------------"
+	echo -en "$TCD"
+    echo -e " $TCG thm           $TCD- Try Hack Me                     (online)"
+	echo -e " $TCG hdb           $TCD- Hack The Box                    (online)"
+	echo -e " $TCG vulnhub       $TCD- VulnHub                         (online)"
+	echo -e " $TCG ps            $TCD- PortSwigger WebSecurity Academy (online)"
+	echo -e " $TCG ctftime       $TCD- CTFTime                         (online)"
+	echo -e "-----------------------------------------------------------------------------------------"
+    #exit 1
 }
 
 #########################
@@ -301,177 +365,195 @@ function addhost() { # ex.   127.5.0.1	bwapp
 function project_info () {
 	case "$1" in
 		bwapp)
-			echo -e "$TCian Information about bWAPP an extremely buggy web app! - bwapp $TDefault"
-			echo -e "$TYellow Description: $TDefault bWAPP, or a buggy web application, is a free and open source deliberately insecure web application."
+			echo -e "$TCC Information about bWAPP an extremely buggy web app! - bwapp $TCD"
+			echo -e "$TCY Description: $TCD bWAPP, or a buggy web application, is a free and open source deliberately insecure web application."
 			echo -e "              It helps security enthusiasts, developers and students to discover and to prevent web vulnerabilities."
 			echo -e "              bWAPP prepares one to conduct successful penetration testing and ethical hacking projects."
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Tutorial: $TDefault https://www.youtube.com/playlist?list=PLSbrmTUy4daOsm6ky-M5QmUnV31BkZ_6X"
-			echo -e "$TYellow Solutions: $TDefault https://wooly6bear.files.wordpress.com/2016/01/bwapp-tutorial.pdf"
-			echo -e "$TYellow Source: $TDefault http://www.itsecgames.com"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Tutorial: $TCD https://www.youtube.com/playlist?list=PLSbrmTUy4daOsm6ky-M5QmUnV31BkZ_6X"
+			echo -e "$TCY Solutions: $TCD https://wooly6bear.files.wordpress.com/2016/01/bwapp-tutorial.pdf"
+			echo -e "$TCY Source: $TCD http://www.itsecgames.com"
 		;;
 		webgoat*)
-			echo -e "$TCian Information about OWASP WebGoat 7,8,8.1 $TDefault"
-			echo -e "$TYellow Description: $TDefault WebGoat is a deliberately insecure application that allows interested developers just like you to test"
+			echo -e "$TCC Information about OWASP WebGoat 7,8,8.1 $TCD"
+			echo -e "$TCY Description: $TCD WebGoat is a deliberately insecure application that allows interested developers just like you to test"
 			echo -e "              vulnerabilities commonly found in Java-based applications that use common and popular open source components."
-			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
+			echo -e "$TCY Source: $TCD https://www.owasp.org/index.php/Category:OWASP_WebGoat_Project"
 			echo -e "         https://github.com/WebGoat/WebGoat"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 		;;
 		dvwa)
-			echo -e "$TCian Information about Damn Vulnerable Web Application - dvwa $TDefault"
-			echo -e "$TYellow Description: $TDefault DVWA is a PHP/MySQL web application that is damn vulnerable."
+			echo -e "$TCC Information about Damn Vulnerable Web Application - dvwa $TCD"
+			echo -e "$TCY Description: $TCD DVWA is a PHP/MySQL web application that is damn vulnerable."
 			echo -e "	           Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, "
 			echo -e "              help web developers better understand the processes of securing web applications and to aid both students"
 			echo -e "	           & teachers to learn about web application security in a controlled class room environment"
-			echo -e "$TYellow Source: $TDefault https://github.com/digininja/DVWA"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Solutions: $TDefault http://www.adminso.es/recursos/Proyectos/PFM/2011_12/PFM_DVWA.pdf"
+			echo -e "$TCY Source: $TCD https://github.com/digininja/DVWA"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Solutions: $TCD http://www.adminso.es/recursos/Proyectos/PFM/2011_12/PFM_DVWA.pdf"
 			echo -e "            https://bughacking.com/dvwa-ultimate-guide-first-steps-and-walkthrough/"
 		;;    
 		mutillidae)
-			echo -e "$TCian Information about OWASP Mutillidae 2 Project - mutillidae $TDefault"
-			echo -e "$TYellow Description: $TDefault OWASP Mutillidae II is a free, open-source, deliberately vulnerable web application providing a target for web-security training."
+			echo -e "$TCC Information about OWASP Mutillidae 2 Project - mutillidae $TCD"
+			echo -e "$TCY Description: $TCD OWASP Mutillidae II is a free, open-source, deliberately vulnerable web application providing a target for web-security training."
 			echo -e "	           This is an easy-to-use web hacking environment designed for labs, security enthusiasts, classrooms, CTF, and vulnerability assessment tool targets."
-			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
+			echo -e "$TCY Source: $TCD https://www.owasp.org/index.php/OWASP_Mutillidae_2_Project"
 			echo -e "         https://github.com/webpwnized/mutillidae"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Tutorial: $TDefault https://www.youtube.com/user/webpwnized"
-			echo -e "$TYellow Solutions: $TDefault https://matrixlabsblog.wordpress.com/2019/04/14/owasp-mutillidae-walkthrough/"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Tutorial: $TCD https://www.youtube.com/user/webpwnized"
+			echo -e "$TCY Solutions: $TCD https://matrixlabsblog.wordpress.com/2019/04/14/owasp-mutillidae-walkthrough/"
 		;;
 		juiceshop)
-			echo -e "$TCian Information about OWASP Juice Shop - juiceshop $TDefault"
-			echo -e "$TYellow Description: $TDefault OWASP Juice Shop is probably the most modern and sophisticated insecure web application!"
-			echo -e "$TYellow Source: $TDefault https://owasp-juice.shop"
+			echo -e "$TCC Information about OWASP Juice Shop - juiceshop $TCD"
+			echo -e "$TCY Description: $TCD OWASP Juice Shop is probably the most modern and sophisticated insecure web application!"
+			echo -e "$TCY Source: $TCD https://owasp-juice.shop"
 			echo -e "         https://github.com/juice-shop/juice-shop"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Solutions: $TDefault https://systemweakness.com/owasp-juice-shop-tryhackme-walkthrough-2023-detailed-bea74989325b"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Solutions: $TCD https://systemweakness.com/owasp-juice-shop-tryhackme-walkthrough-2023-detailed-bea74989325b"
 			echo -e "            https://medium.com/@corybantic/tryhackme-owasp-juice-shop-walkthrough-ab07d12dbdc"
 			echo -e "            https://tomsitcafe.com/2023/01/16/tryhackme-owasp-juice-shop-write-up/"
 		;;
 		securitysheperd)
-			echo -e "$TCian Information about OWASP Security Shepherd - securitysheperd $TDefault"
-			echo -e "$TYellow Description: $TDefault OWASP Security Shepherd is a web and mobile application security training platform. "
+			echo -e "$TCC Information about OWASP Security Shepherd - securitysheperd $TCD"
+			echo -e "$TCY Description: $TCD OWASP Security Shepherd is a web and mobile application security training platform. "
 			echo -e "              Security Shepherd has been designed to foster and improve security awareness among a varied skill-set demographic. "
 			echo -e "              The aim of this project is to take AppSec novices or experienced engineers and sharpen their penetration testing skillset to security expert status"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Source: $TDefault https://www.owasp.org/index.php/OWASP_Security_Shepherd"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Source: $TCD https://www.owasp.org/index.php/OWASP_Security_Shepherd"
 			echo -e "         https://github.com/OWASP/SecurityShepherd"
 		;;
 		vulnerablewp)
-			echo -e "$TCian Information about Vulnerable WordPRess - vulnerablewp $TDefault"
-			echo -e "$TYellow Source: $TDefault https://github.com/wpscanteam/VulnerableWordpress"
+			echo -e "$TCC Information about Vulnerable WordPRess - vulnerablewp $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/wpscanteam/VulnerableWordpress"
 		;;
 		securityninjas)    
-			echo -e "$TCian Information about OpenDNS Security Ninjas - securityninjas $TDefault"
-			echo -e "$TYellow Description: $TDefault OpenDNS Security Ninjas AppSec Training. "
+			echo -e "$TCC Information about OpenDNS Security Ninjas - securityninjas $TCD"
+			echo -e "$TCY Description: $TCD OpenDNS Security Ninjas AppSec Training. "
 			echo -e "              This hands-on training lab consists of 10 fun real world like hacking exercises, corresponding to each of the 2013 OWASP Top 10 vulnerabilities."
-			echo -e "$TYellow Source: $TDefault https://github.com/opendns/Security_Ninjas_AppSec_Training"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Course: $TDefault https://es.slideshare.net/OpenDNS/security-ninjas-opensource"
+			echo -e "$TCY Source: $TCD https://github.com/opendns/Security_Ninjas_AppSec_Training"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Course: $TCD https://es.slideshare.net/OpenDNS/security-ninjas-opensource"
 		;;
 		altoro)    
-			echo -e "$TCian Information about Altoro Mutual Vulnerable Bank - altoro $TDefault"
-			echo -e "$TYellow Description: $TDefault AltoroJ is a sample banking J2EE web application."
+			echo -e "$TCC Information about Altoro Mutual Vulnerable Bank - altoro $TCD"
+			echo -e "$TCY Description: $TCD AltoroJ is a sample banking J2EE web application."
 			echo -e "              It shows what happens when web applications are written with consideration of app functionality but not app security"
-			echo -e "$TYellow Source: $TDefault https://github.com/HCL-TECH-SOFTWARE/AltoroJ"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Source: $TCD https://github.com/HCL-TECH-SOFTWARE/AltoroJ"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 		;;
 		graphql)
-			echo -e "$TCian Information about Grap QL - graphql $TDefault"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
-			echo -e "$TYellow Source: $TDefault https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/"
+			echo -e "$TCC Information about Grap QL - graphql $TCD"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCY Source: $TCD https://carvesystems.com/news/the-5-most-common-graphql-security-vulnerabilities/"
 		;;
 		jvl)    
-			echo -e "$TCian Information about Java Vulnerable Lab - jvl $TDefault"
-			echo -e "$TYellow Description: $TDefault This is a Vulnerable Web Application developed by Cyber Security and Privacy Foundation(www.cysecurity.org). This app is intended for the Java Programmers and other people who wish to learn about Web application vulnerabilities and write secure code"
-			echo -e "$TYellow Source: $TDefault https://github.com/CSPF-Founder/JavaVulnerableLab"
-			echo -e "$TYellow Install: $TDefault Go to install.jsp anc click on the button"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Java Vulnerable Lab - jvl $TCD"
+			echo -e "$TCY Description: $TCD This is a Vulnerable Web Application developed by Cyber Security and Privacy Foundation(www.cysecurity.org). This app is intended for the Java Programmers and other people who wish to learn about Web application vulnerabilities and write secure code"
+			echo -e "$TCY Source: $TCD https://github.com/CSPF-Founder/JavaVulnerableLab"
+			echo -e "$TCY Install: $TCD Go to install.jsp anc click on the button"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-			echo -e "$TYellow Solutions: $TDefault https://github.com/CSPF-Founder/JavaSecurityCourse"
+			echo -e "$TCY Solutions: $TCD https://github.com/CSPF-Founder/JavaSecurityCourse"
 		;;
 		w4p | web4pentester)
-			echo -e "$TCian Information about Web for Pentester I - web4pentester/w4p $TDefault"
-			echo -e "$TYellow Source: $TDefault https://pentesterlab.com/exercises/web_for_pentester/course"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Web for Pentester I - web4pentester/w4p $TCD"
+			echo -e "$TCY Source: $TCD https://pentesterlab.com/exercises/web_for_pentester/course"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
 		;;
 		sqlilabs)
-			echo -e "$TCian Information about Audi-1 SQLi labs - sqlilabs $TDefault"
-			echo -e "$TYellow Source: $TDefault https://github-com.translate.goog/Audi-1/sqli-labs"
-			echo -e "$TYellow Install: $TDefault Click on the link setup/resetDB to create database, create tables and populate Data"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Audi-1 SQLi labs - sqlilabs $TCD"
+			echo -e "$TCY Source: $TCD https://github-com.translate.goog/Audi-1/sqli-labs"
+			echo -e "$TCY Install: $TCD Click on the link setup/resetDB to create database, create tables and populate Data"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-			echo -e "$TYellow Solutions: $TDefault http://dummy2dummies.blogspot.com"
+			echo -e "$TCY Solutions: $TCD http://dummy2dummies.blogspot.com"
 			echo -e "            http://www.securitytube.net/user/Audi"
 			echo -e "            https://www.facebook.com/sqlilabs"
 			;;
 		oxninja)
-			echo -e "$TCian Information about OxNinja SQLi-Lab machine - oxninja $TDefault"
-			echo -e "$TYellow Source: $TDefault https://github.com/OxNinja/SQLi-lab"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about OxNinja SQLi-Lab machine - oxninja $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/OxNinja/SQLi-lab"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
-			echo -e "$TYellow Solutions: $TDefault https://0xninja.fr/posts/sqli-lab/"
+			echo -e "$TCY Solutions: $TCD https://0xninja.fr/posts/sqli-lab/"
 			;;
 		redtiger)
-			echo -e "$TCian Information about RedTigers HackIit - redtiger (ONLINE) $TDefault"
-			echo -e "$TYellow Source: $TDefault http://redtiger.labs.overthewire.org/"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about RedTigers HackIit - redtiger (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD http://redtiger.labs.overthewire.org/"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
 			;;
 		
 		portswigger)
-			echo -e "$TCian Information about PortSwigger SQLi Lab - portswigger (ONLINE) $TDefault"
-			echo -e "$TYellow Source: https://portswigger.net/web-security/sql-injection $TDefault "
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about PortSwigger SQLi Lab - portswigger (ONLINE) $TCD"
+			echo -e "$TCY Source: https://portswigger.net/web-security/sql-injection $TCD "
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
 			;;
 			
 		hacksplaining)
-			echo -e "$TCian Information about Hacksplanning SQLi Lab - hacksplaining (ONLINE) $TDefault"
-			echo -e "$TYellow Source: $TDefault https://www.hacksplaining.com/exercises/sql-injection"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Hacksplanning SQLi Lab - hacksplaining (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://www.hacksplaining.com/exercises/sql-injection"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
 			;;
 		
 		synk)
-			echo -e "$TCian Information about Synk Learn Labs - synk (ONLINE) $TDefault"
-			echo -e "$TYellow Source: $TDefault https://learn.snyk.io/catalog/"
+			echo -e "$TCC Information about Synk Learn Labs - synk (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://learn.snyk.io/catalog/"
 			;;	
 		
 		thmsqli)
-			echo -e "$TCian Information about Try Hack Me SQLi Lab - thmsqli (ONLINE) $TDefault"
-			echo -e "$TYellow Source: $TDefault https://tryhackme.com/room/sqlilab"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Try Hack Me SQLi Lab - thmsqli (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://tryhackme.com/room/sqlilab"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "        No automated tools (like SQLmap, dirb...)"
+			echo -e "        Only hand-crafted payloads or home-made scripts"
+			echo -e "        Be honest. Dont bruteforce the passwords."
+			;;
+		
+		thm)
+			echo -e "$TCC Information about Try Hack Me - thm (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://tryhackme.com"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        Be honest. Dont bruteforce the passwords."
 			;;
 		
 		kontra)
-			echo -e "$TCian Information about Kontra SQLi Lab - kontra (ONLINE) $TDefault"
-			echo -e "$TYellow Source: $TDefault https://application.security/free-application-security-training/owasp-top-10-sql-injection"
-			echo -e "$TYellow Rules: $TDefault The goal of this lab is to train like a hacker not a script kiddie"
+			echo -e "$TCC Information about Kontra SQLi Lab - kontra (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://application.security/free-application-security-training/owasp-top-10-sql-injection"
+			echo -e "$TCY Rules: $TCD The goal of this lab is to train like a hacker not a script kiddie"
 			echo -e "        No automated tools (like SQLmap, dirb...)"
 			echo -e "        Only hand-crafted payloads or home-made scripts"
 			echo -e "        Be honest. Dont bruteforce the passwords."
 			;;
-			
+
+		vulnhub)
+			echo -e "$TCC Information about VulnHub Virtual Machines Labs - vulnhub (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://www.vulnhub.com/"
+			echo -e "$TCY Rules: $TCD Before you can run, you need to be able to walk."
+			echo -e "        You do so by learning the basics so you can gain of the theory. "
+			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
+			echo -e "        This is where VulnHub comes in."
+			;;
+	
 		*)
 		  echo "ERROR: WTH! I don't recognize the project name $1" 
 		  list
@@ -581,7 +663,7 @@ project_startinfo_oxninja ()
 #########################
 # Common start          #
 #########################
-project_start ()
+function project_start ()
 {
   fullname=$1	 # ex. WebGoat 7.1
   projectname=$2 # ex. webgoat7
@@ -613,7 +695,7 @@ project_start ()
 }
 
 
-project_startpublic ()
+function project_startpublic ()
 {
   fullname=$1		# ex. WebGoat 7.1
   projectname=$2public  # ex. webgoat7
@@ -648,7 +730,7 @@ project_startpublic ()
 #########################
 # Common stop           #
 #########################
-project_stop ()
+function project_stop ()
 {
   fullname=$1	 # ex. WebGoat 7.1
   projectname=$2 # ex. webgoat7
@@ -670,7 +752,7 @@ project_stop ()
   fi
 }
 
-project_running()
+function project_running()
 {
   projectname=$1
   shortname=$2
@@ -678,21 +760,21 @@ project_running()
   running=0
 
   if [ "$(sudo docker ps -q -f name=^/${shortname}$)" ]; then
-    echo -e "$projectname:$shortname	$TGreen	running at $url (localhost) $TDefault"
+    echo -e "$projectname:$shortname	$TCG	running at $url (localhost) $TCD"
     running=1
   fi
   if [ "$(sudo docker ps -q -f name=^/${shortname}public$)" ]; then
-    echo -e "$projectname:$shortname	$TGreen	running (public) $TDefault"
+    echo -e "$projectname:$shortname	$TCG	running (public) $TCD"
     running=1
   fi  
   if [ $running -eq 0 ];
   then
-    echo -e "$projectname:$shortname		$TRed not running $TDefault"
+    echo -e "$projectname:$shortname		$TCR not running $TCD"
   fi 
 }
 
 
-project_status()
+function project_status()
 {
   project_running "bWapp                        " "bwapp" "http://bwapp"
   project_running "WebGoat 7.1                  " "webgoat7" "http://webgoat7/WebGoat"
@@ -713,88 +795,93 @@ project_status()
 }
 
 
-project_start_dispatch()
+function project_start_dispatch()
 {
   case "$1" in
     bwapp)
-		openUrl "http://127.5.0.1/install.php"
 		project_start "bWAPP" "bwapp" "raesene/bwapp" "127.5.0.1" "80"
 		project_startinfo_bwapp
+		openUrl "http://127.5.0.1/install.php"
     ;;
     webgoat7)
-		openUrl "http://127.6.0.1/WebGoat"
 		project_start "WebGoat 7.1" "webgoat7" "webgoat/webgoat-7.1" "127.6.0.1" "8080"
 		project_startinfo_webgoat7
+		openUrl "http://127.6.0.1/WebGoat"
     ;;
     webgoat8)
-		openUrl "http://127.7.0.1/WebGoat"
 		project_start "WebGoat 8.0" "webgoat8" "webgoat/webgoat-8.0" "127.7.0.1" "8080"
 		project_startinfo_webgoat8
+		openUrl "http://127.7.0.1/WebGoat"
     ;;    
     webgoat81)
-		openUrl "http://127.17.0.1/WebGoat"
 		project_start "WebGoat 8.1" "webgoat81" "webgoat/goatandwolf" "127.17.0.1" "8080"
 		project_startinfo_webgoat81
+		openUrl "http://127.17.0.1/WebGoat"
     ;;    
     dvwa)
-		openUrl "http://127.8.0.1"		
 		project_start "Damn Vulnerable Web Appliaction" "dvwa" "vulnerables/web-dvwa" "127.8.0.1" "80"
 		project_startinfo_dvwa
+		openUrl "http://127.8.0.1"		
     ;;    
     mutillidae)
-		openUrl "http://127.9.0.1"
 		project_start "Mutillidae II" "mutillidae" "citizenstig/nowasp" "127.9.0.1" "80"
 		project_startinfo_mutillidae
+		openUrl "http://127.9.0.1"
     ;;
     juiceshop)
-		openUrl "http://127.10.0.1:3000"
 		project_start "OWASP Juice Shop" "juiceshop" "bkimminich/juice-shop" "127.10.0.1" "3000"
 		project_startinfo_juiceshop
+		#openUrl "http://127.10.0.1:3000"
+		openUrl "http://127.10.0.1"
     ;;
     securitysheperd)
-		openUrl "http://127.11.0.1"
 		project_start "OWASP Security Shepard" "securitysheperd" "ismisepaul/securityshepherd" "127.11.0.1" "80"
 		project_startinfo_securitysheperd
+		openUrl "http://127.11.0.1"
     ;;
     vulnerablewp)
-		openUrl "http://127.12.0.1"
 		project_start "WPScan Vulnerable Wordpress" "vulnerablewp" "eystsen/vulnerablewordpress" "127.12.0.1" "80" "3306"
 		project_startinfo_vulnerablewp
+		openUrl "http://127.12.0.1"
     ;;
     securityninjas)    
-		openUrl "http://127.13.0.1"
 		project_start "Open DNS Security Ninjas" "securityninjas" "opendns/security-ninjas" "127.13.0.1" "80"
 		project_startinfo_securityninjas
+		openUrl "http://127.13.0.1"
     ;;
     altoro)    
-		openUrl "http://127.14.0.1:8080"
 		project_start "Altoro Mutual" "altoro" "eystsen/altoro" "127.14.0.1" "8080"
 		project_startinfo_altoro
+		openUrl "http://127.14.0.1:8080"
+		openUrl "http://127.14.0.1"
     ;;
     graphql)
-		openUrl "http://127.15.0.1:3000"    
 		project_start "Vulnerable GraphQL API" "graphql" "carvesystems/vulnerable-graphql-api" "127.15.0.1" "3000"
 		project_startinfo_graphql
+		openUrl "http://127.15.0.1:3000"    
+		openUrl "http://127.15.0.1"    
     ;;
     jvl)    
-		project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
+		#project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
 		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
+		openUrl "http://127.16.0.1/JavaVulnerableLab/install.jsp"
 		sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
 		project_startinfo_jvl
-    ;;
+	;;
     web4pentester)
-      project_startinfo_web4pentester
-      #In this particular case in the dockername is attached the command we need to launch on the container
-      #sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester bash
-	  openUrl "http://127.18.0.1"
-	  sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester:1.0 bash -c "service apache2 start && service mysql start && bash"
-	  #project_start "Web for Pentester I" "w4p" "tiizss/webforpentester:1.0 bash -c 'service apache2 start && service mysql start && bash'" "127.18.0.1" "80"
+		project_startinfo_web4pentester
+		#In this particular case in the dockername is attached the command we need to launch on the container
+		#sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester bash
+		openUrl "http://127.18.0.1"
+		sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester:1.0 bash -c "service apache2 start && service mysql start && bash"
+		#project_start "Web for Pentester I" "w4p" "tiizss/webforpentester:1.0 bash -c 'service apache2 start && service mysql start && bash'" "127.18.0.1" "80"
     ;;
 	w4p)
       project_startinfo_web4pentester
       # In this particular case in the dockername is attached the command we need to launch on the container
       project_start "Web for Pentester I" "w4p" "tiizss/webforpentester1:1.0" "127.18.0.1" "80"
-	  ;;
+	  openUrl "http://127.18.0.1"
+	;;
 	sqlilabs)
 		project_startinfo_sqlilabs
 		project_start "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "127.19.0.1" "80"
@@ -825,39 +912,76 @@ project_start_dispatch()
 function start_online () {
 	case "$1" in
 		redtiger)
-			echo -e "  RedTiger's Hackit SQLi Lab is an Online machine. So only web browser is needed."
+			echo -e "$TCR Opening -->$TCD  RedTiger's Hackit SQLi Lab is an Online machine. So only web browser is needed."
 			sleep 2
 			openUrl "http://redtiger.labs.overthewire.org/"
 			;;
+			
 		portswigger)
-			echo -e "  PortSwigger SQL injection Labs. This are all online. So only web browser is needed."
+			echo -e "$TCR Opening -->$TCD  PortSwigger SQL injection Labs. This are all online. So only web browser is needed."
 			sleep 2
 			openUrl "https://portswigger.net/web-security/sql-injection"
 			;;
+
 		hacksplaining)
-			echo -e " Hacksplanning SQL Injection Lab. This are all online. So only web browser is needed. "
+			echo -e "$TCR Opening -->$TCD Hacksplanning SQL Injection Lab. This are all online. So only web browser is needed. "
 			sleep 2
 			openUrl "https://www.hacksplaining.com/exercises/sql-injection"
 			;;
+
 		synk)
+			echo -e "$TCR Opening -->$TCD Synk Lab. This an Online lab. So only webbrowser is needed."
 			echo -e "  Synk Learn teaches developers how to stay secure with interactive lessons exploring "
 			echo -e "  vulnerabilities across a variety of languages and ecosystems. "
 			echo -e "  This are all online. So only web browser is needed. "
 			sleep 2
 			openUrl "https://learn.snyk.io/catalog/"
 			;;
+
 		thmsqli)
-			echo -e "  Try Hack Me SQLi Lab. This are all online. So only web browser is needed."
+			echo -e "$TCR Opening -->$TCD  Try Hack Me SQLi Lab. This are all online. So only web browser is needed."
 			sleep 2
 			openUrl "https://tryhackme.com/room/sqlilab"
 			;;
+		
+		thm)
+			echo -e "$TCR Opening -->$TCD  Try Hack Me. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://tryhackme.com"
+			;;
+		
 		kontra)
-			echo -e "  Kontra Aplication Security SQLi Lab is an online Lab, so only web browser is needed."
-			sleep -2
+			echo -e "$TCR Opening -->$TCD  Kontra Aplication Security SQLi Lab is an online Lab, so only web browser is needed."
+			sleep 2
 			openUrl "https://application.security/free-application-security-training/owasp-top-10-sql-injection"
 			;;
+		
+		vulnhub)
+			echo -e "$TCR Opening -->$TCD  VulnHub Online Virtual Vulnerable Machines, so only web browser is needed."
+			sleep 2
+			openUrl "https://www.vulnhub.com/"
+			;;
+		
+		hdb)
+			echo -e "$TCR Opening -->$TCD  Hack The Box Online Virtual Vulnerable Machines, so only web browser is needed."
+			sleep 2
+			openUrl "https://www.hackthebox.com/"
+			;;
+		
+		ps)
+			echo -e "$TCR Opening -->$TCD  PortSwigger Web Security Academy is an online resource, so only web browser is needed."
+			sleep 2
+			openUrl "https://portswigger.net/web-security"
+			;;
+		
+		ctftime)
+			echo -e "$TCR Opening -->$TCD  CTFTime is an online resource, so only web browser is needed."
+			sleep 2
+			openUrl "https://ctftime.org/ctfs"
+			;;
+		
 		*)
-			echo -e "$TRed ERROR: Project start online doesn't recognize the online project name $TDefault $1 "
+			echo -e "$TCR ERROR: Project start online doesn't recognize the online project name $TCD $1 "
 			echo -e " Trying Docker Project if exists it will be launched. "
 			sleep 2
 			project_start_dispatch $1
@@ -865,7 +989,7 @@ function start_online () {
 	esac		
 }
 
-project_startpublic_dispatch()
+function project_startpublic_dispatch()
 {
   publicip=$2
   port=$3
@@ -948,7 +1072,7 @@ project_startpublic_dispatch()
 }
 
 
-project_stop_dispatch()
+function project_stop_dispatch()
 {
   case "$1" in
     bwapp)
@@ -1012,27 +1136,44 @@ project_stop_dispatch()
 # Checking Privileges   #
 #########################
 function check_runpriv (){
-	echo -e "$TCian Checking user privileges $TDefault"
+	echo -e "$TCC Checking user privileges $TCD"
 	echo -en " Running docker without sudo:  "
 	if groups | grep -q docker; then
-		echo -e "$TGreen YES $TDefault"
+		echo -e "$TCG YES $TCD"
 	else
-		echo -e "$TYellow NEED SUDO $TDefault"
+		echo -e "$TCY NEED SUDO $TCD"
 	fi
 	echo -en " User has sudo privileges:     "
 	if groups | grep -q sudo; then
-		echo -e "$TGreen YES - Elevating privileges $TDefault"
+		echo -e "$TCG YES - Elevating privileges $TCD"
 		sudo docker &> /dev/null
 	else
-		echo -e "$TRed NO $TDefault - To run the script you have to use a user that can run docker."
+		echo -e "$TCR NO $TCD - To run the script you have to use a user that can run docker."
 		exit
 	fi
 }
 
+##############################
+# List Docker Script Options #
+##############################
+function list_docker_options () {
+	echo -en "$TCC"
+	echo -e "-----------------------------------------------------------------------------------------"
+	echo -e " Available docker apps options "
+	echo -en "-----------------------------------------------------------------------------------------"
+	echo -e "$TCD"
+	echo -e "$TCG list        $TCD- List all available docker projects" 
+	echo -e "$TCG status      $TCD- Show status for all docker projects"
+	echo -e "$TCG start       $TCD- Start app docker project and make it available on localhost" 
+	echo -e "$TCG startpublic $TCD- Start app docker project and make it publicly available (to anyone with network connectivity to the machine)" 
+	echo -e "$TCG info        $TCD- Show information about app project"
+	echo -e "$TCG stop        $TCD- Stop app docker project "			
+}
 
 #########################
 # Main switch case      #
 #########################
+function main () {
 	display_logo
 	display_info
 	
@@ -1040,7 +1181,7 @@ function check_runpriv (){
 		online)
 			if [ -z "$2" ]
 			then
-				echo -e "$TRed ERROR: Option online needs project name in lowercase $TDefault"
+				echo -e "$TCR ERROR: Option online needs project name in lowercase $TCD"
 				list # call list ()
 				break
 			fi
@@ -1067,7 +1208,7 @@ function check_runpriv (){
 		;;
 	esac
 
-	echo -e "$TDefault-----------------------------------------------------------------------------------------"
+	echo -e "$TCD-----------------------------------------------------------------------------------------"
 	
 	case "$1" in
 		start)
@@ -1156,5 +1297,189 @@ function check_runpriv (){
 			display_help
 			;;
 	esac
+}
 
+#Script starts to execute stuff from this point, traps and then the main function
+for f in SIGINT SIGHUP INT SIGTSTP; do
+	trap_cmd="trap \"capture_traps ${f}\" \"${f}\""
+	eval "${trap_cmd}"
+done
+
+display_logo
+display_info
+
+while true; do
+	echo -e "$TCC-----------------------------------------------------------------------------------------"
+	echo -e " Available script options:"
+	echo -e "-----------------------------------------------------------------------------------------$TCD"
+	echo -e "$TCG   1 $TCD- Online Apps "
+	echo -e "$TCG   2 $TCD- Docker Apps "
+	echo -e "$TCG  99 $TCD- Exit"
+	echo -e "-----------------------------------------------------------------------------------------"
+	echo -en " Select an option: $TCG"		
+	read choice
+	echo -en "$TCD"
 	
+	case $choice in
+		1)
+			list_onlineapps
+			echo -en "Select an online app: "
+			read oapp
+			if [ -z "$oapp" ]
+			then
+				echo -e "$TCR ERROR: Option online needs project name in lowercase $TCD"
+				list_onlineapps # call list ()
+				#break
+			fi
+			start_online $oapp
+			;;
+		2)
+			list_docker_options
+			echo -e "-----------------------------------------------------------------------------------------"
+			echo -en " Select an option for docker app: "
+			read dockeroption
+			echo -e "-----------------------------------------------------------------------------------------"
+			
+			#list_dockerapps
+			#echo -en "Select a Docker app: "
+			#read dapp
+			
+			#display_help
+			#echo -e "-----------------------------------------------------------------------------------------"
+					
+			case $dockeroption in
+				start)
+					list_dockerapps # call list ()
+					echo -en "Select a Docker app: "
+					read dapp	
+					echo -e "-----------------------------------------------------------------------------------------"
+					if [ -z "$dapp" ]
+					then
+						echo -e "ERROR: Option start needs project name in lowercase"
+						echo 
+						list_dockerapps # call list ()
+						break
+					fi
+					project_start_dispatch $dapp
+					;;
+					
+				startpublic)
+					list_dockerapps # call list ()	
+					echo -en "Select a Docker app: "
+					read dapp
+					echo -e "-----------------------------------------------------------------------------------------"
+					if [ -z "$dapp" ]
+					then
+						echo -e "ERROR: Option start needs project name in lowercase"
+						echo 
+						list_dockerapps # call list ()
+						break
+					fi
+
+					if [ -z "$4" ]
+					then
+						port=80
+					else
+						port=$4
+					fi
+
+					if [ "$3" ]
+					then
+						publicip=$3
+					else
+						publicip=`hostname -I | cut -d" " -f1`
+				
+						echo "Continue using local IP address $publicip?"
+						
+						select yn in "Yes" "No"; do
+							case $yn in
+								Yes)  
+									break;;
+								No) 
+									echo "Specify the correct IP address.";  
+									echo " ex."; 
+									echo "   $0 startpublic w4p 192.168.0.105"; 
+									exit;;
+							esac
+						done
+					fi
+				
+					listen="$publicip:$port"
+					if [ "$(netstat -ln4 | grep -w $listen )" ]
+					then
+						echo "$publicip already listening on port $port"
+						echo "Free up the port or select a different port to bind $2"
+						exit
+					fi
+
+					project_startpublic_dispatch $2 $publicip $port
+						echo "WARNING! Only do this in trusted lab environment. WARNING!"
+						echo "WARNING! Anyone with nettwork access can now pwn this machine! WARNING!" 
+					;;
+					
+				stop)
+					project_status
+					echo -e "-----------------------------------------------------------------------------------------"
+					echo -en "Select a Docker app: "
+					read dapp
+					echo -e "-----------------------------------------------------------------------------------------"
+					if [ -z "$dapp" ]
+					then
+						echo "ERROR: Option start needs project name in lowercase"
+						echo 
+						list_dockerapps # call list ()
+						break
+					fi
+					project_stop_dispatch $dapp
+					echo -e "-----------------------------------------------------------------------------------------"
+					echo -e "$TCC Showing new app status after stopping $TCG $dapp $TCC docker application $TCD "
+					echo -e "-----------------------------------------------------------------------------------------"
+					project_status
+					echo -e "-----------------------------------------------------------------------------------------"
+					;;
+					
+				status)
+					echo " Showing STATUS of the Docker containers"
+					echo "-----------------------------------------------------------------------------------------"
+					project_status # call project_status ()
+					echo "-----------------------------------------------------------------------------------------"
+					;;
+				
+				info)
+					list_dockerapps # call list ()
+					echo -en "Select a Docker app: "
+					read dapp	
+					echo -e "-----------------------------------------------------------------------------------------"
+					if [ -z "$dapp" ]
+					then
+						echo -en " Please choose one 4 detailed information: "
+						list_dockerapps # call list ()
+					break
+					fi
+					echo "-----------------------------------------------------------------------------------------"
+					project_info $dapp
+					;;
+					
+				list)
+					list_dockerapps
+					;;
+
+				*)
+					display_help
+					;;
+			esac
+			;;
+			
+		99)
+			break
+			;;
+			
+		*)
+			echo -e "$TCR"
+			echo -e "Invalid choice. Please try again."
+			echo -e "$TCD"
+			;;
+	esac
+done
+
+#main "$@"
