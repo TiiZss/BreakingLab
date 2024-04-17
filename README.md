@@ -187,3 +187,5 @@ sudo docker ps
 * Include [HackMyVM](https://hackmyvm.eu)
 * Include [VulnMachines](https://www.vulnmachines.com/)
 * Include [BlueTeamLabs](https://blueteamlabs.online/)
+* Include [Damn Vulnerable RESTaurant](https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game)
+* Include [Vulpy - Web Application Security Lab](https://github.com/fportantier/vulpy)
