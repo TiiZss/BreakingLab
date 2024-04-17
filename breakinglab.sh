@@ -10,6 +10,7 @@
 # 2024/01/26 - TiiZss - se modifica el sistema de menus
 # 2024/03/15 - TiiZss - Se añaden HackTheBox/TryHackMe Online
 # 2024/03/16 - TiiZss - Se añaden PortSwigger / VulnHub / CTFTime Online
+# 2024/04/17 - Cryoox - Se añade OWASP Bricks
 
 ETC_HOSTS=/etc/hosts
 
@@ -252,6 +253,7 @@ list() {
     echo "  web4pentester   - PentesterLab Web For Pentester I "
     echo "  sqlilabs        - Audi-1 SQLi labs"
 	echo "  oxninja         - OxNinja SQLi-lab"
+	echo "  bricks          - OWASP Bricks"
 	echo "-----------------------------------------------------------------------------------------"
     echo " Available Online Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
@@ -295,6 +297,7 @@ function list_dockerapps() {
     echo -e "$TCG web4pentester   $TCD- PentesterLab Web For Pentester I "
     echo -e "$TCG sqlilabs        $TCD- Audi-1 SQLi labs"
 	echo -e "$TCG oxninja         $TCD- OxNinja SQLi-lab"
+	echo -e "$TCG bricks          $TCD- OWASP Bricks"
 	echo -e "-----------------------------------------------------------------------------------------"
 }
 
@@ -486,6 +489,11 @@ function project_info () {
 			echo -e "        It's recommended to not read the source code. If you are stuck: Inspect element for (big) nudges."
 			echo -e "$TCY Solutions: $TCD https://0xninja.fr/posts/sqli-lab/"
 			;;
+		bricks)
+			echo -e "$TCC Information about OWASP Bricks - bricks $TCD"
+			echo -e "$TCY Source: $TCD https://sechow.com/bricks/download.html"
+			echo -e "$TCY Solutions: $TCD https://sechow.com/bricks/docs/"
+			;;
 		redtiger)
 			echo -e "$TCC Information about RedTigers HackIit - redtiger (ONLINE) $TCD"
 			echo -e "$TCY Source: $TCD http://redtiger.labs.overthewire.org/"
@@ -660,6 +668,13 @@ project_startinfo_oxninja ()
 	echo "An SQL injection playground, from basic to advanced"
 }
 
+project_startinfo_bricks ()
+{
+	echo "OWASP Bricks"
+	echo "First Install: http://127.21.0.1/config/"
+	echo "Access: http://127.21.0.1/index.php"
+}
+
 #########################
 # Common start          #
 #########################
@@ -792,6 +807,7 @@ function project_status()
   project_running "Web For Pentester I          " "web4pentester" "http://w4p http://127.18.0.1"
   project_running "Audi-1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
   project_running "OxNinja SQLi-Lab             " "oxninja" "http://oxninja http://127.20.0.1"
+  project_running "OWASP Bricks                 " "bricks" "http://bricks http://127.21.0.1"
 }
 
 
@@ -902,6 +918,11 @@ function project_start_dispatch()
 		openUrl "http://127.20.0.1" 
 		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
+		;;
+	bricks)
+		project_startinfo_bricks
+		project_start "OWASP Bricks" "bricks" "citizenstig/owaspbricks" "127.21.0.1" "80"
+		openUrl "http://127.21.0.1/index.php"
 		;;
 	*)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
@@ -1125,6 +1146,9 @@ function project_stop_dispatch()
 	;;
     oxninja)
 		project_stop "OxNinja SQLi-Lab" "oxninja"
+	;;
+	bricks)
+		project_stop "OWASP Bricks" "bricks"
 	;;
     *)
     echo "ERROR: Project stop dispatch doesn't recognize the project name $1" 
