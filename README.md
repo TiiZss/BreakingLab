@@ -27,6 +27,7 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * Web for Pentester I (New 20230918)
 * Audi - 1 SQLI labs (New 20231215)
 * OxNinja SQLi-Lab (New 20231217)
+* OWASP Bricks (New 20240417)
 
 ### Current available ONLINE webapps
 
@@ -151,6 +152,7 @@ Ex.
  * Web For Pentester I    - PentesterLab Web For Pentester I (tiizss/webforpentester)
  * Audi 1 SQLi Lab        - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
  * OxNinja SQLi-Lab       - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
+ * OWASP Bricks           - OWASP Bricks (citizenstig/owaspbricks)
 
 github references means the docker is custom created and hosted in dockerhub.
 
@@ -180,7 +182,6 @@ sudo docker ps
 * Include [exploit.co.il Vulnerable Web App](https://sourceforge.net/projects/exploitcoilvuln/files/)
 * Include [GameOver](https://sourceforge.net/projects/null-gameover/)
 * Include [Web for Pentester II](https://www.pentesterlab.com/exercises/web_for_pentester_II/attachments)
-* Include [OWASP Bricks](https://sourceforge.net/projects/owaspbricks/)
 * Include [Vulnado](https://github.com/ScaleSec/vulnado)
 * Include [BTS PenTesting Lab](https://github.com/CSPF-Founder/btslab)
 * Include [HackMyVM](https://hackmyvm.eu)
