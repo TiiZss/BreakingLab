@@ -11,7 +11,10 @@
 # 2024/03/15 - TiiZss - Se añaden HackTheBox/TryHackMe Online
 # 2024/03/16 - TiiZss - Se añaden PortSwigger / VulnHub / CTFTime Online
 # 2024/04/17 - Cryoox - Se añade OWASP Bricks
-
+# 2024/04/18 - Cryoox - Se añaden SSRF-LAB y Damn Vulnerable RESTaurant (se abre en localhost y no en 127.25.0.1, se abre con los logs en vez de segundo plano)
+# 2024/04/18 - asiola - Se añade Vulnado (se abre en localhost y no en 127.23.0.1 y no se muestra en status)
+# 2024/04/18 - matope1 - Se añaden hackmyvm Online, blueteamlabs Online, vulnmachines Online, nosqli (se abre en localhost y no en 127.22.0.1)
+# 2024/04/19 - Cryoox - Se añaden BTS PenTesting Lab y exploit.co.il Vulnerable Web App (no se muestra en status)
 ETC_HOSTS=/etc/hosts
 
 #Tmux vars
@@ -254,6 +257,12 @@ list() {
     echo "  sqlilabs        - Audi-1 SQLi labs"
 	echo "  oxninja         - OxNinja SQLi-lab"
 	echo "  bricks          - OWASP Bricks"
+	echo "  nosqli          - Digininja NoSqli Lab"
+	echo "  vulnado         - Intentionally Vulnerable Java Application"
+	echo "  ssrflab         - SSRF-LAB"
+	echo "  damnvulnrest    - Damn Vulnerable RESTaurant"
+	echo "  btslab          - BTS PenTesting Lab"
+	echo "  exploitcoil     - exploit.co.il Vulnerable Web App"
 	echo "-----------------------------------------------------------------------------------------"
     echo " Available Online Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
@@ -262,6 +271,7 @@ list() {
 	echo "  hacksplaining   - Hacksplanning SQLi Lab          (online)"
 	echo "  synk            - Synk Learn                      (online)"
 	echo "  thmsqli         - Try Hack Me SQLi Lab            (online)"
+	
 	echo "-----------------------------------------------------------------------------------------"
 	echo " Available Online Hacking Training Webs - User registration needed" >&2
     echo "-----------------------------------------------------------------------------------------"
@@ -271,6 +281,14 @@ list() {
 	echo "  vulnhub         - VulnHub                         (online)"
 	echo "  ps              - PortSwigger WebSecurity Academy (online)"
 	echo "  ctftime         - CTFTime                         (online)"
+	echo "  hackmyvm        - HackMyVM                        (online)"
+	echo "  vuln            - VulnMachines                    (online)"
+	echo "  blueteam        - BlueTeam Lab                    (online)"
+	echo "  pentest2        - Web Pentester II                     (online)"
+	
+	
+	
+	
 	echo "-----------------------------------------------------------------------------------------"
     #exit 1
 }
@@ -298,6 +316,12 @@ function list_dockerapps() {
     echo -e "$TCG sqlilabs        $TCD- Audi-1 SQLi labs"
 	echo -e "$TCG oxninja         $TCD- OxNinja SQLi-lab"
 	echo -e "$TCG bricks          $TCD- OWASP Bricks"
+	echo -e "$TCG nosqli          $TCD- Digininja NoSqli Lab"
+	echo -e "$TCG vulnado         $TCD- Intentionally Vulnerable Java Application"
+	echo -e "$TCG ssrflab         $TCD- SSRF-LAB"
+	echo -e "$TCG damnvulnrest    $TCD- Damn Vulnerable RESTaurant"
+	echo -e "$TCG btslab          $TCD- BTS PenTesting Lab"
+	echo -e "$TCG exploitcoil     $TCD- exploit.co.il Vulnerable Web App"
 	echo -e "-----------------------------------------------------------------------------------------"
 }
 
@@ -324,6 +348,10 @@ function list_onlineapps () {
 	echo -e " $TCG vulnhub       $TCD- VulnHub                         (online)"
 	echo -e " $TCG ps            $TCD- PortSwigger WebSecurity Academy (online)"
 	echo -e " $TCG ctftime       $TCD- CTFTime                         (online)"
+	echo -e " $TCG hackmyvm      $TCD- HackMyVm                        (online)"
+	echo -e " $TCG vuln          $TCD- VulnMachines                    (online)"
+	echo -e " $TCG blueteam      $TCD- BlueTeam Lab                    (online)"
+	echo -e " $TCG pentest2      $TCD- Web Pentester II                    (online)"
 	echo -e "-----------------------------------------------------------------------------------------"
     #exit 1
 }
@@ -494,6 +522,35 @@ function project_info () {
 			echo -e "$TCY Source: $TCD https://sechow.com/bricks/download.html"
 			echo -e "$TCY Solutions: $TCD https://sechow.com/bricks/docs/"
 			;;
+		nosqli)
+			echo -e "$TCC Information about Digininja NoSqli Lab - nosqli $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/digininja/nosqlilab"
+			;;
+		vulnado)
+			echo -e "$TCC Information about scalesec Vulnerable Java Application - vulnado $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/ScaleSec/vulnado"
+			echo -e "$TCY Rules: $TCD This application and exercises will take you through some of the OWASP top 10 Vulnerabilities and how to prevent them."
+			;;
+		ssrflab)
+			echo -e "$TCC Information about SSRF-LAB - ssrflab $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/ph4nt0m-py/SSRF-LAB"
+			;;	
+		damnvulnrest)
+			echo -e "$TCC Information about OxNinja SQLi-Lab machine - oxninja $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game"
+			echo -e "$TCY Rules: $TCD API documentation can be found at the following endpoints:"
+			echo -e "        Swagger - http://127.25.0.1:8080/docs"
+			echo -e "        Redoc - http://127.25.0.1:8080/redoc"
+			;;
+		btslab)
+			echo -e "$TCC Information about BTS PenTesting Lab - btslab $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/CSPF-Founder/btslab"
+			echo -e "$TCY Rules: $TCD BTS PenTesting Lab is an open source vulnerable web application, created by Cyber Security & Privacy Foundation (www.cysecurity.org). It can be used to learn about many different types of web application vulnerabilities."
+			;;
+		exploitcoil)
+			echo -e "$TCC Information about exploit.co.il Vulnerable Web App - exploitcoil $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/Cryoox/exploit.co.il-Docker"
+			;;
 		redtiger)
 			echo -e "$TCC Information about RedTigers HackIit - redtiger (ONLINE) $TCD"
 			echo -e "$TCY Source: $TCD http://redtiger.labs.overthewire.org/"
@@ -561,10 +618,43 @@ function project_info () {
 			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
 			echo -e "        This is where VulnHub comes in."
 			;;
-	
+			
+		pentest2)
+			echo -e "$TCC Information about Pentester II - Pentester II (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://www.pentesterlab.com/"
+			echo -e "$TCY Rules: $TCD Before you can run, you need to be able to walk."
+			echo -e "        You do so by learning the basics so you can gain of the theory. "
+			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;	
+		
+		hackmyvm)
+			echo -e "$TCC Information about HackMyVM - Hackmyvm (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://hackmyvm.eu/"
+			echo -e "$TCY Rules: $TCD Before you can run, you need to be able to walk."
+			echo -e "        You do so by learning the basics so you can gain of the theory. "
+			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
+		vuln)
+			echo -e "$TCC Information about Vuln Machines Labs - vuln (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://www.vulnmachines.com/"
+			echo -e "$TCY Rules: $TCD Before you can run, you need to be able to walk."
+			echo -e "        You do so by learning the basics so you can gain of the theory. "
+			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
+		blueteam)
+			echo -e "$TCC Information about BlueTeam Lab - blueteam (ONLINE) $TCD"
+			echo -e "$TCY Source: $TCD https://blueteamlabs.online/"
+			echo -e "$TCY Rules: $TCD Before you can run, you need to be able to walk."
+			echo -e "        You do so by learning the basics so you can gain of the theory. "
+			echo -e "        Once you're up and walking, you need 'something' to run to (Something to aim for) & you need 'somewhere' that's padded with foam to run about in (so it doesn't matter if you fall over)."
+			echo -e "        Be honest. Dont bruteforce the passwords and dont make any solutions public!!!"
+			;;
 		*)
-		  echo "ERROR: WTH! I don't recognize the project name $1" 
-		  list
+			echo "ERROR: WTH! I don't recognize the project name $1"
+			list
 		;;
 	esac  
 	echo -e "----------------------------------------------"
@@ -673,6 +763,42 @@ project_startinfo_bricks ()
 	echo "OWASP Bricks"
 	echo "First Install: http://127.21.0.1/config/"
 	echo "Access: http://127.21.0.1/index.php"
+}
+
+project_startinfo_nosqli ()
+{
+	echo "Digininja NoSqli Lab"
+	echo "Access: http://127.22.0.1/index.php"
+}
+
+project_startinfo_vulnado ()
+{
+	echo "OWASP top 10 Vulnerabilities and how to prevent them"
+	echo "Access: http://127.23.0.1/index.php"
+}
+
+project_startinfo_ssrflab ()
+{
+	echo "SSRF-LAB"
+	echo "Access: http://127.24.0.1/index.php"
+}
+
+project_startinfo_damnvulnrest ()
+{
+	echo "Damn Vulnerable RESTaurant"
+	echo "Access: http://127.25.0.1:8080"
+}
+
+project_startinfo_btslab ()
+{
+	echo "BTS PenTesting Lab"
+	echo "Access: http://127.26.0.1/btslab"
+}
+
+project_startinfo_exploitcoil ()
+{
+	echo "BTS PenTesting Lab"
+	echo "Access: http://127.27.0.1"
 }
 
 #########################
@@ -791,23 +917,29 @@ function project_running()
 
 function project_status()
 {
-  project_running "bWapp                        " "bwapp" "http://bwapp"
-  project_running "WebGoat 7.1                  " "webgoat7" "http://webgoat7/WebGoat"
-  project_running "WebGoat 8.0                  " "webgoat8" "http://webgoat8/WebGoat"
-  project_running "WebGoat 8.1                  " "webgoat81" "http://webgoat81/WebGoat"
-  project_running "DVWA                         " "dvwa" "http://dvwa"
-  project_running "Mutillidae II                " "mutillidae" "http://mutillidae"
-  project_running "OWASP Juice Shop             " "juiceshop" "http://juiceshop"
-  project_running "WPScan Vulnerable Wordpress  " "vulnerablewp" "http://vulnerablewp"
-  project_running "OpenDNS Security Ninjas      " "securityninjas" "http://securityninjas"
-  project_running "Altoro Mutual                " "altoro" "http://altoro"
-  project_running "Vulnerable GraphQL API       " "graphql" "http://graphql"
-  #project_running "Java Vulnerable Lab          " "jvl" "http://jvl"
-  #project_running "Web For Pentester I          " "w4p" "http://w4p"
-  project_running "Web For Pentester I          " "web4pentester" "http://w4p http://127.18.0.1"
-  project_running "Audi-1 SQLi Labs             " "sqlilabs" "http://sqlilabs http://127.19.0.1"
-  project_running "OxNinja SQLi-Lab             " "oxninja" "http://oxninja http://127.20.0.1"
-  project_running "OWASP Bricks                 " "bricks" "http://bricks http://127.21.0.1"
+  project_running "bWapp                       				 " "bwapp" "http://bwapp"
+  project_running "WebGoat 7.1                 			 	 " "webgoat7" "http://webgoat7/WebGoat"
+  project_running "WebGoat 8.0                  			 " "webgoat8" "http://webgoat8/WebGoat"
+  project_running "WebGoat 8.1                  			 " "webgoat81" "http://webgoat81/WebGoat"
+  project_running "DVWA                         			 " "dvwa" "http://dvwa"
+  project_running "Mutillidae II                			 " "mutillidae" "http://mutillidae"
+  project_running "OWASP Juice Shop            				 " "juiceshop" "http://juiceshop"
+  project_running "WPScan Vulnerable Wordpress 				 " "vulnerablewp" "http://vulnerablewp"
+  project_running "OpenDNS Security Ninjas     				 " "securityninjas" "http://securityninjas"
+  project_running "Altoro Mutual                			 " "altoro" "http://altoro"
+  project_running "Vulnerable GraphQL API      				 " "graphql" "http://graphql"
+  #project_running "Java Vulnerable Lab          			 " "jvl" "http://jvl"
+  #project_running "Web For Pentester I         			 " "w4p" "http://w4p"
+  project_running "Web For Pentester I         				 " "web4pentester" "http://w4p http://127.18.0.1"
+  project_running "Audi-1 SQLi Labs             			 " "sqlilabs" "http://sqlilabs http://127.19.0.1"
+  project_running "OxNinja SQLi-Lab            				 " "oxninja" "http://oxninja http://127.20.0.1"
+  project_running "OWASP Bricks                				 " "bricks" "http://bricks http://127.21.0.1"
+  project_running "Digininja NoSqli Lab        				 " "nosqli" "http://nosqli http://127.22.0.1"
+  project_running "Intentionally Vulnerable Java Application " "vulnado" "http://127.23.0.1:1337"
+  project_running "SSRF-LAB                                  " "ssrflab" "http://127.24.0.1:80"
+  project_running "Damn Vulnerable RESTaurant                " "damnvulnrest" "http://127.25.0.1:8080"
+  project_running "BTS PenTesting Lab                        " "btslab" "http://127.26.0.1"
+  project_running "exploit.co.il Vulnerable Web App          " "exploitcoil" "http://127.27.0.1"
 }
 
 
@@ -924,6 +1056,75 @@ function project_start_dispatch()
 		project_start "OWASP Bricks" "bricks" "citizenstig/owaspbricks" "127.21.0.1" "80"
 		openUrl "http://127.21.0.1/index.php"
 		;;
+		
+		
+	nosqli)
+		project_startinfo_nosqli
+		if [[ ! -d "nosqlilab" ]]; then
+			git clone https://github.com/madamantis-leviathan/nosqlilab.git
+		fi 
+	
+		cd nosqlilab
+		docker-compose up -d --build
+		
+		openUrl "http://127.22.0.1:8080/index.php"
+		
+		;;
+	vulnado)
+		project_startinfo_vulnado
+		if [[ ! -d "vulnado" ]]; then
+			git clone https://github.com/ScaleSec/vulnado vulnado
+		fi
+		cd vulnado	
+		# put up the service and install it if it is not and open it in your browser
+	   sudo docker compose up -d
+		# project_start "Intentionally Vulnerable Java Application" "vulnado" "vulnado" "127.23.0.1" "1337"
+		openUrl "http://127.23.0.1:1337" 
+		nc -vz localhost 8080
+		;;
+		
+	ssrflab)
+		project_startinfo_ssrflab
+		if [[ ! -d "SSRF-LAB" ]]; then
+			git clone https://github.com/ph4nt0m-py/SSRF-LAB.git
+		fi
+		cd SSRF-LAB
+		project_start "SSRF-LAB" "ssrflab" "php:8.1.28-apache-bullseye" "127.24.0.1" "80"
+		docker cp ./index.php ssrflab:/var/www/html
+		openUrl "http://127.24.0.1/index.php"
+		;;
+		
+	damnvulnrest)
+		project_startinfo_damnvulnrest
+		
+		if [[ ! -d "Damn-Vulnerable-RESTaurant-API-Game" ]]; then
+			git clone https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game.git
+		fi 
+		cd Damn-Vulnerable-RESTaurant-API-Game
+		# poner la bandera -d en el docker compose
+		bash ./start_app.sh
+		openUrl "http://127.25.0.1:8080"
+		;;
+		
+	btslab)
+		project_startinfo_btslab
+		if [[ ! -d "btslab" ]]; then
+			git clone https://github.com/CSPF-Founder/btslab
+		fi
+		project_start "BTS PenTesting Lab" "btslab" "tomsik68/xampp:5" "127.26.0.1" "80"
+		docker cp btslab/ btslab:/opt/lampp/htdocs
+		openUrl "http://127.26.0.1/btslab/setup.php"
+		;;
+	exploitcoil)
+		project_startinfo_exploitcoil
+		if [[ ! -d "exploit.co.il-Docker" ]]; then
+			git clone https://github.com/Cryoox/exploit.co.il-Docker.git
+		fi
+		cd exploit.co.il-Docker
+		docker compose up -d
+		openUrl "http://127.27.0.1/index.php"
+		;;
+		
 	*)
       echo "ERROR: Project start dispatch doesn't recognize the project name $1" 
     ;;
@@ -1000,6 +1201,27 @@ function start_online () {
 			sleep 2
 			openUrl "https://ctftime.org/ctfs"
 			;;
+		
+		hackmyvm)
+			echo -e "$TCR Opening -->$TCD  HackMyVM. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://hackmyvm.eu/"
+			;;
+		vuln)
+			echo -e "$TCR Opening -->$TCD  VulnMachines. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://www.vulnmachines.com/"
+			;;
+		blueteam)
+			echo -e "$TCR Opening -->$TCD  BlueTeam Lab. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://blueteamlabs.online/"
+			;;
+		pentest2)
+			echo -e "$TCR Opening -->$TCD  Web Pentester II. This are all online. So only web browser is needed."
+			sleep 2
+			openUrl "https://www.pentesterlab.com/"
+			;;	
 		
 		*)
 			echo -e "$TCR ERROR: Project start online doesn't recognize the online project name $TCD $1 "
@@ -1086,6 +1308,35 @@ function project_startpublic_dispatch()
       #project_startpublic "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "80" $publicip $port
       #	project_startinfo_oxninja $publicip
     ;;
+	bricks)
+      project_startpublic "OWASP Bricks" "bricks" "citizenstig/owaspbricks" "80" $publicip $port
+      project_startinfo_bricks $publicip
+    ;;
+	nosqli)
+	  #project_startpublic "Digininja NoSqli Lab" "nosqli" "" "80" $publicip $port
+      #project_startinfo_nosqli $publicip
+	;;
+	vulnado)
+      #project_startpublic "Vulnado" "vulnado" "" "1337" $publicip $port
+      #project_startinfo_vulnado $publicip
+	;;
+	ssrflab)
+      #project_startpublic "Vulnado" "vulnado" "php:8.1.28-apache-bullseye" "80" $publicip $port
+      #project_startinfo_ssrflab $publicip
+	;;
+	damnvulnrest)
+      #project_startpublic "Damn Vulnerable RESTaurant" "damnvulnrest" "" "8080" $publicip $port
+      #project_startinfo_damnvulnrest $publicip
+	;;
+	btslab)
+      #project_startpublic "BTS PenTesting Lab" "btslab" "tomsik68/xampp:5" "80" $publicip $port
+      #project_startinfo_btslab $publicip
+	;;
+	exploitcoil)
+      #project_startpublic "exploit.co.il Vulnerable Web App" "exploitcoil" "tomsik68/xampp:5" "80" $publicip $port
+      #project_startinfo_exploitcoil $publicip
+	;;
+	
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
     ;;
@@ -1150,6 +1401,25 @@ function project_stop_dispatch()
 	bricks)
 		project_stop "OWASP Bricks" "bricks"
 	;;
+	nosqliweb)
+		project_stop "Digininja NoSqli Lab" "nosqliweb"
+	;;
+	vulnado)
+		project_stop "Intentionally Vulnerable Java Application" "vulnado"
+	;;
+	ssrflab)
+		project_stop "SSRF-LAB" "ssrflab"
+	;;
+	damnvulnrest)
+		project_stop "Damn Vulnerable Restaurant" "damnvulnrest"
+	;;
+	btslab)
+		project_stop "BTS PenTesting Lab" "btslab"
+	;;
+	exploitcoil)
+		project_stop "exploit.co.il Vulnerable Web App" "exploitcoil"
+	;;
+	
     *)
     echo "ERROR: Project stop dispatch doesn't recognize the project name $1" 
     ;;
