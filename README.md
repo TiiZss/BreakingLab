@@ -28,6 +28,12 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * Audi - 1 SQLI labs (New 20231215)
 * OxNinja SQLi-Lab (New 20231217)
 * OWASP Bricks (New 20240417)
+* NoSqli Lab (New 20240418)
+* Vulnado (New 20240418)
+* SSRF-LAB (New 20240418)
+* Damn Vulnerable RESTaurant (New 20240418)
+* BTS PenTesting Lab (New 20240419)
+* exploit.co.il (New 20240419)
 
 ### Current available ONLINE webapps
 
@@ -44,6 +50,10 @@ Working and tested on Ubuntu 23.04, Kali and WSL.<br />
 * [VulnHub](https://www.vulnhub.com) (New 20240316)
 * [Burp Web Security Academy](https://portswigger.net/web-security) (New 20240316)
 * [CTFTime](https://ctftime.org) (New 20240316)
+* [HackMyVM](https://hackmyvm.eu/) (New 20240418)
+* [Vuln Lab](https://www.vulnmachines.com/) (New 20240418)
+* [BlueTeam Lab](https://blueteamlabs.online/) (New 20240418)
+* [Pentester II](https://www.pentesterlab.com/) (New 20240419)
 
 ## How To
 #### 1) Clone the repo
@@ -153,6 +163,12 @@ Ex.
  * Audi 1 SQLi Lab        - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
  * OxNinja SQLi-Lab       - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
  * OWASP Bricks           - OWASP Bricks (citizenstig/owaspbricks)
+ * Digininja NoSqli Lab   - Digininja NoSqli Lab
+ * Vulnado                - Intentionally Vulnerable Java Application
+ * SSRF-LAB               - SSRF-LAB
+ * Damn RESTaurant        - Damn Vulnerable RESTaurant
+ * BTS LAB                - BTS PenTesting Lab
+ * exploit.co.il          - exploit.co.il Vulnerable Web App
 
 github references means the docker is custom created and hosted in dockerhub.
 
@@ -175,17 +191,9 @@ sudo docker ps
 
 ## Next machines / steps
 * Try to fix JVL
-* Include [NoSQLi Lab](https://github.com/digininja/nosqlilab)
-* Include [SSRF-LAB](https://github.com/basubanakar/SSRF-LAB)
+
+
 * Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 * Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
-* Include [exploit.co.il Vulnerable Web App](https://sourceforge.net/projects/exploitcoilvuln/files/)
 * Include [GameOver](https://sourceforge.net/projects/null-gameover/)
-* Include [Web for Pentester II](https://www.pentesterlab.com/exercises/web_for_pentester_II/attachments)
-* Include [Vulnado](https://github.com/ScaleSec/vulnado)
-* Include [BTS PenTesting Lab](https://github.com/CSPF-Founder/btslab)
-* Include [HackMyVM](https://hackmyvm.eu)
-* Include [VulnMachines](https://www.vulnmachines.com/)
-* Include [BlueTeamLabs](https://blueteamlabs.online/)
-* Include [Damn Vulnerable RESTaurant](https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game)
 * Include [Vulpy - Web Application Security Lab](https://github.com/fportantier/vulpy)
