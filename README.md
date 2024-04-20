@@ -172,7 +172,6 @@ Ex.
 
 github references means the docker is custom created and hosted in dockerhub.
 
-
 ## Troubleshoot / FAQ
 
 ### I can't connect to the application I just stared, what is wrong?
@@ -191,8 +190,6 @@ sudo docker ps
 
 ## Next machines / steps
 * Try to fix JVL
-
-
 * Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 * Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
 * Include [GameOver](https://sourceforge.net/projects/null-gameover/)
