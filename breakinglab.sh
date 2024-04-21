@@ -1067,6 +1067,7 @@ function project_start_dispatch()
 		openUrl "http://127.20.0.1" 
 		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
+		cd ..
 		;;
 		
 	bricks)
@@ -1091,6 +1092,7 @@ function project_start_dispatch()
 		fi
 		docker-compose up -d --build
 		openUrl "http://127.22.0.1:8080/index.php"
+		cd ..
 		;;
 		
 	vulnado)
