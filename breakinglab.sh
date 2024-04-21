@@ -876,7 +876,7 @@ function project_stop ()
   fullname=$1	 # ex. WebGoat 7.1
   projectname=$2 # ex. webgoat7
 
-  if [ "$(sudo docker ps -q -f name=^/$projectname$)" ]; 
+  if [ "$(sudo docker ps -q -f name=^/$projectname.*$)" ]; 
   then
     echo "Stopping... $fullname"
     echo "Running command: docker stop $projectname"
@@ -900,46 +900,46 @@ function project_running()
   url=$3
   running=0
 
-  if [ "$(sudo docker ps -q -f name=^/${shortname}$)" ]; then
-    echo -e "$projectname:$shortname	$TCG	running at $url (localhost) $TCD"
+  if [ "$(sudo docker ps -q -f name=^/${shortname}.*$)" ]; then
+    echo -e "$projectname:$shortname $TCG running at $url (localhost) $TCD"
     running=1
   fi
   if [ "$(sudo docker ps -q -f name=^/${shortname}public$)" ]; then
-    echo -e "$projectname:$shortname	$TCG	running (public) $TCD"
+    echo -e "$projectname:$shortname $TCG running (public) $TCD"
     running=1
   fi  
   if [ $running -eq 0 ];
   then
-    echo -e "$projectname:$shortname		$TCR not running $TCD"
+    echo -e "$projectname:$shortname $TCR not running $TCD"
   fi 
 }
 
 
 function project_status()
 {
-  project_running "bWapp                       				 " "bwapp" "http://bwapp"
-  project_running "WebGoat 7.1                 			 	 " "webgoat7" "http://webgoat7/WebGoat"
-  project_running "WebGoat 8.0                  			 " "webgoat8" "http://webgoat8/WebGoat"
-  project_running "WebGoat 8.1                  			 " "webgoat81" "http://webgoat81/WebGoat"
-  project_running "DVWA                         			 " "dvwa" "http://dvwa"
-  project_running "Mutillidae II                			 " "mutillidae" "http://mutillidae"
-  project_running "OWASP Juice Shop            				 " "juiceshop" "http://juiceshop"
-  project_running "WPScan Vulnerable Wordpress 				 " "vulnerablewp" "http://vulnerablewp"
-  project_running "OpenDNS Security Ninjas     				 " "securityninjas" "http://securityninjas"
-  project_running "Altoro Mutual                			 " "altoro" "http://altoro"
-  project_running "Vulnerable GraphQL API      				 " "graphql" "http://graphql"
-  #project_running "Java Vulnerable Lab          			 " "jvl" "http://jvl"
-  #project_running "Web For Pentester I         			 " "w4p" "http://w4p"
-  project_running "Web For Pentester I         				 " "web4pentester" "http://w4p http://127.18.0.1"
-  project_running "Audi-1 SQLi Labs             			 " "sqlilabs" "http://sqlilabs http://127.19.0.1"
-  project_running "OxNinja SQLi-Lab            				 " "oxninja" "http://oxninja http://127.20.0.1"
-  project_running "OWASP Bricks                				 " "bricks" "http://bricks http://127.21.0.1"
-  project_running "Digininja NoSqli Lab        				 " "nosqli" "http://nosqli http://127.22.0.1"
-  project_running "Intentionally Vulnerable Java Application " "vulnado" "http://127.23.0.1:1337"
-  project_running "SSRF-LAB                                  " "ssrflab" "http://127.24.0.1:80"
-  project_running "Damn Vulnerable RESTaurant                " "damnvulnrest" "http://127.25.0.1:8080"
-  project_running "BTS PenTesting Lab                        " "btslab" "http://127.26.0.1"
-  project_running "exploit.co.il Vulnerable Web App          " "exploitcoil" "http://127.27.0.1"
+  project_running "bWapp______________________" "bwapp" "http://bwapp"
+  project_running "WebGoat 7.1________________" "webgoat7" "http://webgoat7/WebGoat"
+  project_running "WebGoat 8.0________________" "webgoat8" "http://webgoat8/WebGoat"
+  project_running "WebGoat 8.1________________" "webgoat81" "http://webgoat81/WebGoat"
+  project_running "DVWA_______________________" "dvwa" "http://dvwa"
+  project_running "Mutillidae II______________" "mutillidae" "http://mutillidae"
+  project_running "OWASP Juice Shop___________" "juiceshop" "http://juiceshop"
+  project_running "WPScan Vuln WP_____________" "vulnerablewp" "http://vulnerablewp"
+  project_running "OpenDNS Security Ninjas____" "securityninjas" "http://securityninjas"
+  project_running "Altoro Mutual______________" "altoro" "http://altoro"
+  project_running "Vulnerable GraphQL API_____" "graphql" "http://graphql"
+  #project_running "Java Vulnerable Lab________" "jvl" "http://jvl"
+  #project_running "Web For Pentester I________" "w4p" "http://w4p"
+  project_running "Web For Pentester I________" "web4pentester" "http://w4p http://127.18.0.1"
+  project_running "Audi-1 SQLi Labs___________" "sqlilabs" "http://sqlilabs http://127.19.0.1"
+  project_running "OxNinja SQLi-Lab___________" "oxninja" "http://oxninja http://127.20.0.1"
+  project_running "OWASP Bricks_______________" "bricks" "http://bricks http://127.21.0.1"
+  project_running "Digininja NoSqli Lab_______" "nosqli" "http://nosqli http://127.22.0.1"
+  project_running "Vulnado Java App___________" "vulnado" "http://127.23.0.1:1337"
+  project_running "SSRF-LAB___________________" "ssrflab" "http://127.24.0.1:80"
+  project_running "Damn Vuln RESTaurant_______" "damnvulnrest" "http://127.25.0.1:8080"
+  project_running "BTS PenTesting Lab_________" "btslab" "http://127.26.0.1"
+  project_running "exploit.co.il Vul WebApp___" "exploitcoil" "http://127.27.0.1"
 }
 
 
@@ -951,64 +951,77 @@ function project_start_dispatch()
 		project_startinfo_bwapp
 		openUrl "http://127.5.0.1/install.php"
     ;;
+	
     webgoat7)
+	
 		project_start "WebGoat 7.1" "webgoat7" "webgoat/webgoat-7.1" "127.6.0.1" "8080"
 		project_startinfo_webgoat7
 		openUrl "http://127.6.0.1/WebGoat"
     ;;
     webgoat8)
+	
 		project_start "WebGoat 8.0" "webgoat8" "webgoat/webgoat-8.0" "127.7.0.1" "8080"
 		project_startinfo_webgoat8
 		openUrl "http://127.7.0.1/WebGoat"
     ;;    
     webgoat81)
+	
 		project_start "WebGoat 8.1" "webgoat81" "webgoat/goatandwolf" "127.17.0.1" "8080"
 		project_startinfo_webgoat81
 		openUrl "http://127.17.0.1/WebGoat"
     ;;    
     dvwa)
+	
 		project_start "Damn Vulnerable Web Appliaction" "dvwa" "vulnerables/web-dvwa" "127.8.0.1" "80"
 		project_startinfo_dvwa
 		openUrl "http://127.8.0.1"		
     ;;    
+	
     mutillidae)
 		project_start "Mutillidae II" "mutillidae" "citizenstig/nowasp" "127.9.0.1" "80"
 		project_startinfo_mutillidae
 		openUrl "http://127.9.0.1"
     ;;
+	
     juiceshop)
 		project_start "OWASP Juice Shop" "juiceshop" "bkimminich/juice-shop" "127.10.0.1" "3000"
 		project_startinfo_juiceshop
 		#openUrl "http://127.10.0.1:3000"
 		openUrl "http://127.10.0.1"
     ;;
+	
     securitysheperd)
 		project_start "OWASP Security Shepard" "securitysheperd" "ismisepaul/securityshepherd" "127.11.0.1" "80"
 		project_startinfo_securitysheperd
 		openUrl "http://127.11.0.1"
     ;;
+	
     vulnerablewp)
 		project_start "WPScan Vulnerable Wordpress" "vulnerablewp" "eystsen/vulnerablewordpress" "127.12.0.1" "80" "3306"
 		project_startinfo_vulnerablewp
 		openUrl "http://127.12.0.1"
     ;;
+	
     securityninjas)    
 		project_start "Open DNS Security Ninjas" "securityninjas" "opendns/security-ninjas" "127.13.0.1" "80"
 		project_startinfo_securityninjas
 		openUrl "http://127.13.0.1"
     ;;
+	
     altoro)    
 		project_start "Altoro Mutual" "altoro" "eystsen/altoro" "127.14.0.1" "8080"
 		project_startinfo_altoro
 		openUrl "http://127.14.0.1:8080"
 		openUrl "http://127.14.0.1"
     ;;
+	
     graphql)
 		project_start "Vulnerable GraphQL API" "graphql" "carvesystems/vulnerable-graphql-api" "127.15.0.1" "3000"
 		project_startinfo_graphql
 		openUrl "http://127.15.0.1:3000"    
 		openUrl "http://127.15.0.1"    
     ;;
+	
     jvl)    
 		#project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
 		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
@@ -1016,6 +1029,7 @@ function project_start_dispatch()
 		sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
 		project_startinfo_jvl
 	;;
+	
     web4pentester)
 		project_startinfo_web4pentester
 		#In this particular case in the dockername is attached the command we need to launch on the container
@@ -1024,17 +1038,20 @@ function project_start_dispatch()
 		sudo docker run --name web4pentester -h w4p -i -t --rm -p 127.18.0.1:80:80 tiizss/webforpentester:1.0 bash -c "service apache2 start && service mysql start && bash"
 		#project_start "Web for Pentester I" "w4p" "tiizss/webforpentester:1.0 bash -c 'service apache2 start && service mysql start && bash'" "127.18.0.1" "80"
     ;;
+	
 	w4p)
       project_startinfo_web4pentester
       # In this particular case in the dockername is attached the command we need to launch on the container
       project_start "Web for Pentester I" "w4p" "tiizss/webforpentester1:1.0" "127.18.0.1" "80"
 	  openUrl "http://127.18.0.1"
 	;;
+	
 	sqlilabs)
 		project_startinfo_sqlilabs
 		project_start "Audi-1 SQLi Labs" "sqlilabs" "c0ny1/sqli-labs:0.1" "127.19.0.1" "80"
 		openUrl "http://127.19.0.1"
 		;;
+		
     oxninja)
 		project_startinfo_oxninja
 		if [[ ! -d "oxninja-sqlilab" ]]; then
@@ -1051,29 +1068,35 @@ function project_start_dispatch()
 		bash ./build.sh	&
 	#	project_start "OxNinja SQLi-Lab" "oxninja" "tiizss/oxninja-sqlilab" "172.16.0.2" "80"
 		;;
+		
 	bricks)
 		project_startinfo_bricks
 		project_start "OWASP Bricks" "bricks" "citizenstig/owaspbricks" "127.21.0.1" "80"
 		openUrl "http://127.21.0.1/index.php"
 		;;
 		
-		
 	nosqli)
 		project_startinfo_nosqli
+		#project_start "Digininja NoSqli Lab" "nosqli" "tiizss/nosqlibab" "127.22.0.1" "8080"
 		if [[ ! -d "nosqlilab" ]]; then
 			git clone https://github.com/madamantis-leviathan/nosqlilab.git
 		fi 
-	
 		cd nosqlilab
+		if grep -q "version: '2.4'" docker-compose.yml; then
+			sed -i 's/^version: .*$/version: '"'"'3.7-3.9'"'"'/' docker-compose.yml
+		fi
+		if ! grep -q "container_name: nosqli-web" docker-compose.yml; then
+			sed -i "/web:/at    container_name: nosqli-web" docker-compose.yml
+			sed -i "s/^t//" docker-compose.yml
+		fi
 		docker-compose up -d --build
-		
 		openUrl "http://127.22.0.1:8080/index.php"
-		
 		;;
+		
 	vulnado)
 		project_startinfo_vulnado
 		if [[ ! -d "vulnado" ]]; then
-			git clone https://github.com/ScaleSec/vulnado vulnado
+			git clone https://github.com/ScaleSec/vulnado
 		fi
 		cd vulnado	
 		# put up the service and install it if it is not and open it in your browser
@@ -1115,6 +1138,7 @@ function project_start_dispatch()
 		docker cp btslab/ btslab:/opt/lampp/htdocs
 		openUrl "http://127.26.0.1/btslab/setup.php"
 		;;
+		
 	exploitcoil)
 		project_startinfo_exploitcoil
 		if [[ ! -d "exploit.co.il-Docker" ]]; then
@@ -1401,8 +1425,8 @@ function project_stop_dispatch()
 	bricks)
 		project_stop "OWASP Bricks" "bricks"
 	;;
-	nosqliweb)
-		project_stop "Digininja NoSqli Lab" "nosqliweb"
+	nosqli)
+		docker stop $(docker ps -q -f name=nosqli)
 	;;
 	vulnado)
 		project_stop "Intentionally Vulnerable Java Application" "vulnado"
@@ -1599,9 +1623,6 @@ for f in SIGINT SIGHUP INT SIGTSTP; do
 	eval "${trap_cmd}"
 done
 
-display_logo
-display_info
-
 while true; do
 	echo -e "$TCC-----------------------------------------------------------------------------------------"
 	echo -e " Available script options:"
@@ -1628,6 +1649,7 @@ while true; do
 			start_online $oapp
 			;;
 		2)
+			check_docker
 			list_docker_options
 			echo -e "-----------------------------------------------------------------------------------------"
 			echo -en " Select an option for docker app: "
@@ -1736,7 +1758,7 @@ while true; do
 					echo " Showing STATUS of the Docker containers"
 					echo "-----------------------------------------------------------------------------------------"
 					project_status # call project_status ()
-					echo "-----------------------------------------------------------------------------------------"
+					#echo "-----------------------------------------------------------------------------------------"
 					;;
 				
 				info)
