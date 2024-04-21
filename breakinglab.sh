@@ -15,6 +15,8 @@
 # 2024/04/18 - asiola - Se añade Vulnado (se abre en localhost y no en 127.23.0.1 y no se muestra en status)
 # 2024/04/18 - matope1 - Se añaden hackmyvm Online, blueteamlabs Online, vulnmachines Online, nosqli (se abre en localhost y no en 127.22.0.1)
 # 2024/04/19 - Cryoox - Se añaden BTS PenTesting Lab y exploit.co.il Vulnerable Web App (no se muestra en status)
+# 2024/04/21 - TiiZss - Corrección de nosqli y sqli-labs, se añade check_docker, nuevo aspecto de status
+
 ETC_HOSTS=/etc/hosts
 
 #Tmux vars
