@@ -1626,6 +1626,7 @@ for f in SIGINT SIGHUP INT SIGTSTP; do
 	trap_cmd="trap \"capture_traps ${f}\" \"${f}\""
 	eval "${trap_cmd}"
 done
+
 display_logo
 display_info
 
