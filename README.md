@@ -158,7 +158,7 @@ Ex.
  * Security Ninjas        - OpenDNS Security Ninjas  
  * Altoro Mutual          - github.com/hclproducts/altoroj  
  * Vulnerable GraphQL API - Carve Systems LLC (carvesystems/vulnerable-graphql-api)  
- * Java Vulnerable Lab    - Java Vulnerable Lab CSPF-Founder (m4n3dw0lf/javavulnerablelab) --> :-( Not working
+ * Java Vulnerable Lab    - Java Vulnerable Lab CSPF-Founder
  * Web For Pentester I    - PentesterLab Web For Pentester I (tiizss/webforpentester)
  * Audi 1 SQLi Lab        - SQLI labs to test error based, Blind boolean based, Time based. (c0ny1/sqli-labs)
  * OxNinja SQLi-Lab       - OxNinja SQLI labs (tiizss/oxninja-sqlilab)
