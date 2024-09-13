@@ -16,6 +16,8 @@
 # 2024/04/18 - matope1 - Se añaden hackmyvm Online, blueteamlabs Online, vulnmachines Online, nosqli (se abre en localhost y no en 127.22.0.1)
 # 2024/04/19 - Cryoox - Se añaden BTS PenTesting Lab y exploit.co.il Vulnerable Web App (no se muestra en status)
 # 2024/04/21 - TiiZss - Corrección de nosqli y sqli-labs, se añade check_docker, nuevo aspecto de status
+# 2024/04/23 - Cryoox - Se añade Vulpy
+# 2024/09/13 - TiiZss - Se arregla JavaVulnerableLab
 
 ETC_HOSTS=/etc/hosts
 
@@ -265,6 +267,7 @@ list() {
 	echo "  damnvulnrest    - Damn Vulnerable RESTaurant"
 	echo "  btslab          - BTS PenTesting Lab"
 	echo "  exploitcoil     - exploit.co.il Vulnerable Web App"
+	echo "  vulpy           - Vulpy Web Application Security Lab"
 	echo "-----------------------------------------------------------------------------------------"
     echo " Available Online Pentest Applications " >&2
     echo "-----------------------------------------------------------------------------------------"
@@ -324,6 +327,7 @@ function list_dockerapps() {
 	echo -e "$TCG damnvulnrest    $TCD- Damn Vulnerable RESTaurant"
 	echo -e "$TCG btslab          $TCD- BTS PenTesting Lab"
 	echo -e "$TCG exploitcoil     $TCD- exploit.co.il Vulnerable Web App"
+	echo -e "$TCG vulpy           $TCD- Vulpy Web Application Security Lab"
 	echo -e "-----------------------------------------------------------------------------------------"
 }
 
@@ -553,6 +557,10 @@ function project_info () {
 			echo -e "$TCC Information about exploit.co.il Vulnerable Web App - exploitcoil $TCD"
 			echo -e "$TCY Source: $TCD https://github.com/Cryoox/exploit.co.il-Docker"
 			;;
+		vulpy)
+			echo -e "$TCC Information about Vulpy Web Application Security Lab - vulpy $TCD"
+			echo -e "$TCY Source: $TCD https://github.com/fportantier/vulpy"
+			;;
 		redtiger)
 			echo -e "$TCC Information about RedTigers HackIit - redtiger (ONLINE) $TCD"
 			echo -e "$TCY Source: $TCD http://redtiger.labs.overthewire.org/"
@@ -736,9 +744,11 @@ project_startinfo_graphql ()
 
 project_startinfo_jvl ()
 {
-  echo "Java Vulnerable Lab now mapped to port 80."
-  echo "First Install: http://127.16.0.1/JavaVulnerableLab/instal.jsp"
-  echo "Access: http://127.16.0.1/JavaVulnerableLab"  
+  echo "Java Vulnerable Lab now mapped to port 8080."
+  echo "First Install: http://localhost:8080/JavaVulnerableLab/instal.jsp"
+  #echo "First Install: http://127.16.0.1/JavaVulnerableLab/instal.jsp"
+  echo "Access: http://localhost:8080/JavaVulnerableLab"  
+  #echo "Access: http://127.16.0.1/JavaVulnerableLab"  
 }
 
 project_startinfo_web4pentester ()
@@ -801,6 +811,12 @@ project_startinfo_exploitcoil ()
 {
 	echo "BTS PenTesting Lab"
 	echo "Access: http://127.27.0.1"
+}
+
+project_startinfo_vulpy ()
+{
+	echo "Vulpy Web Application Security Lab"
+	echo "Access: http://127.28.0.1"
 }
 
 #########################
@@ -930,7 +946,7 @@ function project_status()
   project_running "OpenDNS Security Ninjas____" "securityninjas" "http://securityninjas"
   project_running "Altoro Mutual______________" "altoro" "http://altoro"
   project_running "Vulnerable GraphQL API_____" "graphql" "http://graphql"
-  #project_running "Java Vulnerable Lab________" "jvl" "http://jvl"
+  project_running "Java Vulnerable Lab________" "jvl" "http://jvl"
   #project_running "Web For Pentester I________" "w4p" "http://w4p"
   project_running "Web For Pentester I________" "web4pentester" "http://w4p http://127.18.0.1"
   project_running "Audi-1 SQLi Labs___________" "sqlilabs" "http://sqlilabs http://127.19.0.1"
@@ -942,6 +958,7 @@ function project_status()
   project_running "Damn Vuln RESTaurant_______" "damnvulnrest" "http://127.25.0.1:8080"
   project_running "BTS PenTesting Lab_________" "btslab" "http://127.26.0.1"
   project_running "exploit.co.il Vul WebApp___" "exploitcoil" "http://127.27.0.1"
+  project_running "Vulpy WebApp Security Lab__" "vulpy" "http://127.28.0.1"
 }
 
 
@@ -1024,13 +1041,22 @@ function project_start_dispatch()
 		openUrl "http://127.15.0.1"    
     ;;
 	
-    jvl)    
-		#project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
-		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
-		openUrl "http://127.16.0.1/JavaVulnerableLab/install.jsp"
-		sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
+    jvl)
 		project_startinfo_jvl
-	;;
+		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
+		if [[ ! -d "JavaVulnerableLabb" ]]; then
+			git clone https://github.com/CSPF-Founder/JavaVulnerableLab.git
+		fi 
+		cd JavaVulnerableLab
+		docker-compose up
+		cd ..
+		;;
+    
+		#project_start "Java Vulnerable Lab" "jvl" "m4n3dw0lf/javavulnerablelab" "127.16.0.1" "8080"
+#		openUrl "http://127.16.0.1:8080/JavaVulnerableLab/install.jsp"
+#		sudo docker run --name javavulnerablelab -h jvl -i -t --rm -p 127.16.0.1:8080:8080 m4n3dw0lf/javavulnerablelab bash -c "service apache2 start && service mysql start && bash"
+#		project_startinfo_jvl
+#	;;
 	
     web4pentester)
 		project_startinfo_web4pentester
@@ -1151,6 +1177,12 @@ function project_start_dispatch()
 		cd exploit.co.il-Docker
 		docker compose up -d
 		openUrl "http://127.27.0.1/index.php"
+		;;
+		
+	vulpy)
+		project_startinfo_vulpy
+		project_start "Vulpy Web Application Security Lab" "vulpy" "devsecopsacademy/vulpy:v1.2.0" "127.28.0.1" "5000"
+		openUrl "http://127.28.0.1"
 		;;
 		
 	*)
@@ -1364,6 +1396,10 @@ function project_startpublic_dispatch()
       #project_startpublic "exploit.co.il Vulnerable Web App" "exploitcoil" "tomsik68/xampp:5" "80" $publicip $port
       #project_startinfo_exploitcoil $publicip
 	;;
+	vulpy)
+      project_startpublic "Vulpy Web Application Security Lab" "vulpy" "devsecopsacademy/vulpy:v1.2.0" "80" $publicip $port
+      project_startinfo_vulpy $publicip
+	;;
 	
     *)
     echo "ERROR: Project public dispatch doesn't recognize the project name $1" 
@@ -1446,6 +1482,9 @@ function project_stop_dispatch()
 	;;
 	exploitcoil)
 		project_stop "exploit.co.il Vulnerable Web App" "exploitcoil"
+	;;
+	vulpy)
+		project_stop "Vulpy Web Application Security Lab" "vulpy"
 	;;
 	
     *)
