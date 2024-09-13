@@ -23,7 +23,7 @@ Working and tested on Ubuntu 2x, Kali and WSL.<br />
 * OpenDNS Security Ninjas
 * Altoro Mutual
 * Vulnerable GraphQL API
-* Java Vulnerable Lab (New 20230916) --> Offical Docker Not working :-(
+* Java Vulnerable Lab (Fixed 20240913)
 * Web for Pentester I (New 20230918)
 * Audi - 1 SQLI labs (New 20231215)
 * OxNinja SQLi-Lab (New 20231217)
@@ -189,11 +189,11 @@ sudo docker ps
 - Try to access the application using the IP address
 
 ## Next machines / steps
-* Try to fix JVL
 * Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 * Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
 * Include [GameOver](https://sourceforge.net/projects/null-gameover/)
 * Include [Vulpy - Web Application Security Lab](https://github.com/fportantier/vulpy)
+* Try to include [VulHub](https://github.com/vulhub/vulhub) project
 
 ## Top Collaborators
 Thanks to the following collaborators:
