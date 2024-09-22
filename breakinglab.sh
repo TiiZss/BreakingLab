@@ -18,6 +18,7 @@
 # 2024/04/21 - TiiZss - Corrección de nosqli y sqli-labs, se añade check_docker, nuevo aspecto de status
 # 2024/04/23 - Cryoox - Se añade Vulpy
 # 2024/09/13 - TiiZss - Se arregla JavaVulnerableLab
+# 2024/09/22 - TiiZss - Se corrije el acceso a Mutillidae
 
 ETC_HOSTS=/etc/hosts
 
@@ -999,7 +1000,7 @@ function project_start_dispatch()
     mutillidae)
 		project_start "Mutillidae II" "mutillidae" "citizenstig/nowasp" "127.9.0.1" "80"
 		project_startinfo_mutillidae
-		openUrl "http://127.9.0.1"
+		openUrl "http://127.9.0.1/set-up-database.php"
     ;;
 	
     juiceshop)
