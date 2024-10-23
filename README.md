@@ -65,6 +65,10 @@ chmod +x breakinglab.sh
 ```
 
 #### 2) Installing and enabling docker for your user
+
+##### Windows & WSL 
+If you want to install Docker in your Windows, please follow this guide: https://docs.docker.com/desktop/install/windows-install/  
+
 ##### Linux
 This script is prepared to install Docker in Kali: https://www.kali.org/docs/containers/installing-docker-on-kali/  
 ```
@@ -78,8 +82,6 @@ For any other distro, use the prefered way to install docker. Here you have how 
 ##### Mac  
 If you want to install Docker in your Mac, please follow this guide: https://docs.docker.com/desktop/install/mac-install/  
 
-##### Windows  
-If you want to install Docker in your Windows, please follow this guide: https://docs.docker.com/desktop/install/windows-install/  
 
 #### 3) Start an app on localhost
 Now you can start and stop one or more of these apps on your system.
@@ -191,6 +193,8 @@ sudo docker ps
 ## Known Issues
 * Public Start option not working fine
 * Not all maquines works equal, some machines only run alone
+* JVL docker has a problem, you have to create a "pages" directory into JavaVulnerableLab docker file.
+* If you install docker.io in WSL fails starting docker daemon, because is trying to start Windows Docker Descktop.
 
 ## Next machines / steps
 * Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
