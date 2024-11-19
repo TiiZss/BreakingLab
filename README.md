@@ -69,7 +69,10 @@ chmod +x breakinglab.sh
 ##### Windows & WSL 
 If you want to install Docker in your Windows, please follow this guide: https://docs.docker.com/desktop/install/windows-install/  
 
-##### Linux
+##### Mac  
+If you want to install Docker in your Mac, please follow this guide: https://docs.docker.com/desktop/install/mac-install/  
+
+##### Linux (not WSL)
 This script is prepared to install Docker in Kali: https://www.kali.org/docs/containers/installing-docker-on-kali/  
 ```
 sudo apt install -y docker.io
@@ -78,9 +81,6 @@ sudo usermod -aG docker $USER
 docker
 ```
 For any other distro, use the prefered way to install docker. Here you have how to install Docker Desktop on linux: https://docs.docker.com/desktop/install/linux-install/  
-
-##### Mac  
-If you want to install Docker in your Mac, please follow this guide: https://docs.docker.com/desktop/install/mac-install/  
 
 
 #### 3) Start an app on localhost
@@ -203,6 +203,9 @@ sudo docker ps
 * Include [Vulpy - Web Application Security Lab](https://github.com/fportantier/vulpy)
 * Include [Damn Vulnerable Web Services](https://github.com/snoopysecurity/dvws-node)
 * Include [VulHub](https://github.com/vulhub/vulhub) project
+* Include [CSPF ASP Vulnerable Lab](https://github.com/CSPF-Founder/ASPVulnerableLab)
+* Include [CSPF PHP Vulnerable Lab](https://github.com/CSPF-Founder/btslab)
+* Include [CSPF Android Vulnerable Lab](https://github.com/CSPF-Founder/DodoVulnerableBank)
 
 ## Top Collaborators
 Thanks to the following collaborators:
