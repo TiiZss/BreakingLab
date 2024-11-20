@@ -75,7 +75,7 @@ If you want to install Docker in your Mac, please follow this guide: https://doc
 ##### Linux (not WSL)
 This script is prepared to install Docker in Kali: https://www.kali.org/docs/containers/installing-docker-on-kali/  
 ```
-sudo apt install -y docker.io
+sudo apt install -y docker.io docker-compose
 sudo systemctl enable docker --now
 sudo usermod -aG docker $USER
 docker
