@@ -84,8 +84,14 @@ For any other distro, use the prefered way to install docker. Here you have how 
 
 
 #### 3) Start an app on localhost
+You can use the sccript with parameters or with menu.
+##### With menu
+```
+./breakinglab.sh 
+```
+##### With parameters
 Now you can start and stop one or more of these apps on your system.
-As an example, to start w4p just run this command
+As an example, to start the app w4p just run this command
 ```
 ./breakinglab.sh start w4p
 ```
@@ -93,7 +99,7 @@ This will download the docker, add w4p to hosts file and run the docker mapped t
 That means you can just point your browser to http://w4p and it will be up and running.
 
 
-#### 4) Start an app and expose it from machine
+#### 4) Start an app and expose it from machine (not working)
 Use the startpublic command to bind the app to your IP
 ```
 ./breakinglab.sh startpublic w4p
@@ -107,8 +113,8 @@ IP needs to be an IP on the machine and port in this example is 8080
 You can only have one app exposed on any given port. If you need to expose more than one app, you need to use different ports.
 
 
-#### 5) Stopp any app
-To stop any app use the stop command
+#### 5) Stop any app whit parameters
+To stop any app use the stop command. For example for stor w4p app
 ```
 ./breakinglab.sh stop w4p
 ```
