@@ -1,5 +1,6 @@
 #!/bin/bash
 # 2025/03/15 Resideño completo
+# 2025/10/11 Corrección errores
 
 # Colores y estilos
 TxDefault="\e[0m" TxBold="\e[1m" TxUnderline="\e[2m"
