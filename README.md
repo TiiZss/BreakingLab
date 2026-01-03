@@ -18,9 +18,10 @@
 
 ---
 
-## 🚀 Features (v2.0)
+## 🚀 Features (v2.1)
 
 -   **Modular Architecture**: Clean separation of code (`breakinglab.sh`), configuration (`config/`), and libraries (`lib/`).
+-   **GitHub Import**: Import Docker projects directly from GitHub URLs with **Auto-Sanitization** and conflict resolution.
 -   **Dynamic Menus**: Interactive 2-column menu system with search-by-name/number and status indicators (`[ON]`/`[OFF]`).
 -   **Public Exposure**: `start_public` command to easily expose containers to your LAN (great for classrooms/CTFs).
 -   **Stack Grouping**: All containers automatically grouped under "BreakingLab" in Docker Desktop.
@@ -103,7 +104,13 @@ See which labs are currently running (green for ON, red for OFF).
 ./breakinglab.sh status
 ```
 
-#### 6. Open Online Labs
+#### 6. Delete a Lab
+Permanently removes the project configuration and cleans up associated resources (containers, hosts entries).
+```bash
+./breakinglab.sh delete <project_name>
+```
+
+#### 7. Open Online Labs
 Launches strictly online resources (like PortSwigger Academy or RedTiger).
 ```bash
 ./breakinglab.sh online portswigger
@@ -133,7 +140,6 @@ BreakingLab includes a curated list of vulnerable apps configured to run out-of-
 *   Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 *   Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
 *   Include [GameOver](https://sourceforge.net/projects/null-gameover/)
-*   Include [Vulpy - Web Application Security Lab](https://github.com/fportantier/vulpy)
 *   Include [Damn Vulnerable Web Services](https://github.com/snoopysecurity/dvws-node)
 *   Include [VulHub](https://github.com/vulhub/vulhub) project
 *   Include [CSPF ASP Vulnerable Lab](https://github.com/CSPF-Founder/ASPVulnerableLab)
@@ -147,7 +153,10 @@ BreakingLab includes a curated list of vulnerable apps configured to run out-of-
 Contributions are welcome!
 1.  Fork the repository.
 2.  Create a feature branch (`git checkout -b feature/AmazingFeature`).
-3.  Add your project to `config/projects.conf`.
+3.  **Add a new Project**:
+    *   Copy `config/projects.d/_template.conf.example` to `config/projects.d/docker_yourproject.conf`.
+    *   Fill in the details (Image, IP, Port, etc.).
+    *   (Optional) If you need custom startup commands, create `scripts/hooks/yourproject_pre.sh` or `yourproject_post.sh`.
 4.  Commit your changes.
 5.  Open a Pull Request.
 

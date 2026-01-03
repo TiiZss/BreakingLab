@@ -1,0 +1,1 @@
+git clone https://github.com/OxNinja/SQLi-lab oxninja-sqlilab && cd oxninja-sqlilab && sed -i "/web:/at        container_name: oxninja-web" docker-compose.yml && sed -i "s/^t//" docker-compose.yml && sed -i "s

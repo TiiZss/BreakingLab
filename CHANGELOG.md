@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-01-03
+
+### Added
+- **GitHub Import Feature**: Import Docker projects directly from GitHub URLs.
+- **Auto-Sanitization**: Automatically sanitizes imported `docker-compose.yml` files (removes naming conflicts, rebinds ports to assigned IP).
+- **Auto-IP Assignment**: The "Add New Project" wizard now automatically assigns the next available IP in the `127.100.0.X` range.
+- **Delete Project**: Added option to cleanly delete project configurations and resources via menu or CLI (`delete` command).
+- **Stack Status Detection**: Improved `status` and menu checks to correctly identify running Docker Compose stacks using project labels.
+
+### Changed
+- **Menu Alignment**: Optimized "Online Projects" list to a single-column layout for better readability.
+- **Wizard Improvements**: Clarified port prompts and optimized the flow for adding new projects.
+
 ## [2.0.0] - 2026-01-02
 
 ### Added

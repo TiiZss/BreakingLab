@@ -41,12 +41,37 @@ open_url() {
     fi
 }
 
+# Logging
+LOG_FILE="${DIR}/logs/breakinglab.log"
+ensure_log_dir() { [ -d "${DIR}/logs" ] || mkdir -p "${DIR}/logs"; }
+log_message() {
+    ensure_log_dir
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+}
+
+# Hook Execution
+execute_hook() {
+    local hook_name="$1"
+    local hook_script="${DIR}/scripts/hooks/${hook_name}.sh"
+    
+    if [ -f "$hook_script" ]; then
+        log_message "Executing hook: $hook_name"
+        echo -e "$TCC Executing custom script: $hook_name $TCD"
+        bash "$hook_script" || { echo -e "$TCR Hook $hook_name failed $TCD"; return 1; }
+    fi
+}
+
 docker_is_installed() {
+    if [ -n "${DOCKER_INSTALLED_CACHE:-}" ]; then
+        return $DOCKER_INSTALLED_CACHE
+    fi
     if command -v docker >/dev/null 2>&1; then
         echo -e "$TCG Docker command found $TCD"
+        DOCKER_INSTALLED_CACHE=0
         return 0
     else
         echo -e "$TCR Docker command not found $TCD"
+        DOCKER_INSTALLED_CACHE=1
         return 1
     fi
 }
@@ -54,7 +79,9 @@ docker_is_installed() {
 docker_is_running() {
     # Functional check first: If we can talk to the daemon, we are good.
     if docker ps >/dev/null 2>&1; then
-        echo -e "$TCG Docker is running $TCD"
+        # Quiet success for caching
+        [ -z "${DOCKER_RUNNING_CACHE:-}" ] && echo -e "$TCG Docker is running $TCD"
+        DOCKER_RUNNING_CACHE=0
         return 0
     fi
 
@@ -180,4 +207,27 @@ check_dependencies() {
         exit 1
     fi
     echo -e "$TCG All dependencies found. $TCD"
+}
+
+get_next_available_ip() {
+    # Default subnet base
+    local current_max=1
+    
+    # Iterate through DOCKER_PROJECTS
+    for key in "${!DOCKER_PROJECTS[@]}"; do
+        local config="${DOCKER_PROJECTS[$key]}"
+        IFS='|' read -r _ ip _ _ _ _ _ <<< "$config"
+        
+        # Check if IP matches 127.100.0.X pattern
+        if [[ "$ip" =~ ^127\.100\.0\.([0-9]+)$ ]]; then
+            local last_octet="${BASH_REMATCH[1]}"
+            if [ "$last_octet" -gt "$current_max" ]; then
+                current_max=$last_octet
+            fi
+        fi
+    done
+    
+    # Next available
+    local next_octet=$((current_max + 1))
+    echo "127.100.0.${next_octet}"
 }

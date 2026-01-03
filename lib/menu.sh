@@ -24,6 +24,19 @@ print_menu_items() {
 
     local total=${#sorted_keys[@]}
     local i=0
+
+    # Single Column for Online Projects
+    if [ "$type" == "online" ]; then
+        for ((i=0; i<total; i++)); do
+            local key="${sorted_keys[$i]}"
+            local desc=""
+            IFS='|' read -r _ desc <<< "${ONLINE_PROJECTS[$key]}"
+            
+            # Format: No truncation needed mostly, or large limit
+            printf " %2d) %b%-20s%b - %s\n" "$((i+1))" "$TCG" "$key" "$TCD" "$desc"
+        done
+        return
+    fi
     
     while [ $i -lt $total ]; do
         # Item 1
@@ -34,13 +47,19 @@ print_menu_items() {
         
         if [ "$type" == "docker" ]; then
              IFS='|' read -r _ _ _ desc1 _ <<< "${DOCKER_PROJECTS[$key1]}"
-             if echo "$running_containers" | grep -q "^${key1}$"; then
-                 stat1="[ON] "
+             if docker ps --format '{{.Names}}' | grep -q "^breakinglab_$key1$"; then
+                stat1="ON"
+                stat1_color="$TCG"
+            elif docker ps -q --filter "label=com.docker.compose.project=breakinglab_${key1}" | grep -q .; then
+                 stat1="ON"
                  stat1_color="$TCG"
-             else
-                 stat1="[OFF]"
-                 stat1_color="$TCR"
-             fi
+            elif docker ps --format '{{.Names}}' | grep -q "^$key1$"; then
+                stat1="ON"
+                stat1_color="$TCY"
+            else
+                stat1="OFF"
+                stat1_color="$TCR"
+            fi
         else
              IFS='|' read -r _ desc1 <<< "${ONLINE_PROJECTS[$key1]}"
         fi

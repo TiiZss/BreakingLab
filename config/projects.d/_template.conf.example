@@ -1,0 +1,18 @@
+# Configuración de Proyecto BreakingLab
+# Copia este archivo a: config/projects.d/docker_tuproyecto.conf
+
+# Formato:
+# DOCKER_PROJECTS["nombre_unico"]="imagen|ip|puerto|descripción|url|info_inicio|ruta_compose|pre_hooks|post_hooks"
+
+# Campos:
+# 1. Image: Nombre de la imagen Docker (ej. "vulnerables/web-dvwa")
+# 2. IP: IP Local para mapping (ej. "127.100.0.1")
+# 3. Port: Puerto interno del contenedor (ej. "80")
+# 4. Desc: Descripción corta para el menú
+# 5. URL: URL completa para abrir en navegador
+# 6. Start Info: Mensaje extra al iniciar (credenciales, etc). Usa \n para saltos de línea.
+# 7. Compose Path: (Opcional) Ruta a carpeta con docker-compose.yml si no es imagen simple.
+# 8. Pre-hook: (Opcional/Legacy) Dejar vacío. Usar scripts/hooks/nombre_pre.sh en su lugar.
+# 9. Post-hook: (Opcional/Legacy) Dejar vacío. Usar scripts/hooks/nombre_post.sh en su lugar.
+
+DOCKER_PROJECTS["mi_proyecto"]="mi_usuario/mi_imagen|127.x.x.x|80|Mi Proyecto Vulnerable|http://127.x.x.x|User: admin / Pass: admin|||"
