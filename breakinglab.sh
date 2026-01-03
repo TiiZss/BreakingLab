@@ -405,7 +405,32 @@ import_github_project() {
     # --- SANITIZE COMPOSE ---
     sanitize_compose "$compose_file" "$p_ip" "$p_port"
     
-    read -p "Description: " p_desc
+    # --- FETCH DESCRIPTION ---
+    echo "Fetching repository details..."
+
+    # Extract Owner/Repo from URL
+    # Supports: https://github.com/owner/repo or git@github.com:owner/repo.git
+    local gh_repo_path=$(echo "$repo_url" | sed -E 's/.*github.com[:/](.*)(\.git)?/\1/' | sed 's/\.git$//')
+    
+    local gh_desc=""
+    if [ -n "$gh_repo_path" ]; then
+        local api_url="https://api.github.com/repos/${gh_repo_path}"
+        # Fetch JSON, try to extract description field
+        # Using grep/sed fallback since jq might not be installed
+        gh_desc=$(curl -s "$api_url" | grep '"description":' | sed -E 's/.*"description": "(.*)",/\1/' | sed 's/\\"/\"/g')
+    fi
+    
+    if [ -n "$gh_desc" ] && [ "$gh_desc" != "null" ]; then
+         echo -e "Found Description: $TCC $gh_desc $TCD"
+         read -p "Description (default: imported): " p_desc_input
+         p_desc="${p_desc_input:-$gh_desc}"
+    else 
+         read -p "Description: " p_desc
+    fi
+    
+    # Sanitize description to remove newlines and pipes
+    p_desc=$(echo "$p_desc" | tr -d '\n' | tr '|' '-')
+
     local p_info="Imported from $repo_url"
     
     # 5. Save Config
