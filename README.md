@@ -129,7 +129,7 @@ BreakingLab includes a curated list of vulnerable apps configured to run out-of-
 *   **PentesterLab**: Web For Pentester I.
 *   **Injection**: SQLi Labs (Audi, OxNinja), NoSQLi Lab, GraphQL API.
 *   **CMS**: Vulnerable WordPress, Drupal (via simple label).
-*   **Others**: DVWA, Altoro Mutual, Security Ninjas, Java Vulnerable Lab, Vulnado, SSRF-Lab, Damn Vulnerable RESTaurant, BTS Lab, exploit.co.il.
+*   **Others**: DVWA, Altoro Mutual, Security Ninjas, Java Vulnerable Lab, Vulnado, SSRF-Lab, Damn Vulnerable RESTaurant, BTS Lab, exploit.co.il, Vulpy.
 
 ### 🌐 Online Labs
 *   PortSwigger Academy, TryHackMe, HackTheBox, VulnHub, RedTiger, Root-Me, and more.
