@@ -1,4 +1,6 @@
 #!/bin/bash
+# Colors are assigned in lib/colors.sh, which breakinglab.sh sources first.
+# shellcheck disable=SC2154
 
 print_date() { stat -c %y "$0"; }
 
@@ -26,8 +28,7 @@ open_url() {
             wget -O - https://pkg.wslutiliti.es/public.key | sudo gpg --dearmor -o /usr/share/keyrings/wslu-archive-keyring.gpg
             echo "deb [signed-by=/usr/share/keyrings/wslu-archive-keyring.gpg] https://pkg.wslutiliti.es/debian $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/wslu.list
             sudo apt update -y
-            sudo apt install -y wslu
-            if [ $? -eq 0 ]; then
+            if sudo apt install -y wslu; then
                 echo -e "$TCG wslu installed successfully $TCD"
             else
                 echo -e "$TCR Failed to install wslu. Falling back to powershell $TCD"
@@ -63,7 +64,7 @@ execute_hook() {
 
 docker_is_installed() {
     if [ -n "${DOCKER_INSTALLED_CACHE:-}" ]; then
-        return $DOCKER_INSTALLED_CACHE
+        return "$DOCKER_INSTALLED_CACHE"
     fi
     if command -v docker >/dev/null 2>&1; then
         echo -e "$TCG Docker command found $TCD"
@@ -112,7 +113,8 @@ start_docker() {
         if is_wsl; then
             echo -e "$TCG Starting Docker Desktop (WSL) $TCD"
             local win_path="C:/Program Files/Docker/Docker/Docker Desktop.exe"
-            local wsl_path=$(wslpath -u "$win_path" 2>/dev/null)
+            local wsl_path
+            wsl_path=$(wslpath -u "$win_path" 2>/dev/null)
             if [ -z "$wsl_path" ] || [ ! -f "$wsl_path" ]; then
                 echo -e "$TCR Docker Desktop not found at $win_path $TCD"
                 echo "Please ensure Docker Desktop is installed and adjust the path if necessary."
@@ -141,7 +143,11 @@ start_docker() {
             echo -e "$TCG Starting Docker service (Linux) $TCD"
             sudo systemctl start docker || sudo service docker start
             sleep 2
-            docker_is_running && return 0 || { echo -e "$TCR Failed to start Docker service $TCD"; return 1; }
+            if docker_is_running; then
+                return 0
+            fi
+            echo -e "$TCR Failed to start Docker service $TCD"
+            return 1
         fi
     else
         echo -e "$TCR Docker is required for this operation. Exiting. $TCD"

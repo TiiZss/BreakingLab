@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Mapa de trabajo del agente en `CLAUDE.md` y `.cursor/rules/workflow.mdc`. Memoria en `docs/workflow/`.
 - Documentos de planificación en `docs/` y `.github/prompts/`, enlazados desde el README.
+- ShellCheck del lanzador, de `lib/` y de los hooks. `archive/` queda fuera del análisis.
 
 ## [2.1.0] - 2026-01-03
 
