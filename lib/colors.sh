@@ -1,4 +1,6 @@
 #!/bin/bash
+# Palette sourced by the launcher. The names are used from other files.
+# shellcheck disable=SC2034
 # Colores y estilos
 TxDefault="\e[0m" TxBold="\e[1m" TxUnderline="\e[2m"
 TCD="\e[0;0m" TCR="\e[0;31m" TCG="\e[0;32m" TCY="\e[1;33m" TCB="\e[0;34m" TCM="\e[0;35m" TCC="\e[0;36m" TCW="\e[0;37m"

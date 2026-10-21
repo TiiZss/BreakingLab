@@ -17,3 +17,5 @@ jobs:
       with:
         scandir: './'
         additional_files: 'lib/*.sh'
+        ignore_paths: archive
+        check_together: "true"

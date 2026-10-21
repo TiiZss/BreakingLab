@@ -71,7 +71,12 @@ start_docker_project() {
         
         if [ -n "$container_exists" ]; then
             echo "Container $container_exists exists. Starting..."
-            docker start "$container_exists" >/dev/null && echo "Started." || { echo -e "$TCR Failed to start $container_exists $TCD"; return 1; }
+            if docker start "$container_exists" >/dev/null; then
+                echo "Started."
+            else
+                echo -e "$TCR Failed to start $container_exists $TCD"
+                return 1
+            fi
         else
             echo "Creating container $proj..."
             execute_hook "${proj}_post"
@@ -124,10 +129,10 @@ start_public_project() {
     if [ -z "$proj" ]; then
         select_project "docker" "Start Public Project (enter number or name): " proj || return 0
         
-        read -p "Enter Bind IP (default 0.0.0.0): " input_ip
+        read -r -p "Enter Bind IP (default 0.0.0.0): " input_ip
         [ -n "$input_ip" ] && public_ip="$input_ip"
         
-        read -p "Enter Public Port (leave empty for default): " input_port
+        read -r -p "Enter Public Port (leave empty for default): " input_port
         [ -n "$input_port" ] && public_port="$input_port"
     fi
 
@@ -264,7 +269,7 @@ update_breakinglab() {
         git pull origin main || { echo -e "$TCR Update failed $TCD"; return 1; }
         echo -e "$TCG Update successful. Restarting... $TCD"
         sleep 1
-        exec "$0" "$@"
+        exec "$0"
     else
         echo -e "$TCR Not a git repository. Cannot auto-update. $TCD"
         return 1
@@ -279,7 +284,7 @@ add_new_project() {
     echo "1) Manual - Docker Image (Single Container)"
     echo "2) Manual - Docker Compose (Stack)"
     echo "3) Import from GitHub"
-    read -p "Choice [1]: " p_type_choice
+    read -r -p "Choice [1]: " p_type_choice
     local p_type="${p_type_choice:-1}"
     
     if [ "$p_type" == "3" ]; then
@@ -287,7 +292,7 @@ add_new_project() {
         return
     fi
     
-    read -p "Project Slug (e.g. my-app): " p_slug
+    read -r -p "Project Slug (e.g. my-app): " p_slug
     [[ -z "$p_slug" ]] && return 0
     if [[ -n "${DOCKER_PROJECTS[$p_slug]+x}" ]]; then
         echo -e "$TCR Project $p_slug already exists! $TCD"
@@ -298,7 +303,7 @@ add_new_project() {
     local p_compose=""
     
     if [ "$p_type" == "2" ]; then
-        read -p "Absolute Path to Compose Folder: " p_compose
+        read -r -p "Absolute Path to Compose Folder: " p_compose
         if [ ! -d "$p_compose" ] && [ ! -f "$p_compose" ]; then
             echo -e "$TCR Path does not exist. $TCD"
             return 0
@@ -306,19 +311,20 @@ add_new_project() {
         # Default image placeholder for config format compatibility
         p_image="docker-compose"
     else
-        read -p "Docker Image Name: " p_image
+        read -r -p "Docker Image Name: " p_image
     fi
     
     
-    read -p "Main Service Port (for browser checking): " p_port
+    read -r -p "Main Service Port (for browser checking): " p_port
     
     # Auto-assign IP
     echo "Finding available IP..."
-    local p_ip=$(get_next_available_ip)
+    local p_ip
+    p_ip=$(get_next_available_ip)
     echo -e "Assigned IP: $TCG$p_ip$TCD"
     
-    read -p "Description: " p_desc
-    read -p "Start Info Message: " p_info
+    read -r -p "Description: " p_desc
+    read -r -p "Start Info Message: " p_info
     
     # Construct config string
     # "image|ip|port|desc|http://ip|info|compose_path|pre|post"
@@ -330,6 +336,7 @@ add_new_project() {
     echo "DOCKER_PROJECTS[\"$p_slug\"]=\"$p_image|$p_ip|$p_port|$p_desc|$p_url|$p_info|$p_compose||\"" > "$config_file"
     
     # Reload config
+    # shellcheck disable=SC1090
     source "$config_file"
     echo -e "$TCG Project $p_slug added successfully! $TCD"
     read -n 1 -s -r -p "Press key to continue..."
@@ -341,11 +348,12 @@ import_github_project() {
     echo -e "$TCW GitHub Import Wizard $TCD"
     
     # 1. Get URL and Path
-    read -p "GitHub Repository URL: " repo_url
+    read -r -p "GitHub Repository URL: " repo_url
     [ -z "$repo_url" ] && return 0
     
-    local default_slug=$(basename "$repo_url" .git)
-    read -p "Project Slug / Folder Name (default: $default_slug): " p_slug
+    local default_slug
+    default_slug=$(basename "$repo_url" .git)
+    read -r -p "Project Slug / Folder Name (default: $default_slug): " p_slug
     p_slug="${p_slug:-$default_slug}"
     
     if [[ -n "${DOCKER_PROJECTS[$p_slug]+x}" ]]; then
@@ -372,7 +380,7 @@ import_github_project() {
         compose_file="$target_path/docker-compose.yaml"
     else
         echo -e "$TCR No docker-compose.yml found in root. $TCD"
-        read -p "Path to docker-compose file (relative to $projects_dir/$p_slug): " rel_path
+        read -r -p "Path to docker-compose file (relative to $projects_dir/$p_slug): " rel_path
         if [ -f "$target_path/$rel_path" ]; then
             compose_file="$target_path/$rel_path"
         else
@@ -385,21 +393,24 @@ import_github_project() {
     
     # 3. Port Scanning
     echo "Scanning for ports..."
-    local found_ports=$(grep -oP "^\s*-\s*\"\d+:\d+\"" "$compose_file" | tr -d ' "-' | cut -d: -f1 | tr '\n' ' ')
+    local found_ports
+    found_ports=$(grep -oP "^\s*-\s*\"\d+:\d+\"" "$compose_file" | tr -d ' "-' | cut -d: -f1 | tr '\n' ' ')
+    local default_port
     if [ -n "$found_ports" ]; then
         echo -e "Found ports: $TCY $found_ports $TCD"
-        local default_port=$(echo "$found_ports" | awk '{print $1}')
+        default_port=$(echo "$found_ports" | awk '{print $1}')
     else
         echo "No explicit exposed ports found in standard format."
-        local default_port="80"
+        default_port="80"
     fi
     
-    read -p "Main Service Port (default: $default_port): " p_port
+    read -r -p "Main Service Port (default: $default_port): " p_port
     p_port="${p_port:-$default_port}"
     
     # 4. Auto-IP
     echo "Assigning IP..."
-    local p_ip=$(get_next_available_ip)
+    local p_ip
+    p_ip=$(get_next_available_ip)
     echo -e "Assigned IP: $TCG$p_ip$TCD"
     
     # --- SANITIZE COMPOSE ---
@@ -410,7 +421,8 @@ import_github_project() {
 
     # Extract Owner/Repo from URL
     # Supports: https://github.com/owner/repo or git@github.com:owner/repo.git
-    local gh_repo_path=$(echo "$repo_url" | sed -E 's/.*github.com[:/](.*)(\.git)?/\1/' | sed 's/\.git$//')
+    local gh_repo_path
+    gh_repo_path=$(echo "$repo_url" | sed -E 's/.*github.com[:/](.*)(\.git)?/\1/' | sed 's/\.git$//')
     
     local gh_desc=""
     if [ -n "$gh_repo_path" ]; then
@@ -422,10 +434,10 @@ import_github_project() {
     
     if [ -n "$gh_desc" ] && [ "$gh_desc" != "null" ]; then
          echo -e "Found Description: $TCC $gh_desc $TCD"
-         read -p "Description (default: imported): " p_desc_input
+         read -r -p "Description (default: imported): " p_desc_input
          p_desc="${p_desc_input:-$gh_desc}"
     else 
-         read -p "Description: " p_desc
+         read -r -p "Description: " p_desc
     fi
     
     # Sanitize description to remove newlines and pipes
@@ -447,6 +459,7 @@ import_github_project() {
     # p_image is 'docker-compose' for type 2
     echo "DOCKER_PROJECTS[\"$p_slug\"]=\"docker-compose|$p_ip|$p_port|$p_desc|$p_url|$p_info|$target_path||\"" > "$config_file"
     
+    # shellcheck disable=SC1090
     source "$config_file"
     echo -e "$TCG Project $p_slug imported successfully! $TCD"
     read -n 1 -s -r -p "Press key to continue..."
@@ -472,7 +485,7 @@ delete_project() {
     echo -e "  - Remove the hosts entry"
     echo -e "  - DELETE the configuration file: ${DIR}/config/projects.d/docker_${proj}.conf"
     
-    read -p "Are you sure? (y/N): " confirm
+    read -r -p "Are you sure? (y/N): " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
         echo "Deletion cancelled."
         return 0
@@ -498,7 +511,7 @@ delete_project() {
     fi
 
     # Unset from current session array
-    unset DOCKER_PROJECTS["$proj"]
+    unset "DOCKER_PROJECTS[$proj]"
 
     echo -e "$TCG Project '$proj' has been deleted. $TCD"
     read -n 1 -s -r -p "Press key to continue..."
@@ -509,7 +522,7 @@ delete_project() {
 main_menu() {
     display_logo
     echo -e "$TCC Options: $TCD\n1) List Projects\n2) Start Docker Project\n3) Start Public Project\n4) Stop Docker Project\n5) Status Docker Projects\n6) Start Online Project\n7) Update\n8) Add New Project\n9) Delete Project\n99) Exit"
-    read -p "Select an option: " choice
+    read -r -p "Select an option: " choice
     case $choice in
         1) list_projects; read -n 1 -s -r -p "Press key..." ; main_menu;;
         2) 

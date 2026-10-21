@@ -1,1 +1,4 @@
-cd vulnado && sudo docker compose up -d && cd ..
+#!/usr/bin/env bash
+cd vulnado || exit
+sudo docker compose up -d || exit
+cd .. || exit

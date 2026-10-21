@@ -4,8 +4,6 @@
 
 print_menu_items() {
     local type=$1 # "docker" or "online"
-    local keys=()
-    local display_lines=()
     
     # Get running containers efficiently
     local running_containers=""
@@ -38,7 +36,7 @@ print_menu_items() {
         return
     fi
     
-    while [ $i -lt $total ]; do
+    while [ "$i" -lt "$total" ]; do
         # Item 1
         local key1="${sorted_keys[$i]}"
         local desc1=""
@@ -79,7 +77,7 @@ print_menu_items() {
         
         # Item 2
         local str2=""
-        if [ $((i+1)) -lt $total ]; then
+        if [ $((i+1)) -lt "$total" ]; then
              local key2="${sorted_keys[$((i+1))]}"
              local desc2=""
              local stat2=""
