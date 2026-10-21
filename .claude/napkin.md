@@ -25,7 +25,9 @@
    Do instead: no ejecutes `git config --global`. Usa `git -c safe.directory=D:/Scripts/BreakingLab` en el comando. `tea` dentro de esta carpeta falla por lo mismo: lánzalo desde otro directorio.
 4. **[2026-10-21] Gitea antes que GitHub**
    Do instead: el primer remoto es `https://gitea.tiizss.internal/tiizss/BreakingLab`. GitHub (`origin`, `TiiZss/BreakingLab`) va después. SSH al puerto 22 está cerrado; usa HTTPS.
-5. **[2026-10-20] Copia antes de reescribir lógica**
+5. **[2026-10-21] Correo de los commits hacia GitHub**
+   Do instead: no cambies `git config`. En el comando de commit exporta `GIT_AUTHOR_EMAIL` y `GIT_COMMITTER_EMAIL` a `9557246+TiiZss@users.noreply.github.com`. `github@tiizss.com` hace que GitHub rechace el push con `GH007`.
+6. **[2026-10-20] Copia antes de reescribir lógica**
    Do instead: copia los ficheros afectados a `.backups/AAAA-MM-DD/`. No archives el repo entero.
 
 ## Domain Behavior Guardrails
