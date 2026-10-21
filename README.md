@@ -166,6 +166,25 @@ Contributions are welcome!
 
 ---
 
+## 🗺 Planning
+
+BreakingLab now includes internal planning documents to guide security hardening, runtime improvements, release process changes, and embedded-lab governance.
+
+-   **Documentation index**: `docs/README.md`
+-   **Master planning prompt**: `.github/prompts/plan-breakingLab.prompt.md`
+-   **Execution prompt**: `.github/prompts/plan-breakingLab-execution.prompt.md`
+-   **Compact planning prompt**: `.github/prompts/plan-breakingLab-compact.prompt.md`
+-   **English planning prompt**: `.github/prompts/plan-breakingLab-en.prompt.md`
+-   **Roadmap document**: `docs/plan-breakingLab-roadmap.md`
+-   **RFC summary**: `docs/rfc-breakingLab-roadmap.md`
+-   **GitHub planning conventions**: `docs/github-planning-conventions.md`
+-   **First issue batch**: `docs/issue-batch-1.md`
+-   **Planning handoff**: `docs/planning-handoff.md`
+
+If you are contributing to architecture, runtime safety, configuration changes, CI, or release process work, review these documents before opening a large pull request.
+
+---
+
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.

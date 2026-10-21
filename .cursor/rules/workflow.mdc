@@ -1,0 +1,24 @@
+---
+description: Mapa de trabajo de BreakingLab. Léelo en cada sesión.
+alwaysApply: true
+---
+
+# Comportamiento del agente
+
+El mapa completo está en `CLAUDE.md`. Léelo antes de un cambio que no sea trivial. Esto es lo que no puede perderse si no abres ese archivo.
+
+- BreakingLab es Bash y Docker. Entrada: `breakinglab.sh`. No hay frontend propio ni Python.
+- Graft antes de leer fuentes: `graft ask`, `graft grep`, `graft skeleton`, `graft callers` o `graft map`, el que encaje. Una llamada suele bastar.
+- Plan en `docs/workflow/plans/` antes de codificar. La sesión no es el archivo del plan.
+- Lee `.claude/napkin.md` al empezar. Ahí están las directrices que se repiten.
+- Copia en `.backups/AAAA-MM-DD/` los ficheros cuya lógica vayas a reescribir. Una funcionalidad, una rama.
+- No reescribas comportamiento que ya funciona si el encargo no lo pide. Lo nuevo entra al lado, en UTF-8.
+- Python, si llega: `uv` y virtualenv. Hoy no hay Python; no añadas proyecto Python vacío.
+- Skills útiles, sin copiarlas al repo: ECC `docker-patterns`, `security-review`, `security-scan`, `git-workflow`, `github-ops`, `verification-loop`, `terminal-ops`. Las 818 skills de `Anthropic-Cybersecurity-Skills` solo para auditar este lanzador con permiso. Nada de skills de UI hasta que exista UI.
+- MCP que hay que usar cuando la tarea lo pida: GitHub, Context7, Playwright, Filesystem, Sentry si el servidor responde. `markitdown` no está conectado: no inventes el servidor.
+- Caveman lite en español. Napkin en `.claude/napkin.md`. Diagram Design solo para un diagrama pedido. Prosa nueva según `D:\Scripts\Z-externos\humanizer`.
+- Cuestiona el encargo cuando choque con el repo o con otra regla de este mismo encargo. No completes un hueco con un dato no comprobado.
+- Agente más estrecho y con menos tokens que sirva. Sin subagente para un arreglo local.
+- Memoria en `docs/workflow/MEMORY.md`, lecciones en `LEARNINGS.md`, decisiones en `decisions.md`.
+- Publica primero en `https://gitea.tiizss.internal/tiizss/BreakingLab` y después en GitHub. Push, tag, release y merge a `main` solo con ShellCheck en verde, problemas del cambio corregidos y docs alineadas. Si el CI falla, se corrige antes de fusionar.
+- Si git dice `dubious ownership`, no ejecutes `git config --global`. Usa `git -c safe.directory=D:/Scripts/BreakingLab` en ese comando.

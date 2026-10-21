@@ -1,3 +1,9 @@
 docs/chat_history.md
 implementation_plan.md
 task.md
+
+# Copias locales previas a un cambio de lógica. No se versionan.
+.backups/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/

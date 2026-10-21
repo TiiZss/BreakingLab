@@ -1,1 +1,4 @@
-cd Damn-Vulnerable-RESTaurant-API-Game && bash ./start_app.sh && cd ..
+#!/usr/bin/env bash
+cd Damn-Vulnerable-RESTaurant-API-Game || exit
+bash ./start_app.sh || exit
+cd .. || exit

@@ -1,1 +1,4 @@
-cd SSRF-LAB && docker cp ./index.php ssrflab:/var/www/html && cd ..
+#!/usr/bin/env bash
+cd SSRF-LAB || exit
+docker cp ./index.php ssrflab:/var/www/html || exit
+cd .. || exit
