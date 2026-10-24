@@ -19,6 +19,7 @@ source "$DIR/lib/utils.sh"
 source "$DIR/lib/hosts.sh"
 source "$DIR/lib/menu.sh"
 source "$DIR/lib/yaml_utils.sh"
+source "$DIR/lib/stack.sh"
 source "$DIR/config/projects.conf"
 
 # Initialization
@@ -39,6 +40,7 @@ start_docker_project() {
     fi
     check_docker
     IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    image="$(bl_pin_image "$image")"
     echo "Starting $desc"
     add_host "$ip" "$proj"
     execute_hook "${proj}_pre"
@@ -51,19 +53,24 @@ start_docker_project() {
              execute_hook "${proj}_post"
         else
              echo "Starting Docker Compose project..."
-             pushd "$compose_path" >/dev/null
-             # Use project name to ensure isolation and consistent naming
-             docker compose -p "breakinglab_${proj}" up -d || { echo -e "$TCR Docker Compose failed $TCD"; popd >/dev/null; return 1; }
-             popd >/dev/null
+             local compose_file="docker-compose.yml"
+             if [ -f "$compose_path/.build/docker-compose.yml" ]; then
+                 compose_file=".build/docker-compose.yml"
+             elif [ -f "$compose_path/docker-compose.yaml" ]; then
+                 compose_file="docker-compose.yaml"
+             fi
+             bl_compose "$proj" "$compose_path" "$compose_file" up -d || { echo -e "$TCR Docker Compose failed $TCD"; return 1; }
         fi
     else
         echo "Checking if container $proj exists..."
         # || true to prevent failure if grep finds nothing (though -q usually handles it, pipefail catches grep failure)
         local container_exists
         # Check for breakinglab_<proj> first (new convention), then fallback to <proj> (legacy)
-        if docker ps -a -q -f "name=^breakinglab_${proj}$" >/dev/null; then
+        if [ -n "$(docker ps -aq -f "name=^${proj}_")" ]; then
+            container_exists="${proj}"
+        elif [ -n "$(docker ps -aq -f "name=^breakinglab_${proj}$")" ]; then
             container_exists="breakinglab_${proj}"
-        elif docker ps -a -q -f "name=^${proj}$" >/dev/null; then
+        elif [ -n "$(docker ps -aq -f "name=^${proj}$")" ]; then
              container_exists="${proj}"
         else
              container_exists=""
@@ -71,12 +78,16 @@ start_docker_project() {
         
         if [ -n "$container_exists" ]; then
             echo "Container $container_exists exists. Starting..."
-            if docker start "$container_exists" >/dev/null; then
-                echo "Started."
-            else
-                echo -e "$TCR Failed to start $container_exists $TCD"
-                return 1
+            local id started=0
+            while IFS= read -r id; do
+                [ -z "$id" ] && continue
+                docker start "$id" >/dev/null || return 1
+                started=1
+            done < <(docker ps -aq -f "name=^${proj}_")
+            if [ "$started" -eq 0 ]; then
+                docker start "$container_exists" >/dev/null || return 1
             fi
+            echo "Started."
         else
             echo "Creating container $proj..."
             execute_hook "${proj}_post"
@@ -94,7 +105,7 @@ start_docker_project() {
             else
                 # Enforce naming convention: breakinglab_<slug>
                 # Also ensure it's grouped under BreakingLab stack in Docker Desktop
-                docker run --name "breakinglab_${proj}" --label "com.docker.compose.project=BreakingLab" -d -p "$ip:$port:$port" "$image"
+                docker run --name "${proj}_app" --label "com.docker.compose.project=${STACK_NAME}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$ip:$port:$port" "$image"
             fi
         fi
         
@@ -102,13 +113,15 @@ start_docker_project() {
         echo "Waiting for $proj..."
         local timeout=60
         local elapsed=0
-        while ! docker ps -q -f "name=^breakinglab_${proj}$" >/dev/null && ! docker ps -q -f "name=^${proj}$" >/dev/null; do
-            sleep 1; ((elapsed++))
+        while [ -z "$(docker ps -q -f "name=^${proj}_")" ] && [ -z "$(docker ps -q -f "name=^breakinglab_${proj}$")" ] && [ -z "$(docker ps -q -f "name=^${proj}$")" ]; do
+            sleep 1
+            elapsed=$((elapsed + 1))
             [ "$elapsed" -ge "$timeout" ] && { echo -e "$TCR Timeout awaiting start $TCD"; return 1; }
         done
         echo "Checking port $port..."
         while ! nc -z "$ip" "$port" 2>/dev/null; do
-             sleep 1; ((elapsed++))
+             sleep 1
+             elapsed=$((elapsed + 1))
              [ "$elapsed" -ge "$timeout" ] && { echo -e "$TCR Timeout awaiting port $TCD"; return 1; }
         done
         
@@ -116,8 +129,10 @@ start_docker_project() {
     fi
     echo "DONE! Available at $url"
     echo -e "$start_info"
-    open_url "$url"
-    read -n 1 -s -r -p "Press key to continue..."
+    if [ "${BREAKINGLAB_BATCH:-}" != 1 ]; then
+        open_url "$url"
+        read -n 1 -s -r -p "Press key to continue..."
+    fi
 }
 
 start_public_project() {
@@ -142,7 +157,8 @@ start_public_project() {
     fi
     check_docker
     IFS='|' read -r image ip internal_port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
-    
+    image="$(bl_pin_image "$image")"
+
     # Use internal port if public port not specified
     if [ -z "$public_port" ]; then
         public_port=$internal_port
@@ -160,7 +176,12 @@ start_public_project() {
     else
         # Stop existing instance if it conflicts
         # || true because grep might return 1
-        if docker ps -a --format '{{.Names}}' | grep -q "^breakinglab_$proj$"; then
+        if docker ps -aq -f "name=^${proj}_" | grep -q .; then
+             echo "Stopping and removing existing private instance..."
+             docker ps -aq -f "name=^${proj}_" | while IFS= read -r id; do
+                 [ -n "$id" ] && docker rm -f "$id" >/dev/null
+             done
+        elif docker ps -a --format '{{.Names}}' | grep -q "^breakinglab_$proj$"; then
              echo "Stopping and removing existing private instance..."
              docker rm -f "breakinglab_$proj" >/dev/null
         elif docker ps -a --format '{{.Names}}' | grep -q "^$proj$"; then
@@ -175,7 +196,7 @@ start_public_project() {
              # Warn user that public binding IP override might not work if hook hardcodes it
              execute_hook "${proj}_post"
         else
-             docker run --name "breakinglab_$proj" --label "com.docker.compose.project=BreakingLab" -d -p "$public_ip:$public_port:$internal_port" "$image"
+             docker run --name "${proj}_app" --label "com.docker.compose.project=${STACK_NAME}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$public_ip:$public_port:$internal_port" "$image"
         fi
     fi
 
@@ -199,21 +220,34 @@ stop_docker_project() {
     check_docker >/dev/null 2>&1
     IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
 
+    bl_compose_down "$proj"
     if [ -n "${compose_path:-}" ]; then
         if [ -f "$compose_path" ]; then
-             pushd "$(dirname "$compose_path")" >/dev/null && docker compose -p "breakinglab_${proj}" -f "$(basename "$compose_path")" down >/dev/null 2>&1 && popd >/dev/null
+             pushd "$(dirname "$compose_path")" >/dev/null
+             docker compose -p "breakinglab_${proj}" -f "$(basename "$compose_path")" down >/dev/null 2>&1 || true
+             docker compose -f "$(basename "$compose_path")" down >/dev/null 2>&1 || true
+             popd >/dev/null
         elif [ -d "$compose_path" ]; then
-             pushd "$compose_path" >/dev/null && docker compose -p "breakinglab_${proj}" down >/dev/null 2>&1 && popd >/dev/null
+             local compose_file="docker-compose.yml"
+             if [ -f "$compose_path/.build/docker-compose.yml" ]; then
+                 compose_file=".build/docker-compose.yml"
+             fi
+             pushd "$compose_path" >/dev/null
+             docker compose -p "breakinglab_${proj}" -f "$compose_file" down >/dev/null 2>&1 || true
+             docker compose -f "$compose_file" down >/dev/null 2>&1 || true
+             popd >/dev/null
         fi
         echo -e "$proj --> $TCR stack stopped $TCD"
     else
         # Try stopping new convention name first, then legacy
-        docker stop "breakinglab_$proj" >/dev/null 2>&1 && docker rm "breakinglab_$proj" >/dev/null 2>&1
-        docker stop "$proj" >/dev/null 2>&1 && docker rm "$proj" >/dev/null 2>&1
+        docker rm -f "breakinglab_$proj" >/dev/null 2>&1 || true
+        docker rm -f "$proj" >/dev/null 2>&1 || true
         echo -e "$proj --> $TCR container stopped $TCD"
         remove_host "$ip" "$proj"
     fi
-    read -n 1 -s -r -p "Press key to continue..."
+    if [ "${BREAKINGLAB_BATCH:-}" != 1 ]; then
+        read -n 1 -s -r -p "Press key to continue..."
+    fi
 }
 
 start_online_project() {
@@ -247,20 +281,27 @@ status_docker_project() {
      IFS='|' read -r image ip port desc url rest <<< "${DOCKER_PROJECTS[$proj]}"
      local status_text="not running"
      local status_color="$TCR"
+     local where=""
      
-     if docker ps --format '{{.Names}}' | grep -q "^breakinglab_$proj$"; then
-         status_text="running"
-         status_color="$TCG"
-     elif docker ps -q --filter "label=com.docker.compose.project=breakinglab_${proj}" | grep -q .; then
-         # Check if ANY container with the project label exists
-         status_text="running (stack)"
-         status_color="$TCG"
-     elif docker ps --format '{{.Names}}' | grep -q "^$proj$"; then
-          status_text="running (legacy)"
-          status_color="$TCY"
-     fi
+     case "$(docker_lab_state "$proj")" in
+         running)
+             status_text="running"
+             status_color="$TCG"
+             where="$ip:$port"
+             ;;
+         stack|legacy)
+             status_text="running (stack)"
+             status_color="$TCG"
+             where="$ip:$port"
+             ;;
+         namelegacy)
+             status_text="running (legacy)"
+             status_color="$TCY"
+             where="$ip:$port"
+             ;;
+     esac
      
-     printf "%b%-55s %b%-12s%b\n" "$TCC" "$desc ($proj)" "$status_color" "$status_text" "$TCD"
+     printf "%b%-55s %b%-18s%b %s\n" "$TCC" "$desc ($proj)" "$status_color" "$status_text" "$TCD" "$where"
 }
 
 update_breakinglab() {
@@ -517,11 +558,65 @@ delete_project() {
     read -n 1 -s -r -p "Press key to continue..."
 }
 
+# Arranca o para cada laboratorio en la IP de su ficha. Un fallo no corta el resto.
+_each_docker_project() {
+    local action="$1"
+    local proj ok=0 fail=0
+    local -a projects=()
+
+    check_docker
+    while IFS= read -r proj; do
+        [ -n "$proj" ] && projects+=("$proj")
+    done < <(printf '%s\n' "${!DOCKER_PROJECTS[@]}" | sort)
+
+    for proj in "${projects[@]}"; do
+        echo "---- $proj ----"
+        if command -v timeout >/dev/null 2>&1; then
+            if env BREAKINGLAB_BATCH=1 timeout -k 20 600 bash "$0" "$action" "$proj"; then
+                ok=$((ok + 1))
+            else
+                fail=$((fail + 1))
+                echo "Sin completar: $proj"
+            fi
+        elif env BREAKINGLAB_BATCH=1 bash "$0" "$action" "$proj"; then
+            ok=$((ok + 1))
+        else
+            fail=$((fail + 1))
+            echo "Sin completar: $proj"
+        fi
+    done
+
+    echo "Completados: $ok. Sin completar: $fail."
+    if [ "$action" = "start" ]; then
+        for proj in "${projects[@]}"; do
+            status_docker_project "$proj"
+        done
+    fi
+}
+
+up_all() { _each_docker_project start; }
+
+# Contenedores y redes del proyecto breakinglab. Los de otro stack no llevan esta etiqueta.
+down_all() {
+    check_docker
+    local id n=0
+    while IFS= read -r id; do
+        [ -z "$id" ] && continue
+        docker rm -f "$id" >/dev/null 2>&1 || true
+        n=$((n + 1))
+    done < <(docker ps -aq --filter "label=com.docker.compose.project=${STACK_NAME}")
+    while IFS= read -r id; do
+        [ -z "$id" ] && continue
+        docker network rm "$id" >/dev/null 2>&1 || true
+    done < <(docker network ls -q --filter "label=com.docker.compose.project=${STACK_NAME}")
+    echo "Stack ${STACK_NAME} apagado. Contenedores parados: $n."
+}
+
 # --- Menu & Entry Point ---
 
 main_menu() {
     display_logo
-    echo -e "$TCC Options: $TCD\n1) List Projects\n2) Start Docker Project\n3) Start Public Project\n4) Stop Docker Project\n5) Status Docker Projects\n6) Start Online Project\n7) Update\n8) Add New Project\n9) Delete Project\n99) Exit"
+    echo -e "$TCC Options: $TCD\n1) List Projects\n2) Start Docker Project\n3) Start Public Project\n4) Stop Docker Project\n5) Status Docker Projects\n6) Start Online Project\n7) Update\n8) Add New Project\n9) Delete Project\n10) Start all labs\n11) Stop all labs\n99) Exit"
     read -r -p "Select an option: " choice
     case $choice in
         1) list_projects; read -n 1 -s -r -p "Press key..." ; main_menu;;
@@ -544,6 +639,8 @@ main_menu() {
         7) update_breakinglab; main_menu;;
         8) add_new_project; main_menu;;
         9) delete_project; main_menu;;
+        10) up_all; read -n 1 -s -r -p "Press key to continue..."; main_menu;;
+        11) down_all; read -n 1 -s -r -p "Press key to continue..."; main_menu;;
         99) exit 0;;
         *) main_menu;;
     esac
@@ -559,9 +656,11 @@ else
         startpublic) start_public_project "${2:-}" "${3:-}" "${4:-}";;
         stop) stop_docker_project "${2:-}";;
         status) for proj in "${!DOCKER_PROJECTS[@]}"; do status_docker_project "$proj"; done;;
+        up) up_all;;
+        down) down_all;;
         online) start_online_project "${2:-}";;
         update) update_breakinglab;;
         delete) delete_project "${2:-}";;
-        *) echo "Usage: $0 {list|start|startpublic|stop|status|online|delete|update} [project] [ip] [port]";;
+        *) echo "Usage: $0 {list|start|startpublic|stop|status|up|down|online|delete|update} [project] [ip] [port]";;
     esac
 fi

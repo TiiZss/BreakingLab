@@ -4,10 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-24
+
 ### Added
 - Mapa de trabajo del agente en `CLAUDE.md` y `.cursor/rules/workflow.mdc`. Memoria en `docs/workflow/`.
 - Documentos de planificación en `docs/` y `.github/prompts/`, enlazados desde el README.
 - ShellCheck del lanzador, de `lib/` y de los hooks. `archive/` queda fuera del análisis.
+- Un solo stack de Docker, `breakinglab`. Cada laboratorio nombra sus contenedores con su clave (`jvl2013_`, `web4pentester_w4p`).
+- `up` y `down` (opciones 10 y 11). `down` apaga el stack. El estado muestra la IP y el puerto cuando el laboratorio está en marcha.
+- Máquinas nuevas: WebGoat 8.0, 8.1 y 8.2, Java Vulnerable Lab 2013, DVWS-node, DVGA y Bricks 2.2.
+- Las imágenes de los laboratorios salen de `tiizss` en Docker Hub, con la versión en el nombre del repositorio.
+
+### Changed
+- Vulnado arranca desde `tiizss/vulnado-0.0.1` (origen `bbhunter/vulnado`). El lanzador ya no clona ese repositorio.
+- WebGoat 8.2 es la máquina `webgoat82`. `webgoat8` deja de existir.
 
 ## [2.1.0] - 2026-01-03
 

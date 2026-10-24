@@ -1,17 +1,24 @@
 #!/bin/bash
 # Library for dynamic menus
 
+# Misma comprobación que el menú de estado: nombre breakinglab_, etiqueta del stack o nombre antiguo.
+docker_lab_state() {
+    local proj="$1"
+    if docker ps --format '{{.Names}}' 2>/dev/null | grep -Eq "^${proj}_|^breakinglab_${proj}$"; then
+        echo running
+    elif docker ps -q --filter "label=breakinglab.lab=${proj}" 2>/dev/null | grep -q .; then
+        echo stack
+    elif docker ps -q --filter "label=com.docker.compose.project=breakinglab_${proj}" 2>/dev/null | grep -q .; then
+        echo legacy
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^${proj}$"; then
+        echo namelegacy
+    else
+        echo down
+    fi
+}
 
 print_menu_items() {
     local type=$1 # "docker" or "online"
-    
-    # Get running containers efficiently
-    local running_containers=""
-    if [ "$type" == "docker" ]; then
-        if command -v docker >/dev/null 2>&1; then
-             running_containers=$(docker ps --format '{{.Names}}' 2>/dev/null || true)
-        fi
-    fi
 
     # Sort keys
     if [ "$type" == "docker" ]; then
@@ -45,19 +52,13 @@ print_menu_items() {
         
         if [ "$type" == "docker" ]; then
              IFS='|' read -r _ _ _ desc1 _ <<< "${DOCKER_PROJECTS[$key1]}"
-             if docker ps --format '{{.Names}}' | grep -q "^breakinglab_$key1$"; then
-                stat1="ON"
-                stat1_color="$TCG"
-            elif docker ps -q --filter "label=com.docker.compose.project=breakinglab_${key1}" | grep -q .; then
-                 stat1="ON"
-                 stat1_color="$TCG"
-            elif docker ps --format '{{.Names}}' | grep -q "^$key1$"; then
-                stat1="ON"
-                stat1_color="$TCY"
-            else
+             if [ "$(docker_lab_state "$key1")" = "down" ]; then
                 stat1="OFF"
                 stat1_color="$TCR"
-            fi
+             else
+                stat1="ON"
+                stat1_color="$TCG"
+             fi
         else
              IFS='|' read -r _ desc1 <<< "${ONLINE_PROJECTS[$key1]}"
         fi
@@ -69,7 +70,7 @@ print_menu_items() {
         local str1
         if [ "$type" == "docker" ]; then
              # With Status: key(16) status(5) desc(30)
-             printf -v str1 " %2d) %b%-16s%b %b%s%b - %-30s" "$((i+1))" "$TCG" "$key1" "$TCD" "$stat1_color" "$stat1" "$TCD" "$desc1"
+             printf -v str1 " %2d) %b%-16s%b %b%-3s%b - %-30s" "$((i+1))" "$TCG" "$key1" "$TCD" "$stat1_color" "$stat1" "$TCD" "$desc1"
         else
              # Without Status: key(15) desc(35) - keep consistent total width ~ similar
              printf -v str1 " %2d) %b%-15s%b - %-35s" "$((i+1))" "$TCG" "$key1" "$TCD" "$desc1"
@@ -85,12 +86,12 @@ print_menu_items() {
              
              if [ "$type" == "docker" ]; then
                  IFS='|' read -r _ _ _ desc2 _ <<< "${DOCKER_PROJECTS[$key2]}"
-                 if echo "$running_containers" | grep -q "^${key2}$"; then
-                     stat2="[ON] "
-                     stat2_color="$TCG"
-                 else
-                     stat2="[OFF]"
+                 if [ "$(docker_lab_state "$key2")" = "down" ]; then
+                     stat2="OFF"
                      stat2_color="$TCR"
+                 else
+                     stat2="ON"
+                     stat2_color="$TCG"
                  fi
              else
                  IFS='|' read -r _ desc2 <<< "${ONLINE_PROJECTS[$key2]}"
@@ -99,7 +100,7 @@ print_menu_items() {
              desc2="${desc2:0:30}"
              
              if [ "$type" == "docker" ]; then
-                  printf -v str2 " %2d) %b%-16s%b %b%s%b - %-30s" "$((i+2))" "$TCG" "$key2" "$TCD" "$stat2_color" "$stat2" "$TCD" "$desc2"
+                  printf -v str2 " %2d) %b%-16s%b %b%-3s%b - %-30s" "$((i+2))" "$TCG" "$key2" "$TCD" "$stat2_color" "$stat2" "$TCD" "$desc2"
              else
                   desc2="${desc2:0:35}" # Re-expand for online
                   printf -v str2 " %2d) %b%-15s%b - %-35s" "$((i+2))" "$TCG" "$key2" "$TCD" "$desc2"
