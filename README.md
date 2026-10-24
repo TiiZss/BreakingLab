@@ -18,13 +18,15 @@
 
 ---
 
-## 🚀 Features (v2.1)
+## 🚀 Features (v2.2)
 
 -   **Modular Architecture**: Clean separation of code (`breakinglab.sh`), configuration (`config/`), and libraries (`lib/`).
 -   **GitHub Import**: Import Docker projects directly from GitHub URLs with **Auto-Sanitization** and conflict resolution.
 -   **Dynamic Menus**: Interactive 2-column menu system with search-by-name/number and status indicators (`[ON]`/`[OFF]`).
 -   **Public Exposure**: `start_public` command to easily expose containers to your LAN (great for classrooms/CTFs).
--   **Stack Grouping**: All containers automatically grouped under "BreakingLab" in Docker Desktop.
+-   **Stack Grouping**: All containers automatically grouped under "BreakingLab" in Docker Desktop. Each lab's containers use that lab's name as a prefix.
+-   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops the BreakingLab stack.
+-   **Images**: Lab images are pulled from Docker Hub user `tiizss`, with the version in the repository name.
 -   **Cross-Platform**: Fully compatible with **Linux (Kali/Ubuntu)** and **Windows (WSL2)**.
 -   **Safety**: Built with `set -euo pipefail` and extensive dependency checking.
 
@@ -98,19 +100,26 @@ Stops and removes the container to free up resources.
 ./breakinglab.sh stop bwapp
 ```
 
-#### 5. Check Status
+#### 5. Start or stop every lab
+```bash
+./breakinglab.sh up
+./breakinglab.sh down
+```
+`down` stops the BreakingLab stack. Containers that are not part of that stack stay up.
+
+#### 6. Check Status
 See which labs are currently running (green for ON, red for OFF).
 ```bash
 ./breakinglab.sh status
 ```
 
-#### 6. Delete a Lab
+#### 7. Delete a Lab
 Permanently removes the project configuration and cleans up associated resources (containers, hosts entries).
 ```bash
 ./breakinglab.sh delete <project_name>
 ```
 
-#### 7. Open Online Labs
+#### 8. Open Online Labs
 Launches strictly online resources (like PortSwigger Academy or RedTiger).
 ```bash
 ./breakinglab.sh online portswigger
@@ -125,11 +134,11 @@ Launches strictly online resources (like PortSwigger Academy or RedTiger).
 BreakingLab includes a curated list of vulnerable apps configured to run out-of-the-box.
 
 ### 🐳 Docker Projects
-*   **OWASP**: bWAPP, WebGoat (7.1, 8.0, 8.1), Juice Shop, Mutillidae II, Bricks, Security Shepherd.
+*   **OWASP**: bWAPP, WebGoat (7.1, 8.0, 8.1, 8.2), Juice Shop, Mutillidae II, Bricks 2.2, Security Shepherd.
 *   **PentesterLab**: Web For Pentester I.
-*   **Injection**: SQLi Labs (Audi, OxNinja), NoSQLi Lab, GraphQL API.
-*   **CMS**: Vulnerable WordPress, Drupal (via simple label).
-*   **Others**: DVWA, Altoro Mutual, Security Ninjas, Java Vulnerable Lab, Vulnado, SSRF-Lab, Damn Vulnerable RESTaurant, BTS Lab, exploit.co.il, Vulpy.
+*   **Injection**: SQLi Labs (Audi, OxNinja), NoSQLi Lab, DVGA.
+*   **CMS**: Vulnerable WordPress.
+*   **Others**: DVWA, DVWS-node, Altoro Mutual, Security Ninjas, Java Vulnerable Lab, Java Vulnerable Lab 2013, Vulnado, SSRF-Lab, Damn Vulnerable RESTaurant, BTS Lab, exploit.co.il, Vulpy, Vulpy 5.
 
 ### 🌐 Online Labs
 *   PortSwigger Academy, TryHackMe, HackTheBox, VulnHub, RedTiger, Root-Me, and more.
@@ -140,10 +149,8 @@ BreakingLab includes a curated list of vulnerable apps configured to run out-of-
 *   Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 *   Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
 *   Include [GameOver](https://sourceforge.net/projects/null-gameover/)
-*   Include [Damn Vulnerable Web Services](https://github.com/snoopysecurity/dvws-node)
 *   Include [VulHub](https://github.com/vulhub/vulhub) project
 *   Include [CSPF ASP Vulnerable Lab](https://github.com/CSPF-Founder/ASPVulnerableLab)
-*   Include [CSPF PHP Vulnerable Lab](https://github.com/CSPF-Founder/btslab)
 *   Include [CSPF Android Vulnerable Lab](https://github.com/CSPF-Founder/DodoVulnerableBank)
 
 ---

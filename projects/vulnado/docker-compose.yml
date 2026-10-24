@@ -1,0 +1,31 @@
+services:
+  vulnado:
+    image: tiizss/vulnado-0.0.1:0.0.1
+    ports:
+      - "127.23.0.1:8080:8080"
+    environment:
+      PGPASSWORD: vulnado
+      PGDATABASE: vulnado
+      PGHOST: db:5432
+      PGUSER: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+  client:
+    image: tiizss/vulnado-client-0.0.1:0.0.1
+    ports:
+      - "127.23.0.1:1337:80"
+    depends_on:
+      - vulnado
+  db:
+    image: tiizss/postgres-15.4-alpine:15.4-alpine
+    environment:
+      POSTGRES_PASSWORD: vulnado
+      POSTGRES_DB: vulnado
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vulnado"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+  internal_site:
+    image: tiizss/vulnado-internal-0.0.1:0.0.1

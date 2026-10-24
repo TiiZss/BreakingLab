@@ -31,7 +31,7 @@
    Do instead: copia los ficheros afectados a `.backups/AAAA-MM-DD/`. No archives el repo entero.
 
 ## Domain Behavior Guardrails
-1. **[2026-10-20] Laboratorios vulnerables a propósito**
-   Do instead: el lanzador puede arrancar imágenes vulnerables. No añadas exploits ni copies skills ofensivas al repo. Una auditoría mira el script, los hooks y la exposición de red.
+1. **[2026-10-21] Laboratorios vulnerables a propósito**
+   Do instead: el script practica skills contra máquinas y apps vulnerables. No parchees esa vulnerabilidad. No copies el catálogo de skills al repo. Úsalo solo contra el laboratorio arrancado aquí, en una máquina propia.
 2. **[2026-10-20] Sin Python y sin UI**
    Do instead: no crees `pyproject.toml` ni apliques skills de frontend. `uv` queda escrito para el día en que haya Python.

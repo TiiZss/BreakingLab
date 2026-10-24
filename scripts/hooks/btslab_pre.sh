@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-git clone https://github.com/CSPF-Founder/btslab
+if [[ ! -d btslab/.git ]]; then
+    git clone https://github.com/CSPF-Founder/btslab || exit
+fi

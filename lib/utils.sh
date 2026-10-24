@@ -20,6 +20,10 @@ is_wsl() { [[ $(uname -r) =~ [Mm]icrosoft ]] && return 0 || return 1; }
 
 open_url() {
     local url=$1
+    if [ ! -t 1 ]; then
+        echo "URL: $url"
+        return 0
+    fi
     if is_wsl; then
         if ! command -v wslview >/dev/null 2>&1; then
             echo -e "$TCC wslview not found. Adding wslu repository and installing wslu... $TCD"

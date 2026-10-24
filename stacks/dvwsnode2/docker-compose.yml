@@ -1,0 +1,34 @@
+version: '3'
+services:
+    dvws-mongo:
+        image: tiizss/mongo-4.0.4:4.0.4
+        healthcheck:
+            test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+            interval: 30s
+            timeout: 5s
+            retries: 10
+            start_period: 10s
+    dvws-mysql:
+        image: tiizss/mysql-8:8
+        environment:
+            MYSQL_ROOT_PASSWORD: mysecretpassword
+            MYSQL_DATABASE: dvws_sqldb
+        healthcheck:
+            test: mysqladmin ping -h 127.0.0.1 -u root -pmysecretpassword
+            interval: 30s
+            timeout: 5s
+            retries: 10
+            start_period: 10s
+    web:
+        image: tiizss/dvws-node:2026.10.21
+        ports:
+            - "127.100.0.3:80:80"
+        command: sh -c "node scripts/seed-database.js && npm start"
+        environment:
+            SQL_LOCAL_CONN_URL: dvws-mysql
+            MONGO_LOCAL_CONN_URL: mongodb://dvws-mongo:27017/node-dvws
+        depends_on:
+            dvws-mongo:
+                condition: service_healthy
+            dvws-mysql:
+                condition: service_healthy

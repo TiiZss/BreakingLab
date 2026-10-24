@@ -1,0 +1,21 @@
+services:
+  web:
+    image: tiizss/bricks:2.2
+    ports:
+      - "127.21.0.1:80:80"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: tiizss/mysql-5.7:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bricks
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/01-bricks.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 3s
+      timeout: 5s
+      retries: 30

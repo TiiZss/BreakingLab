@@ -4,6 +4,8 @@ task.md
 
 # Copias locales previas a un cambio de lógica. No se versionan.
 .backups/
+.breakinglab/
+bricks/src/
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 graft/

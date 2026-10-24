@@ -4,7 +4,7 @@ Las carpetas guardan el código. Este archivo dice cómo leerlas. Cursor carga e
 
 ## Qué es este repositorio
 
-BreakingLab es un script Bash que arranca y para laboratorios web vulnerables con Docker. La entrada es `breakinglab.sh`. `install.sh` comprueba dependencias y puede enlazar el script. No hay frontend propio ni módulos Python.
+BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y para, con Docker, máquinas y aplicaciones vulnerables a propósito. Esas vulnerabilidades son el material de práctica. No se parchean, no se eliminan y no se tratan como un defecto del lanzador. La entrada es `breakinglab.sh`. `install.sh` comprueba dependencias y puede enlazar el script. No hay frontend propio ni módulos Python.
 
 ## Dónde está cada cosa
 
@@ -39,7 +39,7 @@ Antes de escribir una funcionalidad, busca en GitHub un proyecto que ya la cubra
 En esta máquina:
 
 - `D:\Scripts\Z-externos\ECC\skills` tiene 261 skills. Aquí aplican `docker-patterns`, `security-review`, `security-scan`, `git-workflow`, `github-ops`, `verification-loop`, `terminal-ops`, `architecture-decision-records`, `search-first`, `context-budget`, `codebase-onboarding` y `production-audit`. El resto no corresponde a un lanzador Bash. No copies el catálogo al repositorio: se lee desde esa ruta.
-- `D:\Scripts\Z-externos\Anthropic-Cybersecurity-Skills\skills` tiene 818 skills de un proyecto de comunidad, con técnicas ofensivas. Úsalas solo al auditar este lanzador (shell, Docker, exposición en red) sobre sistemas propios o con permiso explícito. No las copies aquí y no las abras para una tarea de menú o de documentación.
+- `D:\Scripts\Z-externos\Anthropic-Cybersecurity-Skills\skills` tiene 818 skills de un proyecto de comunidad. Sirven cuando el trabajo es practicar contra un laboratorio que este script ha arrancado en una máquina propia. No las copies al repositorio. No las uses contra un sistema que no sea ese laboratorio.
 
 No hay interfaz web propia. Impeccable, Frontend Design, UI UX Pro Max, Theme Factory y las reglas visuales de Vercel esperan a que esa interfaz exista.
 
