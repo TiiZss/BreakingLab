@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Los laboratorios que el lanzador clona van a `labs/`. La raíz deja de recibir esos árboles.
+- El compose de Bricks y el de DVWS-node quedan en `projects/`. `bricks/` y `stacks/` salen de la raíz.
+- Cada máquina tiene su stack `breakinglab_<clave>`. Los contenedores llevan el prefijo de la máquina (`jvl2013_`).
+- Bricks arranca con `tiizss/bricks-mysql-5.7:5.7`. El SQL de usuarios va dentro de esa imagen.
+
 ## [2.2.0] - 2026-10-24
 
 ### Added

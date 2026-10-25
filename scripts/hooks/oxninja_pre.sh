@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-if [[ ! -d oxninja-sqlilab ]]; then
-    git clone https://github.com/OxNinja/SQLi-lab oxninja-sqlilab || exit
-fi
-cd oxninja-sqlilab || exit
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/lib/lab_dir.sh"
+bl_prepare_lab oxninja-sqlilab https://github.com/OxNinja/SQLi-lab || exit
 if ! grep -q "container_name: oxninja-web" docker-compose.yml; then
     sed -i "/web:/at        container_name: oxninja-web" docker-compose.yml
     sed -i "s/^t//" docker-compose.yml

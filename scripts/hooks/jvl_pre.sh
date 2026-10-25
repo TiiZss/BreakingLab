@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-if [ -d JavaVulnerableLab/.git ]; then git -C JavaVulnerableLab pull --ff-only || true; else git clone https://github.com/CSPF-Founder/JavaVulnerableLab.git; fi
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/lib/lab_dir.sh"
+bl_prepare_lab JavaVulnerableLab https://github.com/CSPF-Founder/JavaVulnerableLab.git pull || exit

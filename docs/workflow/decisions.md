@@ -26,6 +26,18 @@ El login de `tea` se llama `tiizss` y su URL es `https://gitea.tiizss.internal`.
 
 `dubious ownership` no es un rechazo de Gitea ni de GitHub. Git ve que la carpeta `D:/Scripts/BreakingLab` pertenece a otra cuenta de Windows y se niega a trabajar ahí. El mensaje propone `git config --global --add safe.directory`. Esa línea no se ejecuta. Para leer o commitear en un comando basta `-c safe.directory=D:/Scripts/BreakingLab`, que no se guarda.
 
+## 2026-10-25 — Un stack por máquina
+
+El proyecto Compose deja de ser uno solo. Cada laboratorio usa `breakinglab_<clave>` y sus contenedores `<clave>_`. La opción de apagar todos recorre esas etiquetas. Bricks no monta `init.sql`: esa tabla va en `tiizss/bricks-mysql-5.7:5.7`, así el compose de `projects/` arranca solo con imágenes.
+
+## 2026-10-25 — Un solo sitio para el compose del lanzador
+
+`bricks/` y `stacks/` salen de la raíz. El compose que versiona el lanzador queda en `projects/`: bricks, jvl2013, vulnado y dvwsnode2. Los clones de DVWS-node que estaban sueltos en `projects/` pasan a `labs/`, con el resto de árboles de terceros. `test_awk.sh` y `test_gh_fetch.sh` siguen en la raíz porque hay prompts que citan esa ruta.
+
+## 2026-10-25 — Los clones de terceros van a labs/
+
+El arranque clonaba en el directorio de trabajo. Desde la raíz, el repositorio se llenaba de árboles ajenos. `projects/` ya tiene compose del lanzador, así que los clones van a `labs/`, que git ignora. Una copia que aún esté en la raíz se mueve a `labs/` la siguiente vez que ese laboratorio arranca.
+
 ## 2026-10-24 — Imágenes en tiizss y prefijo por laboratorio
 
 Los laboratorios publicados tiran de imágenes `tiizss` en Docker Hub. La versión va en el nombre del repositorio. Dentro del stack `breakinglab`, los contenedores de un laboratorio empiezan por la clave de ese laboratorio. Los árboles clonados de terceros no entran en el commit: el compose que es del lanzador sí (`projects/jvl2013`, `projects/vulnado`, `stacks/dvwsnode2`, `bricks/docker-compose.yml`).

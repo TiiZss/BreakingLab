@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-if [[ ! -d nosqlilab ]]; then
-    git clone https://github.com/madamantis-leviathan/nosqlilab.git || exit
-fi
-cd nosqlilab || exit
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/lib/lab_dir.sh"
+bl_prepare_lab nosqlilab https://github.com/madamantis-leviathan/nosqlilab.git || exit
 sed -i 's/^version: .*$/version: "3.7-3.9"/' docker-compose.yml
 if ! grep -q 'container_name: nosqli-web' docker-compose.yml; then
     sed -i '/web:/a\    container_name: nosqli-web' docker-compose.yml

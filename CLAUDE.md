@@ -9,10 +9,11 @@ BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y
 ## Dónde está cada cosa
 
 - `breakinglab.sh` — entrada.
-- `lib/` — `colors.sh`, `hosts.sh`, `menu.sh`, `utils.sh`, `yaml_utils.sh`.
+- `lib/` — `colors.sh`, `hosts.sh`, `menu.sh`, `utils.sh`, `yaml_utils.sh`, `stack.sh`, `lab_dir.sh`.
 - `config/projects.conf` y `config/projects.d/` — laboratorios declarados.
 - `scripts/hooks/` — ganchos pre y post de algunos laboratorios.
-- `projects/` — árboles importados (`dvws-node-2`, `dvwsnode2`, `vulpy5`). No forman el núcleo.
+- `projects/` — compose del lanzador (`bricks`, `jvl2013`, `vulnado`, `dvwsnode2`) y el submódulo `vulpy5`.
+- `labs/` — clones de terceros. Git no los versiona.
 - `archive/` — `bl2023.sh` y `bl2024.sh`.
 - `assets/` — logo.
 - `docs/` — planificación. La memoria del agente está en `docs/workflow/`.

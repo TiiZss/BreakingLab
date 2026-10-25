@@ -40,6 +40,9 @@ start_docker_project() {
     fi
     check_docker
     IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
+        compose_path="$DIR/$compose_path"
+    fi
     image="$(bl_pin_image "$image")"
     echo "Starting $desc"
     add_host "$ip" "$proj"
@@ -105,7 +108,7 @@ start_docker_project() {
             else
                 # Enforce naming convention: breakinglab_<slug>
                 # Also ensure it's grouped under BreakingLab stack in Docker Desktop
-                docker run --name "${proj}_app" --label "com.docker.compose.project=${STACK_NAME}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$ip:$port:$port" "$image"
+                docker run --name "${proj}_app" --label "com.docker.compose.project=breakinglab_${proj}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$ip:$port:$port" "$image"
             fi
         fi
         
@@ -157,6 +160,9 @@ start_public_project() {
     fi
     check_docker
     IFS='|' read -r image ip internal_port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
+        compose_path="$DIR/$compose_path"
+    fi
     image="$(bl_pin_image "$image")"
 
     # Use internal port if public port not specified
@@ -196,7 +202,7 @@ start_public_project() {
              # Warn user that public binding IP override might not work if hook hardcodes it
              execute_hook "${proj}_post"
         else
-             docker run --name "${proj}_app" --label "com.docker.compose.project=${STACK_NAME}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$public_ip:$public_port:$internal_port" "$image"
+             docker run --name "${proj}_app" --label "com.docker.compose.project=breakinglab_${proj}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$public_ip:$public_port:$internal_port" "$image"
         fi
     fi
 
@@ -219,6 +225,9 @@ stop_docker_project() {
     
     check_docker >/dev/null 2>&1
     IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
+        compose_path="$DIR/$compose_path"
+    fi
 
     bl_compose_down "$proj"
     if [ -n "${compose_path:-}" ]; then
@@ -596,10 +605,15 @@ _each_docker_project() {
 
 up_all() { _each_docker_project start; }
 
-# Contenedores y redes del proyecto breakinglab. Los de otro stack no llevan esta etiqueta.
+# Cada máquina es un stack breakinglab_<clave>. Esto apaga todos. Un contenedor ajeno no lleva la etiqueta.
 down_all() {
     check_docker
-    local id n=0
+    local id project n=0
+    while IFS= read -r id; do
+        [ -z "$id" ] && continue
+        docker rm -f "$id" >/dev/null 2>&1 || true
+        n=$((n + 1))
+    done < <(docker ps -aq --filter "label=breakinglab.lab")
     while IFS= read -r id; do
         [ -z "$id" ] && continue
         docker rm -f "$id" >/dev/null 2>&1 || true
@@ -607,9 +621,12 @@ down_all() {
     done < <(docker ps -aq --filter "label=com.docker.compose.project=${STACK_NAME}")
     while IFS= read -r id; do
         [ -z "$id" ] && continue
-        docker network rm "$id" >/dev/null 2>&1 || true
-    done < <(docker network ls -q --filter "label=com.docker.compose.project=${STACK_NAME}")
-    echo "Stack ${STACK_NAME} apagado. Contenedores parados: $n."
+        project="$(docker network inspect -f '{{index .Labels "com.docker.compose.project"}}' "$id" 2>/dev/null || true)"
+        case "$project" in
+            breakinglab|breakinglab_*) docker network rm "$id" >/dev/null 2>&1 || true ;;
+        esac
+    done < <(docker network ls -q)
+    echo "Stacks breakinglab_* apagados. Contenedores parados: $n."
 }
 
 # --- Menu & Entry Point ---

@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
-# Un solo stack de Docker. Compose no acepta "BreakingLab": el proyecto es breakinglab.
+# Un stack por máquina: breakinglab_<clave>. Compose no acepta "BreakingLab".
 
 if [ -z "${BL_DIR:-}" ]; then
     BL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
 
 STACK_NAME=breakinglab
+
+bl_stack_name() {
+    printf '%s_%s\n' "$STACK_NAME" "$1"
+}
 
 # Nombre en Docker Hub de tiizss. La versión de MySQL, PHP, Postgres y Mongo va en el repositorio.
 bl_pin_image() {
@@ -65,7 +69,7 @@ bl_render_compose() {
     local raw
 
     raw="$(mktemp)"
-    if ! docker compose -p "$STACK_NAME" -f "$src" config >"$raw"; then
+    if ! docker compose -p "$(bl_stack_name "$proj")" -f "$src" config >"$raw"; then
         rm -f "$raw"
         return 1
     fi
@@ -181,7 +185,7 @@ bl_compose() {
     local rendered="${BL_DIR}/.breakinglab/${proj}.yml"
     mkdir -p "${BL_DIR}/.breakinglab"
     bl_render_compose "$proj" "${workdir}/${file}" "$rendered" || return 1
-    docker compose -p "$STACK_NAME" -f "$rendered" "$@"
+    docker compose -p "$(bl_stack_name "$proj")" -f "$rendered" "$@"
 }
 
 bl_compose_down() {
@@ -189,7 +193,7 @@ bl_compose_down() {
     local rendered="${BL_DIR}/.breakinglab/${proj}.yml"
     local id
     if [ -f "$rendered" ]; then
-        docker compose -p "$STACK_NAME" -f "$rendered" down >/dev/null 2>&1 || true
+        docker compose -p "$(bl_stack_name "$proj")" -f "$rendered" down >/dev/null 2>&1 || true
     fi
     while IFS= read -r id; do
         [ -z "$id" ] && continue
