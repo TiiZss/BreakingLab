@@ -1,0 +1,14 @@
+services:
+  vulpy_bad:
+    image: tiizss/vulpy5:latest
+    ports:
+      - "127.100.0.2:5002:5000"
+    command: [ "bad", "5000" ]
+    platform: linux/amd64
+
+  vulpy_good:
+    image: tiizss/vulpy5:latest
+    ports:
+      - "127.100.0.2:5003:5001"
+    command: [ "good", "5001" ]
+    platform: linux/amd64

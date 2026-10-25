@@ -8,6 +8,10 @@ task.md
 
 # Clones de terceros que el lanzador descarga al arrancar un laboratorio.
 /labs/
+
+# El código de Vulpy 5 está en la imagen. El compose sí se versiona.
+/projects/vulpy5/**
+!/projects/vulpy5/docker-compose.yml
 projects/bricks/src/
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
