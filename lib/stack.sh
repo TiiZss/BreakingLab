@@ -175,6 +175,72 @@ bl_render_compose() {
         }
     ' "$raw" >"$dest"
     rm -f "$raw"
+    bl_public_ports "$dest"
+}
+
+# Solo el arranque público define BREAKINGLAB_BIND. El privado no entra aquí.
+bl_public_ports() {
+    local file="$1"
+    local bind="${BREAKINGLAB_BIND:-}"
+    local tmp
+    [ -n "$bind" ] || return 0
+    [ -f "$file" ] || return 0
+    tmp="$(mktemp)"
+    awk -v bind="$bind" '
+        {
+            if ($0 ~ /^[[:space:]]*host_ip: 127\./) {
+                sub(/127\.[0-9.]+/, bind)
+            }
+            print
+        }
+    ' "$file" >"$tmp"
+    mv "$tmp" "$file"
+}
+
+bl_lan_ips() {
+    if command -v powershell.exe >/dev/null 2>&1; then
+        powershell.exe -NoProfile -Command "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { \$_.IPAddress -notlike '127.*' -and \$_.IPAddress -notlike '169.254.*' -and \$_.InterfaceAlias -notlike 'vEthernet*' -and \$_.InterfaceAlias -notlike 'Loopback*' } | ForEach-Object { \$_.IPAddress }" \
+            | tr -d '\r' | awk 'NF && !seen[$0]++' || true
+        return 0
+    fi
+    if command -v ip >/dev/null 2>&1; then
+        ip -4 -o addr show scope global | awk '{split($4, a, "/"); if (a[1] !~ /^127\./) print a[1]}'
+    fi
+}
+
+bl_show_public_urls() {
+    local proj="$1"
+    local url="$2"
+    local path ports line port ip first
+    path="$(printf '%s\n' "$url" | sed -E 's#^https?://[^/]*##')"
+    [ -n "$path" ] || path="/"
+    ports="$(docker ps --filter "label=breakinglab.lab=${proj}" --format '{{.Ports}}' | grep -oE '(0\.0\.0\.0|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+):[0-9]+' | awk '!seen[$0]++' || true)"
+    echo "Published for the classroom:"
+    if [ -z "$ports" ]; then
+        echo "  No published port found."
+        return 0
+    fi
+    first=1
+    while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        port="${line##*:}"
+        if [ "${line%%:*}" = "0.0.0.0" ]; then
+            while IFS= read -r ip; do
+                [ -z "$ip" ] && continue
+                if [ "$first" -eq 1 ]; then
+                    echo "  http://${ip}:${port}${path}"
+                else
+                    echo "  http://${ip}:${port}"
+                fi
+            done < <(bl_lan_ips)
+        elif [ "$first" -eq 1 ]; then
+            echo "  http://${line}${path}"
+        else
+            echo "  http://${line}"
+        fi
+        first=0
+    done <<<"$ports"
+    echo "Windows Firewall has to allow inbound TCP on that port."
 }
 
 bl_compose() {

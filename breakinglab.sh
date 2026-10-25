@@ -39,7 +39,7 @@ start_docker_project() {
         return 1
     fi
     check_docker
-    IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    IFS='|' read -r image ip port desc url start_info compose_path _ _ <<< "${DOCKER_PROJECTS[$proj]}"
     if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
         compose_path="$DIR/$compose_path"
     fi
@@ -108,7 +108,7 @@ start_docker_project() {
             else
                 # Enforce naming convention: breakinglab_<slug>
                 # Also ensure it's grouped under BreakingLab stack in Docker Desktop
-                docker run --name "${proj}_app" --label "com.docker.compose.project=breakinglab_${proj}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$ip:$port:$port" "$image"
+                docker run --name "${proj}_app" --label "com.docker.compose.project=breakinglab_${proj}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "${BREAKINGLAB_BIND:-$ip}:${BREAKINGLAB_PORT:-$port}:$port" "$image"
             fi
         fi
         
@@ -121,14 +121,32 @@ start_docker_project() {
             elapsed=$((elapsed + 1))
             [ "$elapsed" -ge "$timeout" ] && { echo -e "$TCR Timeout awaiting start $TCD"; return 1; }
         done
-        echo "Checking port $port..."
-        while ! nc -z "$ip" "$port" 2>/dev/null; do
+        local probe_ip="$ip"
+        local probe_port="$port"
+        if [ -n "${BREAKINGLAB_BIND:-}" ]; then
+            if [ "$BREAKINGLAB_BIND" = "0.0.0.0" ]; then
+                probe_ip="127.0.0.1"
+            else
+                probe_ip="$BREAKINGLAB_BIND"
+            fi
+            probe_port="${BREAKINGLAB_PORT:-$port}"
+        fi
+        echo "Checking port $probe_port..."
+        while ! nc -z "$probe_ip" "$probe_port" 2>/dev/null; do
              sleep 1
              elapsed=$((elapsed + 1))
              [ "$elapsed" -ge "$timeout" ] && { echo -e "$TCR Timeout awaiting port $TCD"; return 1; }
         done
         
         echo "Container $proj is running at $url"
+    fi
+    if [ -n "${BREAKINGLAB_BIND:-}" ]; then
+        local class_ip="127.0.0.1"
+        local class_path
+        bl_show_public_urls "$proj" "$url"
+        [ "$BREAKINGLAB_BIND" != "0.0.0.0" ] && class_ip="$BREAKINGLAB_BIND"
+        class_path="$(printf '%s\n' "$url" | sed -E 's#^https?://[^/]*##')"
+        url="http://${class_ip}:${BREAKINGLAB_PORT:-$port}${class_path}"
     fi
     echo "DONE! Available at $url"
     echo -e "$start_info"
@@ -138,76 +156,73 @@ start_docker_project() {
     fi
 }
 
+bl_other_running_labs() {
+    local wanted="$1"
+    local key
+    for key in "${!DOCKER_PROJECTS[@]}"; do
+        [ "$key" = "$wanted" ] && continue
+        if [ "$(docker_lab_state "$key")" != "down" ]; then
+            printf '%s\n' "$key"
+        fi
+    done | sort
+}
+
+bl_public_make_room() {
+    local proj="$1"
+    local running=()
+    local key answer
+    while IFS= read -r key; do
+        [ -z "$key" ] && continue
+        running+=("$key")
+    done < <(bl_other_running_labs "$proj")
+    [ "${#running[@]}" -eq 0 ] && return 0
+
+    echo -e "$TCY En público solo puede haber una máquina. En marcha: ${running[*]}. $TCD"
+    if [ "${BREAKINGLAB_BATCH:-}" = 1 ]; then
+        echo "No se arranca $proj."
+        return 1
+    fi
+    read -r -p "¿Apagar ${running[*]} y levantar ${proj}? (s/N) " answer
+    case "$answer" in
+        s|S|y|Y) ;;
+        *) echo "Se queda ${running[*]}."; return 1 ;;
+    esac
+    for key in "${running[@]}"; do
+        bl_compose_down "$key"
+        echo -e "$key --> $TCR apagada $TCD"
+    done
+}
+
 start_public_project() {
     local proj="${1:-}"
-    local public_ip="${2:-0.0.0.0}" # Default to all interfaces
-    local public_port="${3:-}"      # Default to configured port if empty
+    local public_ip="${2:-0.0.0.0}"
+    local public_port="${3:-}"
 
-    # If no project provided, ask using menu
     if [ -z "$proj" ]; then
-        select_project "docker" "Start Public Project (enter number or name): " proj || return 0
-        
-        read -r -p "Enter Bind IP (default 0.0.0.0): " input_ip
-        [ -n "$input_ip" ] && public_ip="$input_ip"
-        
-        read -r -p "Enter Public Port (leave empty for default): " input_port
-        [ -n "$input_port" ] && public_port="$input_port"
+        select_project "docker" "Máquina pública (número o nombre): " proj || return 0
     fi
 
     if [[ -z "${DOCKER_PROJECTS[$proj]+x}" ]]; then
         echo -e "$TCR Project '$proj' not found $TCD"
         return 1
     fi
-    check_docker
-    IFS='|' read -r image ip internal_port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
-    if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
-        compose_path="$DIR/$compose_path"
-    fi
-    image="$(bl_pin_image "$image")"
-
-    # Use internal port if public port not specified
-    if [ -z "$public_port" ]; then
-        public_port=$internal_port
+    if ! bl_public_make_room "$proj"; then
+        return 1
     fi
 
-    echo -e "$TCG Starting Public Access for $desc $TCD"
-    echo -e "Binding to $public_ip:$public_port"
-
-    [ -n "${pre_commands:-}" ] && eval "$pre_commands"
-
-    if [ -n "${compose_path:-}" ]; then
-        echo -e "$TCW Note: Public start for Compose stacks requires manual yaml editing or overrides. $TCD"
-        [ -d "$compose_path" ] || { echo "Error: $compose_path not found"; return 1; }
-        eval "$post_commands"
+    echo -e "$TCG Starting Public Access for $proj on ${public_ip} $TCD"
+    bl_compose_down "$proj"
+    export BREAKINGLAB_BIND="$public_ip"
+    if [ -n "$public_port" ]; then
+        export BREAKINGLAB_PORT="$public_port"
     else
-        # Stop existing instance if it conflicts
-        # || true because grep might return 1
-        if docker ps -aq -f "name=^${proj}_" | grep -q .; then
-             echo "Stopping and removing existing private instance..."
-             docker ps -aq -f "name=^${proj}_" | while IFS= read -r id; do
-                 [ -n "$id" ] && docker rm -f "$id" >/dev/null
-             done
-        elif docker ps -a --format '{{.Names}}' | grep -q "^breakinglab_$proj$"; then
-             echo "Stopping and removing existing private instance..."
-             docker rm -f "breakinglab_$proj" >/dev/null
-        elif docker ps -a --format '{{.Names}}' | grep -q "^$proj$"; then
-             echo "Stopping and removing existing private instance (legacy)..."
-             docker rm -f "$proj" >/dev/null
-        fi
-
-        echo "Running public container..."
-        echo "Running public container..."
-        if [ -f "${DIR}/scripts/hooks/${proj}_post.sh" ]; then
-             echo -e "$TCY Executing custom start command. Public binding might depend on hardcoded values in the command. $TCD"
-             # Warn user that public binding IP override might not work if hook hardcodes it
-             execute_hook "${proj}_post"
-        else
-             docker run --name "${proj}_app" --label "com.docker.compose.project=breakinglab_${proj}" --label "com.docker.compose.service=${proj}" --label "breakinglab.lab=${proj}" -d -p "$public_ip:$public_port:$internal_port" "$image"
-        fi
+        unset BREAKINGLAB_PORT
     fi
-
-    echo -e "$TCG Public instance started! Access via http://$public_ip:$public_port (or your server LAN IP) $TCD"
-    read -n 1 -s -r -p "Press key to continue..."
+    if ! start_docker_project "$proj"; then
+        unset BREAKINGLAB_BIND BREAKINGLAB_PORT
+        return 1
+    fi
+    unset BREAKINGLAB_BIND BREAKINGLAB_PORT
 }
 
 stop_docker_project() {
@@ -224,7 +239,7 @@ stop_docker_project() {
     [[ -z "${DOCKER_PROJECTS[$proj]+x}" ]] && { echo -e "$TCR Project '$proj' not found $TCD"; return 1; }
     
     check_docker >/dev/null 2>&1
-    IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    IFS='|' read -r image ip port desc url start_info compose_path _ _ <<< "${DOCKER_PROJECTS[$proj]}"
     if [ -n "${compose_path:-}" ] && [[ "$compose_path" != /* ]]; then
         compose_path="$DIR/$compose_path"
     fi
@@ -542,7 +557,7 @@ delete_project() {
     fi
 
     # Retrieve info for remove_host before deletion
-    IFS='|' read -r image ip port desc url start_info compose_path pre_commands post_commands <<< "${DOCKER_PROJECTS[$proj]}"
+    IFS='|' read -r image ip port desc url start_info compose_path _ _ <<< "${DOCKER_PROJECTS[$proj]}"
 
     # Stop the project first
     echo "Stopping project..."
@@ -633,7 +648,7 @@ down_all() {
 
 main_menu() {
     display_logo
-    echo -e "$TCC Options: $TCD\n1) List Projects\n2) Start Docker Project\n3) Start Public Project\n4) Stop Docker Project\n5) Status Docker Projects\n6) Start Online Project\n7) Update\n8) Add New Project\n9) Delete Project\n10) Start all labs\n11) Stop all labs\n99) Exit"
+    echo -e "$TCC Options: $TCD\n1) List Projects\n2) Start Docker Project\n3) Start one lab on the classroom network\n4) Stop Docker Project\n5) Status Docker Projects\n6) Start Online Project\n7) Update\n8) Add New Project\n9) Delete Project\n10) Start all labs\n11) Stop all labs\n99) Exit"
     read -r -p "Select an option: " choice
     case $choice in
         1) list_projects; read -n 1 -s -r -p "Press key..." ; main_menu;;
@@ -641,7 +656,7 @@ main_menu() {
            start_docker_project
            main_menu;;
         3)
-           start_public_project
+           start_public_project || true
            main_menu;;
         4) 
            stop_docker_project

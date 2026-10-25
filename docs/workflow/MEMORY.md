@@ -3,7 +3,7 @@
 Hechos comprobados el 2026-10-20. Si uno deja de ser cierto, se corrige aquí y se anota la fecha.
 
 - BreakingLab es un lanzador de práctica. Las máquinas y los scripts que arranca son vulnerables a propósito. Entrada: `breakinglab.sh`. Librerías en `lib/`. Definiciones en `config/projects.d/`. Confirmado por el autor el 2026-10-21.
-- El remoto documentado en el README es `https://github.com/TiiZss/BreakingLab`. La versión del changelog es 2.3.0 (2026-10-25).
+- El remoto documentado en el README es `https://github.com/TiiZss/BreakingLab`. La versión del changelog es 2.4.0 (2026-10-25).
 - El CI en el repositorio es ShellCheck (`.github/workflows/shellcheck.yml`).
 - No hay módulos Python ni aplicación web propia. `projects/` guarda el compose del lanzador. Los clones de terceros van a `labs/` y git no los versiona.
 - Graft está instalado y el repo tiene índice. `graft/` está en `.gitignore`.

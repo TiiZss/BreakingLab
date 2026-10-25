@@ -18,12 +18,12 @@
 
 ---
 
-## 🚀 Features (v2.3)
+## 🚀 Features (v2.4)
 
 -   **Modular Architecture**: Clean separation of code (`breakinglab.sh`), configuration (`config/`), and libraries (`lib/`).
 -   **GitHub Import**: Import Docker projects directly from GitHub URLs with **Auto-Sanitization** and conflict resolution.
 -   **Dynamic Menus**: Interactive 2-column menu system with search-by-name/number and status indicators (`[ON]`/`[OFF]`).
--   **Public Exposure**: `start_public` command to easily expose containers to your LAN (great for classrooms/CTFs).
+-   **Public Exposure**: Menu option 3 and `startpublic` publish one lab on this computer's LAN address. If another lab is already running, the menu asks before turning it off.
 -   **Stack Grouping**: Each lab is its own Compose project, `breakinglab_<name>`, so Docker Desktop shows one stack per machine. Containers inside use that lab's name as a prefix (`jvl2013_`).
 -   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops those BreakingLab stacks.
 -   **Layout**: Launcher compose lives in `projects/`. Third-party clones go to `labs/` and stay out of git.
@@ -93,7 +93,9 @@ Want to host a lab for a class or CTF? Use `startpublic`.
 # Example: Bind bWAPP to all interfaces on port 8080
 ./breakinglab.sh startpublic bwapp 0.0.0.0 8080
 ```
-*Students can now access `http://YOUR_LAN_IP:8080`.*
+The lab is published on that interface. The script prints the classroom URL, the LAN address of this computer. `start` still binds `127.x` and is only visible here. Windows Firewall has to allow the inbound port.
+
+Menu option 3 lists every lab and publishes it on `0.0.0.0`. Only one lab can be up that way, because they share this computer's address. If another lab is already running, the menu asks before turning it off.
 
 #### 4. Stop a Lab
 Stops and removes the container to free up resources.
@@ -147,12 +149,15 @@ BreakingLab includes a curated list of vulnerable apps configured to run out-of-
 ---
 
 ## 🔮 Next Machines / Steps
+*   Include [Web for Pentester II](https://pentesterlab.com/exercises/web_for_pentester_II)
 *   Include [Drunk Admin Web Hacking Challenge](http://bechtsoudis.com/data/challenges/drunk_admin_hacking_challenge.zip)
 *   Include [OWASP Broken Web Applications Project](https://sourceforge.net/projects/owaspbwa/)
 *   Include [GameOver](https://sourceforge.net/projects/null-gameover/)
 *   Include [VulHub](https://github.com/vulhub/vulhub) project
 *   Include [CSPF ASP Vulnerable Lab](https://github.com/CSPF-Founder/ASPVulnerableLab)
 *   Include [CSPF Android Vulnerable Lab](https://github.com/CSPF-Founder/DodoVulnerableBank)
+
+The order for adding them is in `docs/workflow/plans/2026-10-25-proximas-maquinas.md`.
 
 ---
 
@@ -195,4 +200,4 @@ If you are contributing to architecture, runtime safety, configuration changes, 
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the GNU General Public License v3.0. See `LICENSE` for the full text.

@@ -1,5 +1,13 @@
 # Decisiones
 
+## 2026-10-25 — Una máquina en la red del aula
+
+`start` sigue publicando cada laboratorio en su `127.x`. La opción 3 y `startpublic` publican en la IP del ordenador, así que solo puede haber una en marcha. Si ya hay otra, el menú pregunta antes de apagarla.
+
+## 2026-10-25 — La licencia del lanzador es GPL-3.0
+
+El 2024-01-11 `LICENSE` pasó de MIT a la GPL-3.0. GitHub lee ese fichero. El README de la 2.0.0 volvió a escribir MIT. Cryoox y Matope tienen commits posteriores a ese cambio, así que el texto que se queda es la GPL-3.0. El README apunta a `LICENSE`.
+
 ## 2026-10-20 — Mapa del agente en CLAUDE.md y en una regla de Cursor
 
 Claude Code lee `CLAUDE.md` en la raíz. Cursor lee `.cursor/rules/*.mdc`. Hace falta los dos. `AGENTS.md`, `GEMINI.md` y `.github/copilot-instructions.md` solo apuntan al mapa, detrás del bloque de graft, para no duplicar cinco copias que se desfasarían.

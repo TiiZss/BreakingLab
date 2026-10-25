@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-10-25
+
+### Fixed
+- El README decía MIT. La licencia del repositorio es la GPL-3.0, la de `LICENSE` desde el 2024-01-11.
+- `startpublic` publica la máquina en la interfaz elegida y muestra la IP de la red del aula. El arranque privado sigue en `127.x`.
+
+### Added
+- Web for Pentester II entra en la lista de máquinas pendientes. El orden para añadirlas está en `docs/workflow/plans/2026-10-25-proximas-maquinas.md`.
+- La opción 3 del menú arranca cualquier máquina en público. Si ya hay otra en marcha, pregunta si la apaga. En público solo puede haber una.
+
 ## [2.3.0] - 2026-10-25
 
 ### Changed
