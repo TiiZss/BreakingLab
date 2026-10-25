@@ -18,14 +18,15 @@
 
 ---
 
-## 🚀 Features (v2.2)
+## 🚀 Features (v2.3)
 
 -   **Modular Architecture**: Clean separation of code (`breakinglab.sh`), configuration (`config/`), and libraries (`lib/`).
 -   **GitHub Import**: Import Docker projects directly from GitHub URLs with **Auto-Sanitization** and conflict resolution.
 -   **Dynamic Menus**: Interactive 2-column menu system with search-by-name/number and status indicators (`[ON]`/`[OFF]`).
 -   **Public Exposure**: `start_public` command to easily expose containers to your LAN (great for classrooms/CTFs).
--   **Stack Grouping**: All containers automatically grouped under "BreakingLab" in Docker Desktop. Each lab's containers use that lab's name as a prefix.
--   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops the BreakingLab stack.
+-   **Stack Grouping**: Each lab is its own Compose project, `breakinglab_<name>`, so Docker Desktop shows one stack per machine. Containers inside use that lab's name as a prefix (`jvl2013_`).
+-   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops those BreakingLab stacks.
+-   **Layout**: Launcher compose lives in `projects/`. Third-party clones go to `labs/` and stay out of git.
 -   **Images**: Lab images are pulled from Docker Hub user `tiizss`, with the version in the repository name.
 -   **Cross-Platform**: Fully compatible with **Linux (Kali/Ubuntu)** and **Windows (WSL2)**.
 -   **Safety**: Built with `set -euo pipefail` and extensive dependency checking.
@@ -105,7 +106,7 @@ Stops and removes the container to free up resources.
 ./breakinglab.sh up
 ./breakinglab.sh down
 ```
-`down` stops the BreakingLab stack. Containers that are not part of that stack stay up.
+`down` stops every lab whose stack is `breakinglab_<name>`. Other containers stay up.
 
 #### 6. Check Status
 See which labs are currently running (green for ON, red for OFF).

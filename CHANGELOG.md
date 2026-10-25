@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-25
+
 ### Changed
 - Los laboratorios que el lanzador clona van a `labs/`. La raíz deja de recibir esos árboles.
-- El compose de Bricks y el de DVWS-node quedan en `projects/`. `bricks/` y `stacks/` salen de la raíz.
-- Cada máquina tiene su stack `breakinglab_<clave>`. Los contenedores llevan el prefijo de la máquina (`jvl2013_`).
+- El compose de Bricks, DVWS-node, exploit.co.il y Vulpy 5 queda en `projects/`. `bricks/` y `stacks/` salen de la raíz.
+- Cada máquina tiene su stack `breakinglab_<clave>`. Los contenedores llevan el prefijo de la máquina (`jvl2013_`). `down` apaga esos stacks.
 - Bricks arranca con `tiizss/bricks-mysql-5.7:5.7`. El SQL de usuarios va dentro de esa imagen.
+- exploit.co.il y Vulpy 5 arrancan con `tiizss/exploitcoil:latest` y `tiizss/vulpy5:latest`. Un clon limpio ya no construye Cryoox ni se queda sin el compose de Vulpy 5.
+- Los `.sh` y los `.conf` se versionan con fin de línea LF, para que WSL ejecute el lanzador.
 
 ## [2.2.0] - 2026-10-24
 

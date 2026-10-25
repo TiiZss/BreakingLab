@@ -26,6 +26,10 @@ El login de `tea` se llama `tiizss` y su URL es `https://gitea.tiizss.internal`.
 
 `dubious ownership` no es un rechazo de Gitea ni de GitHub. Git ve que la carpeta `D:/Scripts/BreakingLab` pertenece a otra cuenta de Windows y se niega a trabajar ahí. El mensaje propone `git config --global --add safe.directory`. Esa línea no se ejecuta. Para leer o commitear en un comando basta `-c safe.directory=D:/Scripts/BreakingLab`, que no se guarda.
 
+## 2026-10-25 — exploit.co.il y Vulpy 5 salen de imágenes
+
+Un clon limpio de `c86f018` construía exploit.co.il desde Cryoox y no encontraba el compose de Vulpy 5, porque esa ruta era un gitlink sin `.gitmodules`. Los dos quedan como compose en `projects/` y arrancan con `tiizss/exploitcoil:latest` y `tiizss/vulpy5:latest`. La prueba de los 28 laboratorios sobre `0c2c2d9` está en `docs/workflow/lab-check-2026-10-25.md`.
+
 ## 2026-10-25 — Un stack por máquina
 
 El proyecto Compose deja de ser uno solo. Cada laboratorio usa `breakinglab_<clave>` y sus contenedores `<clave>_`. La opción de apagar todos recorre esas etiquetas. Bricks no monta `init.sql`: esa tabla va en `tiizss/bricks-mysql-5.7:5.7`, así el compose de `projects/` arranca solo con imágenes.
