@@ -33,5 +33,5 @@
 ## Domain Behavior Guardrails
 1. **[2026-10-21] Laboratorios vulnerables a propósito**
    Do instead: el script practica skills contra máquinas y apps vulnerables. No parchees esa vulnerabilidad. No copies el catálogo de skills al repo. Úsalo solo contra el laboratorio arrancado aquí, en una máquina propia.
-2. **[2026-10-20] Sin Python y sin UI**
-   Do instead: no crees `pyproject.toml` ni apliques skills de frontend. `uv` queda escrito para el día en que haya Python.
+2. **[2026-10-25] Panel web local, sin proyecto Python**
+   Do instead: la web es `web/` y `./breakinglab.sh web`. No añadas `pyproject.toml` ni dependencias. `uv` no está dentro de Ubuntu; el panel usa el Python 3 de WSL.

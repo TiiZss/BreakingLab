@@ -7,13 +7,13 @@ alwaysApply: true
 
 El mapa completo está en `CLAUDE.md`. Léelo antes de un cambio que no sea trivial. Esto es lo que no puede perderse si no abres ese archivo.
 
-- BreakingLab es un lanzador Bash/Docker de laboratorios vulnerables para practicar ciberseguridad. Entrada: `breakinglab.sh`. La vulnerabilidad del laboratorio se queda. Se corrige el lanzador cuando el encargo lo pide. No hay frontend propio ni Python.
+- BreakingLab es un lanzador Bash/Docker de laboratorios vulnerables para practicar ciberseguridad. Entrada: `breakinglab.sh`. La vulnerabilidad del laboratorio se queda. Se corrige el lanzador cuando el encargo lo pide. El panel local es `./breakinglab.sh web`, en `web/`, y escucha solo en `127.0.0.1:8765`.
 - Graft antes de leer fuentes: `graft ask`, `graft grep`, `graft skeleton`, `graft callers` o `graft map`, el que encaje. Una llamada suele bastar.
 - Plan en `docs/workflow/plans/` antes de codificar. La sesión no es el archivo del plan.
 - Lee `.claude/napkin.md` al empezar. Ahí están las directrices que se repiten.
 - Copia en `.backups/AAAA-MM-DD/` los ficheros cuya lógica vayas a reescribir. Una funcionalidad, una rama.
 - No reescribas comportamiento que ya funciona si el encargo no lo pide. Lo nuevo entra al lado, en UTF-8.
-- Python, si llega: `uv` y virtualenv. Hoy no hay Python; no añadas proyecto Python vacío.
+- Python del panel: biblioteca estándar, sin `pyproject.toml`. Si entra otro Python, `uv` y virtualenv. No añadas un proyecto Python vacío.
 - Skills útiles, sin copiarlas al repo: ECC `docker-patterns`, `security-review`, `security-scan`, `git-workflow`, `github-ops`, `verification-loop`, `terminal-ops`. Las 818 skills de `Anthropic-Cybersecurity-Skills` solo contra un laboratorio de este lanzador, en una máquina propia. Nada de skills de UI hasta que exista UI.
 - MCP que hay que usar cuando la tarea lo pida: GitHub, Context7, Playwright, Filesystem, Sentry si el servidor responde. `markitdown` no está conectado: no inventes el servidor.
 - Caveman lite en español. Napkin en `.claude/napkin.md`. Diagram Design solo para un diagrama pedido. Prosa nueva según `D:\Scripts\Z-externos\humanizer`.

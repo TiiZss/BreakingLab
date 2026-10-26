@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BreakingLab</title>
+  <link rel="stylesheet" href="/app.css?v=11">
+</head>
+<body>
+  <header class="top">
+    <img class="logo" src="/splash.svg" alt="BreakingLab en ASCII: bloques verdes y blancos, 35, TiiZss, 57 y BETA.">
+    <div class="sub">
+      <img class="mark" src="/TIIZSS_Logo.png" alt="TiiZss. Tech Innovation Ideas y Zyber Security Solutions.">
+      <h1>Laboratorios de este ordenador</h1>
+      <p class="count" id="count" aria-live="polite">Leyendo el estado</p>
+    </div>
+  </header>
+  <p class="note" id="note" role="status"></p>
+  <main>
+    <table class="bench">
+      <caption class="sr">Máquinas que este lanzador puede arrancar</caption>
+      <thead>
+        <tr>
+          <th scope="col">Estado</th>
+          <th scope="col">Máquina</th>
+          <th scope="col">Dirección</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="labs"></tbody>
+    </table>
+  </main>
+  <footer class="foot">
+    <div class="cow-herd" aria-hidden="true">
+      <span class="cow-herd-cow" style="--i: 0">🐄</span>
+      <span class="cow-herd-cow" style="--i: 1">🐄</span>
+      <span class="cow-herd-cow" style="--i: 2">🐄</span>
+      <span class="cow-herd-cow" style="--i: 3">🐄</span>
+      <span class="cow-herd-cow" style="--i: 4">🐄</span>
+      <span class="cow-herd-cow" style="--i: 5">🐄</span>
+    </div>
+    <div class="foot-line">
+      <span id="banner-version">v.</span>
+      <span>TiiZss</span>
+      <span>GPL-3.0</span>
+      <span class="beta">BETA</span>
+    </div>
+  </footer>
+  <dialog id="confirm">
+    <form method="dialog">
+      <p id="confirm-text"></p>
+      <div class="dialog-actions">
+        <button value="cancel" type="submit">Dejarla</button>
+        <button value="ok" class="danger" type="submit">Apagar y levantar</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="/app.js?v=6"></script>
+</body>
+</html>

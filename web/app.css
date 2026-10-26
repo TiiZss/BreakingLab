@@ -1,0 +1,352 @@
+:root {
+  /* Los mismos ANSI del logo: verde 42, blanco 47, texto 32 y 37, fondo de terminal. */
+  --bg: #0c0c0c;
+  --green: #16c60c;
+  --green-ink: #0b7a08;
+  --paper: #f2f2f2;
+  --white: #cccccc;
+  --yellow: #c0c000;
+  --red: #cc0000;
+  --line: #16c60c;
+  color-scheme: dark;
+  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  background: var(--bg);
+  color: var(--green);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: end;
+  padding: 1.25rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--green);
+}
+
+.logo {
+  display: block;
+  height: auto;
+  width: min(36rem, 62%);
+  max-height: 8.5rem;
+  object-fit: contain;
+  object-position: left bottom;
+}
+
+.sub {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: stretch;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.mark {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: auto;
+  max-width: min(34rem, 48vw);
+  height: 4.6rem;
+  object-fit: contain;
+  object-position: right bottom;
+  margin: 0 0 0.35rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--white);
+  text-wrap: balance;
+}
+
+.count {
+  margin: 0.35rem 0 0;
+  color: var(--green);
+  font-variant-numeric: tabular-nums;
+}
+
+.note:empty { display: none; }
+
+.note {
+  margin: 0.6rem 1.25rem;
+  color: var(--yellow);
+}
+
+tr.has-log td {
+  border-bottom: 0;
+  padding-bottom: 0.2rem;
+}
+
+.lab-log-row td {
+  padding: 0 0.75rem 0.75rem;
+  border-bottom: 1px solid #14520f;
+}
+
+.lab-log {
+  margin: 0;
+  max-height: 8rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  color: var(--yellow);
+  font: inherit;
+}
+
+.bench {
+  width: calc(100% - 2.5rem);
+  margin: 0 1.25rem 2rem;
+  border-collapse: collapse;
+  background: var(--bg);
+  border: 1px solid var(--green);
+}
+
+caption.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+th, td {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #14520f;
+  vertical-align: middle;
+}
+
+th {
+  background: var(--green);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.name {
+  display: block;
+  font-weight: 700;
+  color: var(--paper);
+}
+
+.desc {
+  display: block;
+  color: var(--white);
+  text-wrap: pretty;
+  max-width: 46ch;
+}
+
+.addr {
+  font-variant-numeric: tabular-nums;
+}
+
+.addr-stack > span:not(.mode) {
+  color: var(--red);
+}
+
+.addr-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.mode {
+  color: var(--white);
+  font-size: 0.75rem;
+}
+
+.addr a {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.state {
+  text-align: center;
+}
+
+th:first-child {
+  text-align: center;
+}
+
+th:last-child {
+  text-align: right;
+}
+
+.lamp {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--red);
+}
+
+tr.on .lamp {
+  background: var(--green);
+}
+
+tr.on .name { color: var(--green); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button, a.button {
+  font: inherit;
+  color: var(--green);
+  background: transparent;
+  border: 1px solid var(--green);
+  border-radius: 0;
+  padding: 0.35rem 0.65rem;
+  min-height: 2.1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:focus-visible, a.button:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+button.switch {
+  position: relative;
+  width: 7.2rem;
+  padding: 0 0.4rem 0 1.5rem;
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  text-align: right;
+}
+
+button.switch[aria-checked="true"] {
+  padding: 0 1.5rem 0 0.4rem;
+  border-color: var(--green);
+  background: var(--green);
+  text-align: left;
+}
+
+button.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: 1.15rem;
+  background: var(--paper);
+}
+
+button.switch[aria-checked="true"]::after {
+  left: auto;
+  right: 2px;
+}
+
+button.switch.mode[aria-checked="false"] {
+  border-color: var(--white);
+  background: #1a1a1a;
+  color: var(--paper);
+}
+
+button.switch.mode:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: progress;
+}
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 1.25rem 1.25rem;
+  padding: 0.45rem 0.75rem 0.55rem;
+  border-top: 1px solid var(--green);
+  color: var(--green);
+}
+
+.foot-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.foot .beta { margin-left: auto; }
+
+.cow-herd {
+  position: relative;
+  height: 1.45rem;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.cow-herd-cow {
+  position: absolute;
+  bottom: 0;
+  left: -1.6em;
+  font-size: 1.05rem;
+  line-height: 1;
+  transform: scaleX(-1);
+  animation: cow-herd-walk 14s linear infinite;
+  animation-delay: calc(var(--i) * -2.2s);
+  user-select: none;
+}
+
+@keyframes cow-herd-walk {
+  from { left: -1.6em; }
+  to { left: calc(100% + 0.4em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cow-herd-cow {
+    animation: none;
+    left: calc(var(--i) * 1.5em);
+  }
+}
+
+dialog {
+  background: var(--bg);
+  color: var(--paper);
+  border: 2px solid var(--green);
+  border-radius: 0;
+  max-width: 28rem;
+}
+
+dialog::backdrop { background: #0c0c0ccc; }
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+button.danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+}
+
+@media (max-width: 800px) {
+  .top { flex-direction: column; align-items: start; }
+  .logo { width: min(36rem, 100%); }
+  .sub { height: auto; align-items: flex-start; text-align: left; }
+  .mark { height: 4.2rem; object-position: left bottom; margin-left: 0; }
+  .bench { width: calc(100% - 1.2rem); margin-left: 0.6rem; }
+  thead { display: none; }
+  tr { display: block; padding: 0.35rem 0; border-bottom: 1px solid #14520f; }
+  td { display: block; border: 0; }
+}

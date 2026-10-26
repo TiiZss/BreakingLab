@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-10-26
+
+### Added
+- `./breakinglab.sh web` abre el panel en `127.0.0.1:8765`. Enciende y apaga cada máquina, marca privado o público, y enseña la dirección. El panel no sale a la red del aula. Usa el Python 3 de la biblioteca estándar, sin dependencias.
+- El README muestra el ASCII de `display_logo`.
+
+### Changed
+- Si otra máquina ya está en público, el panel pregunta antes de apagarla. Sin teclado, `BREAKINGLAB_PUBLIC_CONFIRM=1` acepta ese cambio.
+
 ## [2.4.0] - 2026-10-25
 
 ### Fixed

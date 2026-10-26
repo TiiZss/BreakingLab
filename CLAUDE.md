@@ -4,7 +4,7 @@ Las carpetas guardan el código. Este archivo dice cómo leerlas. Cursor carga e
 
 ## Qué es este repositorio
 
-BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y para, con Docker, máquinas y aplicaciones vulnerables a propósito. Esas vulnerabilidades son el material de práctica. No se parchean, no se eliminan y no se tratan como un defecto del lanzador. La entrada es `breakinglab.sh`. `install.sh` comprueba dependencias y puede enlazar el script. No hay frontend propio ni módulos Python.
+BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y para, con Docker, máquinas y aplicaciones vulnerables a propósito. Esas vulnerabilidades son el material de práctica. No se parchean, no se eliminan y no se tratan como un defecto del lanzador. La entrada es `breakinglab.sh`. `install.sh` comprueba dependencias y puede enlazar el script. `./breakinglab.sh web` abre el panel de `web/` en `127.0.0.1:8765`. Ese panel usa el Python 3 de la biblioteca estándar. No hay `pyproject.toml`.
 
 ## Dónde está cada cosa
 
@@ -15,7 +15,8 @@ BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y
 - `projects/` — compose del lanzador: `bricks`, `jvl2013`, `vulnado`, `dvwsnode2`, `exploitcoil`, `vulpy5`.
 - `labs/` — clones de terceros. Git no los versiona.
 - `archive/` — `bl2023.sh` y `bl2024.sh`.
-- `assets/` — logo.
+- `web/` — panel local: `server.py`, `index.html`, `app.css`, `app.js`.
+- `assets/` — logo. `assets/preview/splash.svg` es el ASCII de `display_logo`.
 - `docs/` — planificación. La memoria del agente está en `docs/workflow/`.
 - `.github/workflows/shellcheck.yml` — el CI que hay hoy en el repositorio.
 
@@ -31,7 +32,7 @@ BreakingLab es un script Bash para practicar skills de ciberseguridad. Arranca y
 
 Si una función estable no es el objetivo del cambio, no la reescribas. Lo nuevo entra por un fichero o un gancho aparte, y el flujo anterior sigue respondiendo igual. Los ficheros nuevos van en UTF-8.
 
-Este repositorio no tiene Python. Si entra, el entorno será un virtualenv gestionado con `uv`, no con `pip`. Hasta entonces no añadas `pyproject.toml`.
+El panel no añade dependencias. Si entra otro Python, el entorno será un virtualenv gestionado con `uv`, no con `pip`. No añadas `pyproject.toml` para el panel.
 
 ## Qué reutilizar
 
@@ -42,7 +43,7 @@ En esta máquina:
 - `D:\Scripts\Z-externos\ECC\skills` tiene 261 skills. Aquí aplican `docker-patterns`, `security-review`, `security-scan`, `git-workflow`, `github-ops`, `verification-loop`, `terminal-ops`, `architecture-decision-records`, `search-first`, `context-budget`, `codebase-onboarding` y `production-audit`. El resto no corresponde a un lanzador Bash. No copies el catálogo al repositorio: se lee desde esa ruta.
 - `D:\Scripts\Z-externos\Anthropic-Cybersecurity-Skills\skills` tiene 818 skills de un proyecto de comunidad. Sirven cuando el trabajo es practicar contra un laboratorio que este script ha arrancado en una máquina propia. No las copies al repositorio. No las uses contra un sistema que no sea ese laboratorio.
 
-No hay interfaz web propia. Impeccable, Frontend Design, UI UX Pro Max, Theme Factory y las reglas visuales de Vercel esperan a que esa interfaz exista.
+La interfaz local es `./breakinglab.sh web`, en `web/`. Escucha solo en `127.0.0.1:8765`. Para construirla se leyeron Frontend Design, `frontend-design-direction`, `frontend-a11y` y `make-interfaces-feel-better`. Impeccable, UI UX Pro Max, Theme Factory y unas reglas visuales de Vercel con ese nombre no están en esta máquina.
 
 ## Herramientas
 

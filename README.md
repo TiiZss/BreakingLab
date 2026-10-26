@@ -9,7 +9,7 @@
 [![PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate/?business=AC5N3XX2KGY2S&no_recurring=0&item_name=Support+BreakingLab+Development&currency_code=EUR)
 
 <p align="center">
-  <img src="assets/BrakingLab.png" alt="BreakingLab Logo" width="300">
+  <img src="assets/preview/splash.svg" alt="BreakingLab ASCII banner from the Bash launcher: green and white blocks, 35, TiiZss, 57 and BETA" style="max-width: 832px; width: 100%; height: auto;">
 </p>
 
 **BreakingLab** is a powerful Bash script to manage vulnerable web applications using Docker. It simplifies the process of setting up, running, and stopping various security testing labs locally or exposing them to a network.
@@ -18,7 +18,7 @@
 
 ---
 
-## 🚀 Features (v2.4)
+## 🚀 Features (v2.5)
 
 -   **Modular Architecture**: Clean separation of code (`breakinglab.sh`), configuration (`config/`), and libraries (`lib/`).
 -   **GitHub Import**: Import Docker projects directly from GitHub URLs with **Auto-Sanitization** and conflict resolution.
@@ -28,6 +28,7 @@
 -   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops those BreakingLab stacks.
 -   **Layout**: Launcher compose lives in `projects/`. Third-party clones go to `labs/` and stay out of git.
 -   **Images**: Lab images are pulled from Docker Hub user `tiizss`, with the version in the repository name.
+-   **Local panel**: `./breakinglab.sh web` opens the same labs in the browser at `127.0.0.1:8765`. On and Off start and stop a lab. Privado and Público only choose the address. The panel itself stays on this computer. It uses Python 3 from the standard library.
 -   **Cross-Platform**: Fully compatible with **Linux (Kali/Ubuntu)** and **Windows (WSL2)**.
 -   **Safety**: Built with `set -euo pipefail` and extensive dependency checking.
 
@@ -65,6 +66,14 @@ Simply run the script with no arguments to launch the dashboard.
 ./breakinglab.sh
 ```
 From here you can search for projects, start/stop them, and check their status using the number or name.
+
+The same list is in the browser:
+
+```bash
+./breakinglab.sh web
+```
+
+Open `http://127.0.0.1:8765`. The page listens only on this computer. Público publishes the lab on the LAN; the panel does not.
 
 ---
 

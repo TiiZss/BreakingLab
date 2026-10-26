@@ -1,5 +1,9 @@
 # Decisiones
 
+## 2026-10-26 — Panel local en el navegador
+
+`./breakinglab.sh web` ejecuta `web/server.py` y escucha solo en `127.0.0.1:8765`. El panel enciende, apaga y elige privado o público. No se publica el panel en la red del aula. No hay `pyproject.toml`: el proceso es el Python 3 que ya trae WSL.
+
 ## 2026-10-25 — Una máquina en la red del aula
 
 `start` sigue publicando cada laboratorio en su `127.x`. La opción 3 y `startpublic` publican en la IP del ordenador, así que solo puede haber una en marcha. Si ya hay otra, el menú pregunta antes de apagarla.
@@ -22,7 +26,7 @@ El autor lo fijó: BreakingLab sirve para practicar skills de ciberseguridad con
 
 ## 2026-10-20 — Skills por referencia, no por copia
 
-ECC y el catálogo de ciberseguridad se usan desde `D:\Scripts\Z-externos`. Al repo solo entra la lista de skills que encajan con un lanzador Bash/Docker. Las skills de interfaz web no se activan: no hay interfaz. Las skills ofensivas no se copian.
+ECC y el catálogo de ciberseguridad se usan desde `D:\Scripts\Z-externos`. Al repo solo entra la lista de skills que encajan con un lanzador Bash/Docker. El 2026-10-20 no había interfaz. El panel de 2026-10-26 está en `web/`. Las skills ofensivas no se copian.
 
 ## 2026-10-20 — MCP sin secretos nuevos
 

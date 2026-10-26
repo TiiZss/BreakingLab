@@ -178,9 +178,17 @@ bl_public_make_room() {
     [ "${#running[@]}" -eq 0 ] && return 0
 
     echo -e "$TCY En público solo puede haber una máquina. En marcha: ${running[*]}. $TCD"
+    if [ "${BREAKINGLAB_PUBLIC_CONFIRM:-}" = 1 ]; then
+        for key in "${running[@]}"; do
+            bl_compose_down "$key"
+            echo -e "$key --> $TCR apagada $TCD"
+        done
+        return 0
+    fi
     if [ "${BREAKINGLAB_BATCH:-}" = 1 ]; then
+        echo "PUBLIC_BUSY ${running[*]}"
         echo "No se arranca $proj."
-        return 1
+        return 2
     fi
     read -r -p "¿Apagar ${running[*]} y levantar ${proj}? (s/N) " answer
     case "$answer" in
@@ -206,8 +214,10 @@ start_public_project() {
         echo -e "$TCR Project '$proj' not found $TCD"
         return 1
     fi
-    if ! bl_public_make_room "$proj"; then
-        return 1
+    local room=0
+    bl_public_make_room "$proj" || room=$?
+    if [ "$room" -ne 0 ]; then
+        return "$room"
     fi
 
     echo -e "$TCG Starting Public Access for $proj on ${public_ip} $TCD"
@@ -693,6 +703,7 @@ else
         online) start_online_project "${2:-}";;
         update) update_breakinglab;;
         delete) delete_project "${2:-}";;
-        *) echo "Usage: $0 {list|start|startpublic|stop|status|up|down|online|delete|update} [project] [ip] [port]";;
+        web) exec python3 "$DIR/web/server.py" "$DIR";;
+        *) echo "Usage: $0 {list|start|startpublic|stop|status|up|down|online|delete|update|web} [project] [ip] [port]";;
     esac
 fi
