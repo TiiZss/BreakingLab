@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- El README describe el panel web y muestra una captura con una máquina en marcha.
+
 ## [2.5.0] - 2026-10-26
 
 ### Added

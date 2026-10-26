@@ -28,7 +28,7 @@
 -   **Fleet**: `up` starts every lab on its own `127.x` address. `down` stops those BreakingLab stacks.
 -   **Layout**: Launcher compose lives in `projects/`. Third-party clones go to `labs/` and stay out of git.
 -   **Images**: Lab images are pulled from Docker Hub user `tiizss`, with the version in the repository name.
--   **Local panel**: `./breakinglab.sh web` opens the same labs in the browser at `127.0.0.1:8765`. On and Off start and stop a lab. Privado and Público only choose the address. The panel itself stays on this computer. It uses Python 3 from the standard library.
+-   **Web interface**: `./breakinglab.sh web` opens the lab list at `127.0.0.1:8765`. The page is described under [Web interface](#web-interface).
 -   **Cross-Platform**: Fully compatible with **Linux (Kali/Ubuntu)** and **Windows (WSL2)**.
 -   **Safety**: Built with `set -euo pipefail` and extensive dependency checking.
 
@@ -67,13 +67,36 @@ Simply run the script with no arguments to launch the dashboard.
 ```
 From here you can search for projects, start/stop them, and check their status using the number or name.
 
-The same list is in the browser:
+### Web interface
+
+<p align="center">
+  <img src="assets/preview/web.png" alt="BreakingLab web panel: Bricks is on, with a green address and its yellow log; the other labs are off" style="max-width: 832px; width: 100%; height: auto;">
+</p>
+
+The same labs are in the browser. Needs `python3` from WSL or Linux. No extra packages.
 
 ```bash
 ./breakinglab.sh web
 ```
 
-Open `http://127.0.0.1:8765`. The page listens only on this computer. Público publishes the lab on the LAN; the panel does not.
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765). The server listens only on this computer. Students do not open the panel. They open the lab address when that lab is Público.
+
+The header shows the BreakingLab ASCII banner and the TiiZss mark. Under that, the table has four columns:
+
+| Column | What you see |
+| --- | --- |
+| Estado | A red square while the lab is off. It turns green when the lab is running. |
+| Máquina | The lab key and its description. |
+| Dirección | **Privado** shows the `127.x` address. **Público** shows this computer's LAN addresses. The text is red while the lab is off. When it is on, the address is a larger green link. |
+| Acciones | **Público** / **Privado** on the left, **On** / **Off** on the right. Both switches have the same width. |
+
+**On** starts the lab. **Off** stops it. **Público** and **Privado** only choose the address. They do not start the machine. While the lab is on, that switch stays locked until you turn it off.
+
+Only one lab can be public. If another one is already running, the page asks before turning it off and starting the one you chose.
+
+Each lab keeps its own log under its row, in yellow. The log follows the last line.
+
+The footer shows the same line as the Bash banner: the `v.` date of `breakinglab.sh`, TiiZss, GPL-3.0, and BETA.
 
 ---
 
